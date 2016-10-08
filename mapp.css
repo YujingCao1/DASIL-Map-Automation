@@ -12,6 +12,10 @@
   src: local("Source Sans Pro"), local("SourceSansPro-Regular"), url("http://fonts.gstatic.com/s/sourcesanspro/v9/ODelI1aHBYDBqgeIAH2zlOgEI-65pc1uHHusEBt4aX4.woff2") format("woff2"), url("http://fonts.gstatic.com/s/sourcesanspro/v9/ODelI1aHBYDBqgeIAH2zlDLXPPWpYIJRcQ99gLLWTOQ.woff") format("woff");
 }
 
+*{
+	box-sizing: border-box;
+}
+
 #pagetitle {
    font-family: "Roboto Condensed", "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
    font-size: 40px;
@@ -23,12 +27,9 @@
    text-transform: uppercase;
    color: #404040;
    float: right;
-   margin-right: 1.5%;
-   margin-top: -3%;
-}
-
-#bod {
-	float: right;
+   position: absolute;
+   top: 23%;
+   right: 4%;
 }
 
 g.legend {
@@ -39,8 +40,8 @@ g.legend {
 	font-family: "Source Sans Pro";
 	color: #767676;
 	position: absolute;
-	margin-left: 50%;
-	margin-top: -9%;
+	top: 23%;
+	left: 47%;
 }
 
 #interactive_menu {
@@ -88,28 +89,52 @@ path:hover {
 
 #interactive_panel {
 	width: 27%;
-    margin-left: 2%;
-    margin-top: 10%;
+	position: absolute;
+	top: 30%;
+	left: 2.4%;
     background: #eee; 
 }
 
-#somanydivs {
-	position: relative; 
-}
 
 #option_menu {
-	margin-top:40px;
-	width: 180%;
+	width: 100%;
 	height:100px;
 }
 
+#selectBar, #selectBarColor {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+   padding: 5px;
+   border-radius: 5px;
+   background: #f6f6f6;
+   font-size: 1em; 
+   color: #404040;
+   width: 30%;
+}
+
+#selectBar:hover , #selectBarColor:hover {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+   padding: 5px;
+   border-radius: 5px;
+   background: #222;
+   font-size: 1em; 
+   color: white;
+}
+
 #selectBar {
-	margin-left: 5px;
-	margin-top: 35px;
+	margin-left: 11%;
+	margin-top: 6%;
+	margin-bottom: 6%;
 }
 
 #selectBarColor{
-	margin-top:35px;
+	margin-left: 15%;
+	margin-top: 6%;
+	margin-bottom: 6%;
+	margin-right: 10%;
 }
 
 #selectedheader {
@@ -126,44 +151,39 @@ path:hover {
 #tooltip {
 	background: #eee; 
 	color: #464646;
-	display: block;
-	font-size: 12px;
-	left: 130px;
-	padding-left: 40px;
-	padding-right: 40px;
-	padding-bottom: 50px;
-	position: absolute;
+	display: none;
+	font-size: 18px;
 	text-align: left;
-	top: 280px;
 	width: 20%;
 	z-index: 10;
-	margin-top: 8%;
-	margin-right: 50%;
-	margin-left: -8%;
-	line-height: 350%;
+	line-height: 200%;
 	font-family: "Source Sans Pro";
-	font-size: 110%;
+    position: absolute;
+    top: 80%;
+    left: 2.4%;
+    padding: 1%;
 }
 
-div.tooltip {	
-    position: absolute;			
-    text-align: center;			
-    width: 60px;					
-    height: 28px;					
-    padding: 2px;				
-    font: 12px sans-serif;		
-    background: lightsteelblue;	
-    border: 0px;		
-    border-radius: 8px;			
-    pointer-events: none;			
+#referencemap{
+	position: absolute;
+	top: 43%;
+	left: 2.4%;
+	width: 27%;
+	background: #eee;
+	border: 2px solid black;
+	padding: 1%;
+	display: block;
 }
 
 svg {
 	float: right;
-	width: 67%;
+	width: 64%;
 	height: 28em;
-	margin-top: -6%;
+    position: absolute;
+    top: 30%;
+    left: 35%;
 	background: #eee;
+	border:2px solid black;
 }
 
 .country {
@@ -230,35 +250,5 @@ svg {
  	padding: 15px;
  	border: black solid 2px;
 }
- 
- #greybox {
-	background: grey;
-	width: 25px;
-	height: 25px;
-	margin-top: 10px;
-	margin-left: 15%;
-	float: left;
-	margin-right: 10px;
-}
 
-#selectBar, #selectBarColor {
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   appearance: none;
-   padding: 5px;
-   border-radius: 5px;
-   background: #f6f6f6;
-   font-size: 1em; 
-   color: #404040;
-}
 
-#selectBar:hover , #selectBarColor:hover {
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   appearance: none;
-   padding: 5px;
-   border-radius: 5px;
-   background: #222;
-   font-size: 1em; 
-   color: white;
-}
