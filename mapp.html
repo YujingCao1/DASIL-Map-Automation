@@ -82,6 +82,8 @@
 		var currentpath = "";
 	
 		var currentjson = "";
+
+		var toggle=0;
 /*
 		var referencemap=d3.json("Referencempa.geojson");
 
@@ -259,11 +261,23 @@
     			
     				.on("click", function(d) {
     					var dis = d3.select(this);
-	 						currentpath = dis.style('stroke-width', '1px')
-	 							.style('fill-opacity', 2)
-	 							.style('fill',"rgba(193, 66, 66, 0.8)");
-	 						console.log("item clicked");
-	 						lock = true;
+    					if (toggle==0){
+							dis.style('stroke-width', '2px')
+	 					 		.style('fill-opacity', 2)
+	 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
+	 					 	console.log("item clicked");
+	 					 	toggle=1;
+    			 		}else{
+    						dis.style('stroke-width', '2px')
+	 					 		.style('fill-opacity', 2)
+	 					 		.style('fill',dis.attr('fill'));
+	 					 		toggle=0;
+    			 		}
+	 						 //  dis.style('stroke-width', '2px')
+	 						 // 	.style('fill-opacity', 2)
+	 						 // 	.style('fill',"rgba(193, 66, 66, 0.8)");
+	 						 // console.log("item clicked");
+	 						  lock = true;
 	 						var tooltipDiv = document.getElementById('tooltip');
 	 						tooltipDiv.style.display = "block"; 
     						tooltipDiv.innerHTML = 
