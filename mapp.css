@@ -164,6 +164,14 @@ path:hover {
     padding: 1%;
 }
 
+#tooltipTest{
+	z-index: 1000;
+	background-color: rgba(193, 184, 184, 1);
+	display: inline-block;
+	border-radius: 6px;
+}
+
+
 #referencemap{
 	position: absolute;
 	top: 60%;
@@ -250,5 +258,3 @@ svg {
  	padding: 15px;
  	border: black solid 2px;
 }
-
-

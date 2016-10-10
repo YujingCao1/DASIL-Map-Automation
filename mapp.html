@@ -12,7 +12,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
     <link type="text/css" rel="stylesheet" href="mapp.css">
 	<script>
-
 	$(document).ready(function() {
 		$("select#selectBar").change(function() {
 			var thisvalue = $("#selectBar option:selected").text();
@@ -38,14 +37,15 @@
 	</div>
     
 	<div id="tooltip"></div>
+	<div id="tooltipTest"></div>
 	<div id="referenceMap"></div>
 
 	<script id="map">
 	
 		 var div = d3.select("body").append("div")
 		 			.style("position","relative")
-		 	.attr("class", "tooltipTest")
-		 	.style("opacity", 0.9);
+		 			.attr("id", "tooltipTest")
+		 			.style("opacity", 0.9);
 	
 		d3.csv("filelist.csv", function(data) {
 			d3.select("#selectBar").selectAll("option")
@@ -78,29 +78,22 @@
 		var tooltip = d3.select('text')
 							.append('div')
 							.attr('class', 'tooltip');
-
 		var currentpath = "";
 	
 		var currentjson = "";
-
 		var toggle=0;
 /*
 		var referencemap=d3.json("Referencempa.geojson");
-
 		var projection_reference=d3.geo.mercator()
 			.center([0,5])
 			.scale(500)
 			.rotate([-180,0]);
-
 		var reference=d3.select("div#referenceMap").append("svg")
 			.attr("width",200)
 			.attr("height",100);
-
 		var reference_path=d3.geo.path()
 			.projection(projection_reference);
-
 		var g_refer=reference.append("g");
-
 		d3.json("referencemap.geojson", function(error,topology){
 			g_refer.select("reference_path")
 			.data(topojson.object(topology,topology.objects.countries).geometries)
@@ -158,7 +151,6 @@
     			projection = d3.geo.mercator().center(center)
     							.scale(scale).translate(offset);
     			path = path.projection(projection);
-
     			for (var i = 0; i < json.features.length; i++) {
 	 				countryattr[i] = json.features[i].properties.GDPpcap;
 	 			}
@@ -210,7 +202,6 @@
 					         .text(function(d,i){
 							     return legendLabel[i];
 							 });
-
 	 			var lock;
 	 		
 				//makes the map
@@ -237,15 +228,14 @@
     					div.transition()
     						.duration(200)
     						.style("opacity", .9);
-    					div.html(d.properties.CNTRY_NAME + "<br/>")
+    					div.html(d.properties.CNTRY_NAME + "<br/>"+"Total Population"+d.properties.TotPop+"<br>")
     						.style("position", "absolute")
-    					    .style("left", (mouse[0] + 200) + "px")
-    					    .style("top", (mouse[1] + 100) + "px");
+    					    .style("x", (mouse[0]) + "px")
+    					    .style("y", (mouse[1]) + "px");
     					if (lock) {
     						d3.event.stopPropagation();
     						dis.style('stroke-width', '2px')
     							.style('fill-opacity', 2);
-
     					} else {
     						dis.style('stroke-width', '2px')
     							.style('fill-opacity', 2);
@@ -255,7 +245,6 @@
     						tooltipDiv.innerHTML = d.properties.CNTRY_NAME + "<br/>" + 
     						"Total Population: " + d.properties.TotPop + "<br/>";
     						tooltipDiv.style.display = "block";
-
     					}
     				})
     			
@@ -285,7 +274,6 @@
     						"Total Population: " + d.properties.TotPop + "<br/>" +
     						"GDP per Capita: " + d.properties.GDPpcap + "<br/>";
 	 				})
-
 					.on("mouseout", function(d) {
 						div .transition()
     						.duration(200)
@@ -334,6 +322,7 @@
 		function changeAttribute(attribute) {
 			var countryattr = [];
 			var color = [];
+			var lock;
 			//grab data from current dataset
 			var dataset = currentjson;
 		
@@ -357,12 +346,11 @@
 				var domainRange=d3.max(countryattr)-d3.min(countryattr);
 				var domainDiff=(d3.max(countryattr)-d3.min(countryattr))/4;
 				var legendLabel={};
-
 				for (i=0;i<colorScale.range().length;i++){
 				     legendLabel[i]=(d3.min(countryattr)+domainDiff*i).toFixed(2)+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
 					 console.log(legendLabel[i]);
 					 };
-			var svg=d3.selectAll("#mySVG");
+			    var svg=d3.selectAll("#mySVG");
 				    svg.selectAll('.legend')
 					   .remove();
                 var legend=svg.selectAll('.legend')
@@ -392,15 +380,15 @@
 			
 		
 			console.log(attribute);
-			d3.selectAll("path")
+			svg.selectAll("path")
 				.transition()
 				.duration(750)
 				.attr("height", 0)
-				setTimeout(function() {
+				//setTimeout(function() {
 					d3.selectAll("body")
 						.transition()
 						.duration(200)
-						setTimeout(function() {
+						//setTimeout(function() {
 							d3.selectAll("path")
 								.attr("fill", function(json, i) {	
 				
@@ -412,28 +400,80 @@
 									}
 								}) //missing data is grey
 						
-    							.on("mouseover", function(d) {
-    								d3.select(this).style('stroke-width', '2px')
+    					   .on("mouseover", function(d) {
+    						var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
+    						var dis = d3.select(this);
+    						console.log("left: " + mouse[0]);
+    						console.log("top: " + mouse[1]);
+    						div.transition()
+    							.duration(200)
+    							.style("opacity", .9);
+    						div.html(d.properties.CNTRY_NAME + "<br/>"+"Total Population"+d.properties.TotPop+"<br>")
+    							.style("position", "absolute")
+    					    	.style("x", (mouse[0]) + "px")
+    					    	.style("y", (mouse[1]) + "px");
+    						if (lock) {
+    							d3.event.stopPropagation();
+    							dis.style('stroke-width', '2px')
     								.style('fill-opacity', 2);
-    								console.log(d3.select(this));
-    					
-    								var tooltipDiv = document.getElementById('tooltip');
-    								tooltipDiv.innerHTML = d.properties.CNTRY_NAME + "<br />" +
-    								"Total Population: " + d.properties.TotPop + "<br />" +
-    								attribute + ": " + d.properties[attribute];
-    								tooltipDiv.style.display = "block";
-    							})
-    				
-								.on("mouseout", function(d) {
-	 								d3.select(this).style('stroke-width', '1px')
+    						} else {
+    							dis.style('stroke-width', '2px')
+    								.style('fill-opacity', 2);
+    							console.log(dis);
+   
+    						var tooltipDiv = document.getElementById('tooltip');
+    							tooltipDiv.innerHTML = d.properties.CNTRY_NAME + "<br/>" + 
+    							"Total Population: " + d.properties.TotPop + "<br/>";
+    							tooltipDiv.style.display = "block";
+    					}
+    				})
+    				.on("click", function(d) {
+    					var dis = d3.select(this);
+    					if (toggle==0){
+							dis.style('stroke-width', '2px')
+	 					 		.style('fill-opacity', 2)
+	 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
+	 					 	console.log("item clicked");
+	 					 	toggle=1;
+    			 		}else{
+    						dis.style('stroke-width', '1px')
+	 					 		.style('fill-opacity', 2)
+	 					 		.style('fill',dis.attr('fill'));
+	 					 		toggle=0;
+    			 		}
+	 						lock = true;
+	 						var tooltipDiv = document.getElementById('tooltip');
+	 						tooltipDiv.style.display = "block"; 
+    						tooltipDiv.innerHTML = 
+    						"Selected Country: " + d.properties.CNTRY_NAME + "<br/>" + 
+    						"Total Population: " + d.properties.TotPop + "<br/>" +
+    						"GDP per Capita: " + d.properties.GDPpcap + "<br/>";
+	 				})
+					.on("mouseout", function(d) {
+						div .transition()
+    						.duration(200)
+    						.style("opacity", .9);
+    					div .html(d.properties.CNTRY_NAME + "<br/>" + 
+    						"Total Population: " + d.properties.TotPop + "<br/>")
+    					    .style("left", (d3.event.pageX) + "px")
+    					    .style("top", (d3.event.pageY - 28) + "px"); 
+						if (lock) {
+							d3.select(this).style('stroke-width', '1px')
+	 							.style('fill-opacity', 1);
+	 						console.log("item clicked");
+	 						var tooltipDiv = document.getElementById('tooltip');
+	 						tooltipDiv.style.display = "block";
+						} else {
+	 						d3.select(this).style('stroke-width', '1px')
 	 								.style('fill-opacity', 1);
-	 								tooltip.style('visibility', 'hidden');
+	 						tooltip.style('visibility', 'hidden');
 	 					
-	 					 			var tooltipDiv = document.getElementById('tooltip');
-	 		               			tooltipDiv.style.display = "none";
-	 							})
-						}, 450);
-				}, 750);
+	 						var tooltipDiv = document.getElementById('tooltip');
+	 		             	tooltipDiv.style.display = "block";
+						}
+	 				});
+						//}, 450);
+				//}, 750);
 			});
    			console.log("done");
 		}// changeAttribute()
