@@ -28,7 +28,7 @@
    color: #404040;
    float: right;
    position: absolute;
-   top: 23%;
+   top: 20%;
    right: 4%;
 }
 
@@ -40,7 +40,7 @@ g.legend {
 	font-family: "Source Sans Pro";
 	color: #767676;
 	position: absolute;
-	top: 23%;
+	top: 20%;
 	left: 47%;
 }
 
@@ -90,7 +90,7 @@ path:hover {
 #interactive_panel {
 	width: 27%;
 	position: absolute;
-	top: 30%;
+	top: 27%;
 	left: 2.4%;
     background: #eee; 
 }
@@ -159,14 +159,14 @@ path:hover {
 	line-height: 200%;
 	font-family: "Source Sans Pro";
     position: absolute;
-    top: 80%;
+    top: 40%;
     left: 2.4%;
     padding: 1%;
 }
 
 #referencemap{
 	position: absolute;
-	top: 43%;
+	top: 60%;
 	left: 2.4%;
 	width: 27%;
 	background: #eee;
@@ -180,7 +180,7 @@ svg {
 	width: 64%;
 	height: 28em;
     position: absolute;
-    top: 30%;
+    top: 27%;
     left: 35%;
 	background: #eee;
 	border:2px solid black;

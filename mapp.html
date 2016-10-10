@@ -82,7 +82,7 @@
 		var currentpath = "";
 	
 		var currentjson = "";
-
+/*
 		var referencemap=d3.json("Referencempa.geojson");
 
 		var projection_reference=d3.geo.mercator()
@@ -107,7 +107,7 @@
 			.attr("d",reference_path)
 		});
 		
-	
+*/
 		function loadImage(dataset) {
 		
 			currentjson = dataset;
@@ -260,7 +260,8 @@
     				.on("click", function(d) {
     					var dis = d3.select(this);
 	 						currentpath = dis.style('stroke-width', '1px')
-	 							.style('fill-opacity', 2);
+	 							.style('fill-opacity', 2)
+	 							.style('fill',"rgba(193, 66, 66, 0.8)");
 	 						console.log("item clicked");
 	 						lock = true;
 	 						var tooltipDiv = document.getElementById('tooltip');
