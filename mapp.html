@@ -33,7 +33,7 @@
 	<div id="interactive_panel">
 		<div id="option_menu">
 			<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
-			<select id="selectBarColor" selected="GDPpcap" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
+			<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
 		</div> <!-- option_menu -->
 	</div>
     
@@ -87,8 +87,8 @@
         var base_color = d3.scale.category20();
 		// Add reference map
 			var svg_base=d3.select("#referencemap").append("svg")
-			.attr("width",300)
-			.attr("height",200);
+			.attr("width",350)
+			.attr("height",240);
 
 			d3.json("Referencemap.json", function(data){
 				var group=svg_base.selectAll("g")
@@ -152,12 +152,14 @@
     			var hscale = scale*w / (bounds[1][0] + bounds[0][0]);
     			var vscale = scale*w / (bounds[1][1] - bounds[0][1]);
     			var scale = (hscale < vscale) ? hscale : vscale;
+
     			var offset = [w - (bounds[0][0] + bounds[1][0])/2, 
     									h - (bounds[0][1] - bounds[1][1])/2];
+
     			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
     			// new projection
     			projection = d3.geo.mercator().center(center)
-    							.scale(scale).translate(offset);
+    							.scale(128).translate([790,300]);
     			path = path.projection(projection);
     			for (var i = 0; i < json.features.length; i++) {
 	 				countryattr[i] = json.features[i].properties.GDPpcap;
@@ -195,7 +197,7 @@
                      legend.append("rect")
                              .attr("x",20)	
                              .attr("y",function(d,i){
-							 return 270+i*40;
+							 return 355+i*40;
 							 })							 
 				             .attr("width",30)
 							 .attr("height",40)
@@ -205,7 +207,7 @@
 					 legend.append("text")
 					         .attr("x",60)
 							 .attr("y",function(d,i){
-							 return 295+i*40;
+							 return 380+i*40;
 							 })
 					         .text(function(d,i){
 							     return legendLabel[i];
@@ -381,7 +383,7 @@
                      legend.append("rect")
                              .attr("x",20)	
                              .attr("y",function(d,i){
-							 return 270+i*40;
+							 return 355+i*40;
 							 })							 
 				             .attr("width",30)
 							 .attr("height",40)
@@ -391,7 +393,7 @@
 					 legend.append("text")
 					         .attr("x",60)
 							 .attr("y",function(d,i){
-							 return 295+i*40;
+							 return 380+i*40;
 							 })
 					         .text(function(d,i){
 							     return legendLabel[i];
