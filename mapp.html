@@ -10,6 +10,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
+	<script src="node_modules/datamaps/dist/datamaps.world.min.js"></script>
     <link type="text/css" rel="stylesheet" href="mapp.css">
 	<script>
 	$(document).ready(function() {
@@ -20,7 +21,7 @@
 	});
 	</script>
 </head>
-<body onload="loadImage('Fertility.json')">
+<body onload="loadImage('Fertility.json');">
 	<a id="pagetitle"> Fertility</a>
 	<div id="credit">
 		<p class="date"> August 20, 2015 </p>
@@ -31,14 +32,14 @@
 	<div id="interactive_menu"></div> <!-- circular_interactive_menu -->
 	<div id="interactive_panel">
 		<div id="option_menu">
-			<select id="selectBar" onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
-			<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
+			<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
+			<select id="selectBarColor" selected="GDPpcap" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
 		</div> <!-- option_menu -->
 	</div>
     
 	<div id="tooltip"></div>
 	<div id="tooltipTest"></div>
-	<div id="referenceMap"></div>
+	<div id="referencemap"></div>
 
 	<script id="map">
 	
@@ -82,27 +83,34 @@
 	
 		var currentjson = "";
 		var toggle=0;
-/*
-		var referencemap=d3.json("Referencempa.geojson");
-		var projection_reference=d3.geo.mercator()
-			.center([0,5])
-			.scale(500)
-			.rotate([-180,0]);
-		var reference=d3.select("div#referenceMap").append("svg")
-			.attr("width",200)
-			.attr("height",100);
-		var reference_path=d3.geo.path()
-			.projection(projection_reference);
-		var g_refer=reference.append("g");
-		d3.json("referencemap.geojson", function(error,topology){
-			g_refer.select("reference_path")
-			.data(topojson.object(topology,topology.objects.countries).geometries)
-			.enter()
-			.append("path")
-			.attr("d",reference_path)
-		});
-		
-*/
+        
+        var base_color = d3.scale.category20();
+		// Add reference map
+			var svg_base=d3.select("#referencemap").append("svg")
+			.attr("width",300)
+			.attr("height",200);
+
+			d3.json("Referencemap.json", function(data){
+				var group=svg_base.selectAll("g")
+				.data(data.features)
+				.enter()
+				.append("g")
+
+				var projection=d3.geo.mercator()
+					.scale([78])
+					.center(d3.geo.centroid(data)) 
+					.translate([265,140]);
+
+				var path=d3.geo.path().projection(projection);
+
+				var areas=group.append("path")
+				.attr("d", path)
+				.attr("class","area")
+				.style("fill",function(d){
+					return base_color(d.properties.ADMIN);
+				});
+			});
+
 		function loadImage(dataset) {
 		
 			currentjson = dataset;
@@ -164,6 +172,7 @@
 				for (var i = 0; i < json.features.length; i++) {
 	 				color[i] = colorScale(countryattr[i]);
 	 			}
+
 			
 			var domainRange=d3.max(countryattr)-d3.min(countryattr);
 			var domainDiff=(d3.max(countryattr)-d3.min(countryattr))/4;
@@ -171,7 +180,6 @@
 				
 			for (i=0;i<colorScale.range().length;i++) {
 				legendLabel[i]=(d3.min(countryattr)+domainDiff*i).toFixed(2)+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
-					 console.log(legendLabel[i]);
 			};
 					 
 				// Add legend 
@@ -235,11 +243,12 @@
     					if (lock) {
     						d3.event.stopPropagation();
     						dis.style('stroke-width', '2px')
-    							.style('fill-opacity', 2);
+    							.style('fill-opacity', 2)
+    							.style('stroke',"red");
     					} else {
     						dis.style('stroke-width', '2px')
-    							.style('fill-opacity', 2);
-    						console.log(dis);
+    							.style('fill-opacity', 2)
+    							.style('stroke',"red");
    
     						var tooltipDiv = document.getElementById('tooltip');
     						tooltipDiv.innerHTML = d.properties.CNTRY_NAME + "<br/>" + 
@@ -256,23 +265,21 @@
 	 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
 	 					 	console.log("item clicked");
 	 					 	toggle=1;
-    			 		}else{
-    						dis.style('stroke-width', '2px')
-	 					 		.style('fill-opacity', 2)
-	 					 		.style('fill',dis.attr('fill'));
-	 					 		toggle=0;
-    			 		}
-	 						 //  dis.style('stroke-width', '2px')
-	 						 // 	.style('fill-opacity', 2)
-	 						 // 	.style('fill',"rgba(193, 66, 66, 0.8)");
-	 						 // console.log("item clicked");
-	 						  lock = true;
+	 					 	lock = true;
 	 						var tooltipDiv = document.getElementById('tooltip');
 	 						tooltipDiv.style.display = "block"; 
     						tooltipDiv.innerHTML = 
     						"Selected Country: " + d.properties.CNTRY_NAME + "<br/>" + 
     						"Total Population: " + d.properties.TotPop + "<br/>" +
     						"GDP per Capita: " + d.properties.GDPpcap + "<br/>";
+    			 		}else{
+    						dis.style('stroke-width', '1px')
+	 					 		.style('fill-opacity', 2)
+	 					 		.style('fill',dis.attr('fill'));
+	 					 		toggle=0;
+	 					 		var tooltipDiv = document.getElementById('tooltip');
+	 								tooltipDiv.style.display = "none"; 
+    			 		}
 	 				})
 					.on("mouseout", function(d) {
 						div .transition()
@@ -284,17 +291,25 @@
     					    .style("top", (d3.event.pageY - 28) + "px"); 
 						if (lock) {
 							d3.select(this).style('stroke-width', '1px')
-	 							.style('fill-opacity', 1);
+	 							.style('fill-opacity', 1)
+	 							.style('stroke',"black");
 	 						console.log("item clicked");
 	 						var tooltipDiv = document.getElementById('tooltip');
-	 						tooltipDiv.style.display = "block";
+	 							if (toggle==0){
+	 							tooltipDiv.style.display = "none";
+	 						}else{
+	 							tooltipDiv.style.display = "block";
+	 						}
 						} else {
 	 						d3.select(this).style('stroke-width', '1px')
-	 								.style('fill-opacity', 1);
-	 						tooltip.style('visibility', 'hidden');
-	 					
+	 								.style('fill-opacity', 1)
+	 								.style('stroke',"black");
 	 						var tooltipDiv = document.getElementById('tooltip');
-	 		             	tooltipDiv.style.display = "block";
+	 		             	if (toggle==0){
+	 							tooltipDiv.style.display = "none";
+	 						}else{
+	 							tooltipDiv.style.display = "block";
+	 						}
 						}
 	 				})
 			});
@@ -325,24 +340,27 @@
 			var lock;
 			//grab data from current dataset
 			var dataset = currentjson;
-		
+
+
 			var map = d3.json(dataset, function (json) {
-				console.log(json)
+				
 				for (var i = 0; i < json.features.length; i++) {
 					countryattr[i] = json.features[i].properties[attribute];
-					console.log([i]);
-			}
-	
+				}
+	        
+
 			//sets a quantized scale based on the automatically-calculated data range
 			var colorScale = d3.scale.quantize()
 						.range(['#ffffcc','#a1dab4',
 							'#41b6c4','#225ea8'])
 						.domain([d3.min(countryattr), d3.max(countryattr)]);
+
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
 				color[i] = colorScale(countryattr[i]);
 			}
 		
+
 				var domainRange=d3.max(countryattr)-d3.min(countryattr);
 				var domainDiff=(d3.max(countryattr)-d3.min(countryattr))/4;
 				var legendLabel={};
@@ -350,7 +368,8 @@
 				     legendLabel[i]=(d3.min(countryattr)+domainDiff*i).toFixed(2)+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
 					 console.log(legendLabel[i]);
 					 };
-			    var svg=d3.selectAll("#mySVG");
+
+				var svg=d3.selectAll("#mySVG");
 				    svg.selectAll('.legend')
 					   .remove();
                 var legend=svg.selectAll('.legend')
@@ -383,28 +402,26 @@
 			svg.selectAll("path")
 				.transition()
 				.duration(750)
-				.attr("height", 0)
-				//setTimeout(function() {
+				.attr("height", 0);
+
+				setTimeout(function() {
 					d3.selectAll("body")
 						.transition()
 						.duration(200)
-						//setTimeout(function() {
-							d3.selectAll("path")
+						setTimeout(function() {
+							svg.selectAll("path")
 								.attr("fill", function(json, i) {	
 				
 									if (countryattr[i] > 0) { 
 										return color[i];
-									}
-									else {
-										return "grey";
-									}
+								}else {
+									return "grey";}
 								}) //missing data is grey
-						
-    					   .on("mouseover", function(d) {
+								
+    					.on("mouseover", function(d) {
     						var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
     						var dis = d3.select(this);
-    						console.log("left: " + mouse[0]);
-    						console.log("top: " + mouse[1]);
+    					
     						div.transition()
     							.duration(200)
     							.style("opacity", .9);
@@ -415,10 +432,12 @@
     						if (lock) {
     							d3.event.stopPropagation();
     							dis.style('stroke-width', '2px')
-    								.style('fill-opacity', 2);
+    								.style('fill-opacity', 2)
+    								.style('stroke',"red");
     						} else {
     							dis.style('stroke-width', '2px')
-    								.style('fill-opacity', 2);
+    								.style('fill-opacity', 2)
+    								.style('stroke',"red");
     							console.log(dis);
    
     						var tooltipDiv = document.getElementById('tooltip');
@@ -433,23 +452,26 @@
 							dis.style('stroke-width', '2px')
 	 					 		.style('fill-opacity', 2)
 	 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
-	 					 	console.log("item clicked");
+	
 	 					 	toggle=1;
-    			 		}else{
-    						dis.style('stroke-width', '1px')
-	 					 		.style('fill-opacity', 2)
-	 					 		.style('fill',dis.attr('fill'));
-	 					 		toggle=0;
-    			 		}
-	 						lock = true;
+	 					 	lock = true;
 	 						var tooltipDiv = document.getElementById('tooltip');
 	 						tooltipDiv.style.display = "block"; 
     						tooltipDiv.innerHTML = 
     						"Selected Country: " + d.properties.CNTRY_NAME + "<br/>" + 
     						"Total Population: " + d.properties.TotPop + "<br/>" +
-    						"GDP per Capita: " + d.properties.GDPpcap + "<br/>";
+    						attribute+": " + d.properties[attribute] + "<br/>";
+    			 		}else{
+    						dis.style('stroke-width', '1px')
+	 					 		.style('fill-opacity', 2)
+	 					 		.style('fill',dis.attr('fill'));
+	 					 		toggle=0;
+	 					 		var tooltipDiv = document.getElementById('tooltip');
+	 								tooltipDiv.style.display = "none"; 
+    			 		}
 	 				})
 					.on("mouseout", function(d) {
+						var tooltipDiv = document.getElementById('tooltip');
 						div .transition()
     						.duration(200)
     						.style("opacity", .9);
@@ -459,21 +481,27 @@
     					    .style("top", (d3.event.pageY - 28) + "px"); 
 						if (lock) {
 							d3.select(this).style('stroke-width', '1px')
-	 							.style('fill-opacity', 1);
-	 						console.log("item clicked");
-	 						var tooltipDiv = document.getElementById('tooltip');
-	 						tooltipDiv.style.display = "block";
+	 							.style('fill-opacity', 1)
+	 							.style('stroke',"black");
+	 						if (toggle==0){
+	 							tooltipDiv.style.display = "none";
+	 						}else{
+	 							tooltipDiv.style.display = "block";
+	 						}
+	 						
 						} else {
 	 						d3.select(this).style('stroke-width', '1px')
-	 								.style('fill-opacity', 1);
-	 						tooltip.style('visibility', 'hidden');
-	 					
-	 						var tooltipDiv = document.getElementById('tooltip');
-	 		             	tooltipDiv.style.display = "block";
+	 								.style('fill-opacity', 1)
+	 								.style('stroke',"black");
+	 		             	if (toggle==0){
+	 							tooltipDiv.style.display = "none";
+	 						}else{
+	 							tooltipDiv.style.display = "block";
+	 						}
 						}
 	 				});
-						//}, 450);
-				//}, 750);
+						}, 450);
+				}, 750);
 			});
    			console.log("done");
 		}// changeAttribute()
