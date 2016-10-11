@@ -111,7 +111,18 @@
 				});
 			});
 
-
+         // Function to remove all the missing values. Missing data is coded as "-999"
+        function remove(arr){
+        	var what, a = arguments, L = a.length, ax;
+    		while (L > 1 && arr.length) {
+        		what = a[--L];
+       			while ((ax= arr.indexOf(what)) !== -1) {
+           		arr.splice(ax, 1);
+        	}
+   		 }
+    		return arr;
+		}
+       
         // Showing the base map in the large svg area
 
         function loadBaseMap(dataset){
@@ -192,26 +203,27 @@
     							.scale(128).translate([790,300]);
     			path = path.projection(projection);
     			for (var i = 0; i < json.features.length; i++) {
-	 				countryattr[i] = json.features[i].properties.GDPpcap;
+	 				countryattr[i] = json.features[i].properties.GDPPCAP;
 	 			}
 			
     			//sets a quantized scale based on the automatically-calculated data range
 				var colorScale = d3.scale.quantize()
     							.range(['#ffffcc','#a1dab4',
 									'#41b6c4','#225ea8'])
-    							.domain([d3.min(countryattr), d3.max(countryattr)]);
+    							.domain([d3.min(remove(countryattr,-999)), d3.max(countryattr)]);
+
 				//links the data variable to the color scale
 				for (var i = 0; i < json.features.length; i++) {
 	 				color[i] = colorScale(countryattr[i]);
 	 			}
 
 			
-			var domainRange=d3.max(countryattr)-d3.min(countryattr);
-			var domainDiff=(d3.max(countryattr)-d3.min(countryattr))/4;
+			var domainRange=d3.max(countryattr)-d3.min(remove(countryattr,-999));
+			var domainDiff=(d3.max(countryattr)-d3.min(remove(countryattr,-999)))/4;
 			var legendLabel={};
 				
 			for (i=0;i<colorScale.range().length;i++) {
-				legendLabel[i]=(d3.min(countryattr)+domainDiff*i).toFixed(2)+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
+				legendLabel[i]=(d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2)+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
 			};
 					 
 				// Add legend 
@@ -253,7 +265,7 @@
 					.attr("stroke", "black")
 					.attr("fill", function(json, i) {	
 				
-						if (countryattr[i] > 0) { 
+						if (countryattr[i]!=-999) { 
 							return color[i];
 						}
 						else {
@@ -268,7 +280,7 @@
     					div.transition()
     						.duration(200)
     						.style("opacity", .9);
-    					div.html(d.properties.CNTRY_NAME + "<br/>"+"Total Population"+d.properties.TotPop+"<br>")
+    					div.html(d.properties.ADMIN + "<br/>"+"Total Population"+d.properties.POPULAT+"<br>")
     						.style("position", "absolute")
     					    .style("x", (mouse[0]) + "px")
     					    .style("y", (mouse[1]) + "px");
@@ -283,8 +295,8 @@
     							.style('stroke',"red");
    
     						var tooltipDiv = document.getElementById('tooltip');
-    						tooltipDiv.innerHTML = d.properties.CNTRY_NAME + "<br/>" + 
-    						"Total Population: " + d.properties.TotPop + "<br/>";
+    						tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
+    						"Total Population: " + d.properties.POPULAT + "<br/>";
     						tooltipDiv.style.display = "block";
     					}
     				})
@@ -301,9 +313,9 @@
 	 						var tooltipDiv = document.getElementById('tooltip');
 	 						tooltipDiv.style.display = "block"; 
     						tooltipDiv.innerHTML = 
-    						"Selected Country: " + d.properties.CNTRY_NAME + "<br/>" + 
-    						"Total Population: " + d.properties.TotPop + "<br/>" +
-    						"GDP per Capita: " + d.properties.GDPpcap + "<br/>";
+    						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
+    						"Total Population: " + d.properties.POPULAT + "<br/>" +
+    						"GDP per Capita: " + d.properties.GDPPCAP + "<br/>";
     			 		}else{
     						dis.style('stroke-width', '1px')
 	 					 		.style('fill-opacity', 2)
@@ -318,7 +330,7 @@
     						.duration(200)
     						.style("opacity", .9);
     					div .html(d.properties.CNTRY_NAME + "<br/>" + 
-    						"Total Population: " + d.properties.TotPop + "<br/>")
+    						"Total Population: " + d.properties.POPULAT + "<br/>")
     					    .style("left", (d3.event.pageX) + "px")
     					    .style("top", (d3.event.pageY - 28) + "px"); 
 						if (lock) {
@@ -387,7 +399,7 @@
 			var colorScale = d3.scale.quantize()
 						.range(['#ffffcc','#a1dab4',
 							'#41b6c4','#225ea8'])
-						.domain([d3.min(countryattr), d3.max(countryattr)]);
+						.domain([d3.min(remove(countryattr,-999)), d3.max(countryattr)]);
 
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
@@ -395,11 +407,11 @@
 			}
 		
 
-				var domainRange=d3.max(countryattr)-d3.min(countryattr);
-				var domainDiff=(d3.max(countryattr)-d3.min(countryattr))/4;
+				var domainRange=d3.max(countryattr)-d3.min(remove(countryattr,-999));
+				var domainDiff=(d3.max(countryattr)-d3.min(remove(countryattr,-999)))/4;
 				var legendLabel={};
 				for (i=0;i<colorScale.range().length;i++){
-				     legendLabel[i]=(d3.min(countryattr)+domainDiff*i).toFixed(2)+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
+				     legendLabel[i]=(d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2)+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
 					 console.log(legendLabel[i]);
 					 };
 
@@ -447,7 +459,7 @@
 							svg.selectAll("path")
 								.attr("fill", function(json, i) {	
 				
-									if (countryattr[i] > 0) { 
+									if (countryattr[i]!=-999) { 
 										return color[i];
 								}else {
 									return "grey";}
@@ -460,7 +472,7 @@
     						div.transition()
     							.duration(200)
     							.style("opacity", .9);
-    						div.html(d.properties.CNTRY_NAME + "<br/>"+"Total Population"+d.properties.TotPop+"<br>")
+    						div.html(d.properties.ADMIN + "<br/>"+"Total Population"+d.properties.POPULAT+"<br>")
     							.style("position", "absolute")
     					    	.style("x", (mouse[0]) + "px")
     					    	.style("y", (mouse[1]) + "px");
@@ -476,8 +488,8 @@
     							console.log(dis);
    
     						var tooltipDiv = document.getElementById('tooltip');
-    							tooltipDiv.innerHTML = d.properties.CNTRY_NAME + "<br/>" + 
-    							"Total Population: " + d.properties.TotPop + "<br/>";
+    							tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
+    							"Total Population: " + d.properties.POPULAT + "<br/>";
     							tooltipDiv.style.display = "block";
     					}
     				})
@@ -493,8 +505,8 @@
 	 						var tooltipDiv = document.getElementById('tooltip');
 	 						tooltipDiv.style.display = "block"; 
     						tooltipDiv.innerHTML = 
-    						"Selected Country: " + d.properties.CNTRY_NAME + "<br/>" + 
-    						"Total Population: " + d.properties.TotPop + "<br/>" +
+    						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
+    						"Total Population: " + d.properties.POPULAT + "<br/>" +
     						attribute+": " + d.properties[attribute] + "<br/>";
     			 		}else{
     						dis.style('stroke-width', '1px')
@@ -511,7 +523,7 @@
     						.duration(200)
     						.style("opacity", .9);
     					div .html(d.properties.CNTRY_NAME + "<br/>" + 
-    						"Total Population: " + d.properties.TotPop + "<br/>")
+    						"Total Population: " + d.properties.POPULAT + "<br/>")
     					    .style("left", (d3.event.pageX) + "px")
     					    .style("top", (d3.event.pageY - 28) + "px"); 
 						if (lock) {
