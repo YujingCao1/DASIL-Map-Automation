@@ -21,7 +21,7 @@
 	});
 	</script>
 </head>
-<body onload="loadImage('Fertility.json');">
+<body onload="loadBaseMap('Referencemap.json');">
 	<a id="pagetitle"> Fertility</a>
 	<div id="credit">
 		<p class="date"> August 20, 2015 </p>
@@ -83,7 +83,7 @@
 	
 		var currentjson = "";
 		var toggle=0;
-        
+    
         var base_color = d3.scale.category20();
 		// Add reference map
 			var svg_base=d3.select("#referencemap").append("svg")
@@ -110,6 +110,36 @@
 					return base_color(d.properties.ADMIN);
 				});
 			});
+
+
+        // Showing the base map in the large svg area
+
+        function loadBaseMap(dataset){
+        	var base_color = d3.scale.category20();
+		// Add reference map
+			var svg_base=d3.select("body").append("svg")
+			.attr("width",350)
+			.attr("height",240);
+
+			d3.json(dataset, function(data){
+				var group=svg_base.selectAll("g")
+				.data(data.features)
+				.enter()
+				.append("g")
+
+				var projection=d3.geo.mercator()
+					.scale([125])
+					.center(d3.geo.centroid(data)) 
+					.translate([630,245]);
+
+				var path=d3.geo.path().projection(projection);
+
+				var areas=group.append("path")
+				.attr("d", path)
+				.attr("class","area")
+				.style("fill","steelblue");
+			});
+        }
 
 		function loadImage(dataset) {
 		
@@ -321,18 +351,20 @@
 			console.log("current dataset: " + currentjson);
 			d3.selectAll("path")
 				.transition()
-				.duration(750)
+				.duration(2000)
+				.ease("linear")
 				.attr("height", 0)
 				setTimeout(function() {
 					d3.selectAll("body")
 						.transition()
-						.duration(200)
+						.duration(2000)
+						.ease("linear")
 						setTimeout(function() {
 							d3.selectAll("#mySVG").remove();
 							loadImage(dataset + ".json"); 
-							d3.selectAll("#map").transition().duration(200).style("opacity", 1);
-							}, 450);
-					}, 750);
+							d3.selectAll("#map").transition().duration(2000).ease("linear").style("opacity", 1);
+							}, 0);
+					}, 0);
 			console.log("done");
 		}// changeDataset()
 	
@@ -403,13 +435,14 @@
 			console.log(attribute);
 			svg.selectAll("path")
 				.transition()
-				.duration(750)
+				.duration(2000)
 				.attr("height", 0);
 
 				setTimeout(function() {
 					d3.selectAll("body")
 						.transition()
-						.duration(200)
+						.duration(2000)
+						.ease("linear");
 						setTimeout(function() {
 							svg.selectAll("path")
 								.attr("fill", function(json, i) {	
@@ -502,8 +535,8 @@
 	 						}
 						}
 	 				});
-						}, 450);
-				}, 750);
+						}, 0);
+				}, 0);
 			});
    			console.log("done");
 		}// changeAttribute()
