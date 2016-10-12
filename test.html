@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+ <style>
+ 		.states {
+	fill: #e5e5e5;
+	stroke: #fff;
+	stroke-width:2px;
+	}
+ </style>
+	<body>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="d3.min.js"></script>
+	<script src="http://d3js.org/topojson.v0.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
+	<script src="https://d3js.org/d3-array.v1.min.js"></script>
+	<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+
+		<script type="text/javascript">
+            
+            var base_color = d3.scale.category20();
+			var svg_base=d3.select("body").append("svg")
+			.attr("width",2000)
+			.attr("height",1000);
+
+			d3.json("Referencemap.json", function(data){
+				var group=svg_base.selectAll("g")
+				.data(data.features)
+				.enter()
+				.append("g")
+
+				var projection=d3.geo.mercator()
+					.scale([110])
+					.center([5,30]);
+
+				var path=d3.geo.path().projection(projection);
+
+				var areas=group.append("path")
+				.attr("d", path)
+				.attr("class","area")
+				.style("fill",function(d){
+					return base_color(d.properties.ADMIN);
+				});
+			});
+									
+		</script>
+	</body>
+</html>
