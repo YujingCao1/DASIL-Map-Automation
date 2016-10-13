@@ -31,6 +31,8 @@
 
 	<div id="interactive_menu"></div> <!-- circular_interactive_menu -->
 	<div id="interactive_panel">
+				<div id="tittle1"> Data Set </div>
+			    <div id="tittle2"> Attribute</div>
 		<div id="option_menu">
 			<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
 			<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
@@ -73,8 +75,8 @@
 								return d.Attribute;
 							});
 		});
-	
-		var json = d3.json("Fertility.json"); 
+	    
+		var json = d3.json("Fertility2.json"); 
 	
 		var tooltip = d3.select('text')
 							.append('div')
@@ -200,7 +202,7 @@
     			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
     			// new projection
     			projection = d3.geo.mercator().center(center)
-    							.scale(128).translate([790,300]);
+    							.scale(scale).translate(offset);
     			path = path.projection(projection);
     			for (var i = 0; i < json.features.length; i++) {
 	 				countryattr[i] = json.features[i].properties.GDPPCAP;
@@ -214,7 +216,11 @@
 
 				//links the data variable to the color scale
 				for (var i = 0; i < json.features.length; i++) {
-	 				color[i] = colorScale(countryattr[i]);
+					if (countryattr[i]==-999){
+						color[i]="grey";
+					}else{
+						color[i] = colorScale(countryattr[i]);
+					}	
 	 			}
 
 			
@@ -223,7 +229,7 @@
 			var legendLabel={};
 				
 			for (i=0;i<colorScale.range().length;i++) {
-				legendLabel[i]=(d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2)+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
+				legendLabel[i]=((d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2))+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
 			};
 					 
 				// Add legend 
@@ -254,6 +260,10 @@
 					         .text(function(d,i){
 							     return legendLabel[i];
 							 });
+					 legend.append("text")
+					 		.attr("x",20)
+					 		.attr("y",340)
+					 		.text("GDP per Capita");
 	 			var lock;
 	 		
 				//makes the map
@@ -263,13 +273,8 @@
     				.append("path")
     				.attr("d", d3.geo.path().projection(projection))
 					.attr("stroke", "black")
-					.attr("fill", function(json, i) {	
-				
-						if (countryattr[i]!=-999) { 
+					.attr("fill", function(json, i) {
 							return color[i];
-						}
-						else {
-							return "grey";}
 						}) //missing data is grey
 													
     				.on("mouseover", function(d) {
@@ -327,7 +332,7 @@
 	 				})
 					.on("mouseout", function(d) {
 						div .transition()
-    						.duration(200)
+    						.duration(2000)
     						.style("opacity", .9);
     					div .html(d.properties.CNTRY_NAME + "<br/>" + 
     						"Total Population: " + d.properties.POPULAT + "<br/>")
@@ -403,7 +408,11 @@
 
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
-				color[i] = colorScale(countryattr[i]);
+				if (countryattr[i]==-999){
+					color[i]="grey"
+				}else{
+					color[i] = colorScale(countryattr[i]);
+				}
 			}
 		
 
@@ -411,7 +420,7 @@
 				var domainDiff=(d3.max(countryattr)-d3.min(remove(countryattr,-999)))/4;
 				var legendLabel={};
 				for (i=0;i<colorScale.range().length;i++){
-				     legendLabel[i]=(d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2)+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
+				     legendLabel[i]=((d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2))+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
 					 console.log(legendLabel[i]);
 					 };
 
@@ -442,7 +451,10 @@
 					         .text(function(d,i){
 							     return legendLabel[i];
 							 });
-			
+					 legend.append("text")
+					 		.attr("x",20)
+					 		.attr("y",340)
+					 		.text(attribute);
 		
 			console.log(attribute);
 			svg.selectAll("path")
@@ -458,11 +470,7 @@
 						setTimeout(function() {
 							svg.selectAll("path")
 								.attr("fill", function(json, i) {	
-				
-									if (countryattr[i]!=-999) { 
-										return color[i];
-								}else {
-									return "grey";}
+									return color[i];
 								}) //missing data is grey
 								
     					.on("mouseover", function(d) {
@@ -552,7 +560,7 @@
 			});
    			console.log("done");
 		}// changeAttribute()
-			
+
 		var dropDown = document.getElementById("selectBar");
 		var dropDownColor = document.getElementById("selectBarColor");
 			
