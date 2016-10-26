@@ -167,10 +167,16 @@ function loadImage(dataset) {
                 .attr("id","referenceSVG")
 				.attr("width",350)
 				.attr("height",240);
-
+	var unit;
 
 		currentjson = dataset;
 		
+      	attributesJSON.forEach(function(d){
+        	if (d.id=="GDPPCAP"){
+        		return unit=d.unit;
+        	}
+        });
+
 		var margin = {
 			top: 20,
 			right: 10,
@@ -258,7 +264,7 @@ function loadImage(dataset) {
                  legend.append("rect")
                          .attr("x",20)	
                          .attr("y",function(d,i){
-						 return 355+i*40;
+						 return 370+i*40;
 						 })							 
 			             .attr("width",30)
 						 .attr("height",40)
@@ -268,15 +274,20 @@ function loadImage(dataset) {
 				 legend.append("text")
 				         .attr("x",60)
 						 .attr("y",function(d,i){
-						 return 380+i*40;
+						 return 395+i*40;
 						 })
 				         .text(function(d,i){
 						     return legendLabel[i];
 						 });
 				 legend.append("text")
 				 		.attr("x",20)
-				 		.attr("y",340)
+				 		.attr("y",320)
 				 		.text("GDP per Capita");
+				 legend.append("text")
+				 	   .attr("x",20)
+				 	   .attr("y",355)
+				 	   .text("Unit: "+unit);
+
  			var lock;
  		
 			//makes the map
@@ -451,6 +462,7 @@ function loadImage(dataset) {
 		var lock;
 		var toggle=0;
 	    var fullname;
+	    var unit;
 		//grab data from current dataset
 		var dataset = currentjson;
 
@@ -459,7 +471,12 @@ function loadImage(dataset) {
         	if (d.id==attribute){
         		return fullname=d.name;
         	}
-        })
+        });
+      	attributesJSON.forEach(function(d){
+        	if (d.id==attribute){
+        		return unit=d.unit;
+        	}
+        });
 
         d3.selectAll("#referenceSVG").remove();
        var svg_base=d3.select("#referencemap").append("svg")
@@ -510,7 +527,7 @@ function loadImage(dataset) {
                  legend.append("rect")
                          .attr("x",20)	
                          .attr("y",function(d,i){
-						 return 355+i*40;
+						 return 370+i*40;
 						 })							 
 			             .attr("width",30)
 						 .attr("height",40)
@@ -520,15 +537,19 @@ function loadImage(dataset) {
 				 legend.append("text")
 				         .attr("x",60)
 						 .attr("y",function(d,i){
-						 return 380+i*40;
+						 return 395+i*40;
 						 })
 				         .text(function(d,i){
 						     return legendLabel[i];
 						 });
 				 legend.append("text")
 				 		.attr("x",20)
-				 		.attr("y",340)
-				 		.text(attribute);
+				 		.attr("y",320)
+				 		.text(fullname);
+				 legend.append("text")
+				 	   .attr("x",20)
+				 	   .attr("y",355)
+				 	   .text("Unit: "+unit);
 	
 		svg.selectAll("path")
 			.transition()
