@@ -1,569 +1,687 @@
- <!--  put in a key for the graph, only grabbing FeatureCollection 
- 		put in a click function -->
+<!--  put in a key for the graph, only grabbing FeatureCollection 
+		put in a click function -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<script type="text/javascript" src="d3.min.js"></script>
-	<script src="http://d3js.org/topojson.v0.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
-	<script src="node_modules/datamaps/dist/datamaps.world.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="mapp.css">
-	<script>
-	$(document).ready(function() {
-		$("select#selectBar").change(function() {
-			var thisvalue = $("#selectBar option:selected").text();
-			$('a#pagetitle').text(thisvalue);
-		});
+<meta charset="utf-8">
+<script type="text/javascript" src="d3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
+<link type="text/css" rel="stylesheet" href="mapp.css">
+<script>
+$(document).ready(function() {
+	$("select#selectBar").change(function() {
+		var thisvalue = $("#selectBar option:selected").text();
+		$('a#pagetitle').text(thisvalue);
 	});
-	</script>
+});
+</script>
 </head>
 <body onload="loadBaseMap('Referencemap.json');">
-	<a id="pagetitle"> Fertility</a>
-	<div id="credit">
-		<p class="date"> August 20, 2015 </p>
-		<p class="by">by</p>
-		<p class="id"> Amanda Hinchman-Dominguez, Student, Grinnell College </p>
-	</div>
+<a id="pagetitle"> World Map</a>
+<div id="credit">
+	<p class="date"> August 20, 2015 </p>
+	<p class="by">by</p>
+	<p class="id"> Amanda Hinchman-Dominguez, Student, Grinnell College </p>
+</div>
 
-	<div id="interactive_menu"></div> <!-- circular_interactive_menu -->
-	<div id="interactive_panel">
-				<div id="tittle1"> Data Set </div>
-			    <div id="tittle2"> Attribute</div>
-		<div id="option_menu">
-			<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
-			<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
-		</div> <!-- option_menu -->
-	</div>
+<div id="interactive_menu"></div> <!-- circular_interactive_menu -->
+<div id="interactive_panel">
+			<div id="tittle1"> Data Set </div>
+		    <div id="tittle2"> Attribute</div>
+	<div id="option_menu">
+		<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
+		<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
+	</div> <!-- option_menu -->
+</div>
+
+<div id="tooltip"></div>
+<div id="tooltipTest"></div>
+<div id="referencemap"></div>
+
+<script id="map">
+
+	 var div = d3.select("body").append("div")
+	 			.style("position","relative")
+	 			.attr("id", "tooltipTest")
+	 			.style("opacity", 0.9);
+
+	d3.csv("filelist.csv", function(data) {
+		d3.select("#selectBar").selectAll("option")
+						.data(data)
+						.enter()
+						.append("option")
+						.attr("id", function(d,i) {
+							return ("option" + i);
+						})
+						.text(function(d) {
+							return d.FileNames;
+						});
+	});
     
-	<div id="tooltip"></div>
-	<div id="tooltipTest"></div>
-	<div id="referencemap"></div>
-
-	<script id="map">
-	
-		 var div = d3.select("body").append("div")
-		 			.style("position","relative")
-		 			.attr("id", "tooltipTest")
-		 			.style("opacity", 0.9);
-	
-		d3.csv("filelist.csv", function(data) {
-			d3.select("#selectBar").selectAll("option")
-							.data(data)
+    // Generate dropdow list with JSON file of attributes
+	var attributesJSON=d3.json("Attributes.json",function(json){
+		attributesJSON=json;
+		d3.select("#selectBarColor").selectAll("option")
+							.data(attributesJSON)
 							.enter()
 							.append("option")
 							.attr("id", function(d,i) {
 								return ("option" + i)
 							})
 							.text(function(d) {
-								return d.FileNames;
-							});
-		});
-	
-		d3.csv("Attributes.csv", function(data) {
-			d3.select("#selectBarColor").selectAll("option")
-							.data(data)
-							.enter()
-							.append("option")
-							.attr("id", function(d,i) {
-								return ("option" + i)
+								return d.id;
 							})
-							.text(function(d) {
-								return d.Attribute;
+							.attr("title",function(d){
+								return d.name;
 							});
-		});
-	    
-		var json = d3.json("Fertility2.json"); 
-	
-		var tooltip = d3.select('text')
-							.append('div')
-							.attr('class', 'tooltip');
-		var currentpath = "";
-	
-		var currentjson = "";
-		var toggle=0;
+	});
     
-        var base_color = d3.scale.category20();
-		// Add reference map
-			var svg_base=d3.select("#referencemap").append("svg")
-			.attr("width",350)
-			.attr("height",240);
+    // Load Attributes json file
+    var attributesJSON=d3.json("Attributes.json",function(json){
+		attributesJSON=json;
+	});
+    
+	var json = d3.json("Population.json"); 
 
-			d3.json("Referencemap.json", function(data){
-				var group=svg_base.selectAll("g")
-				.data(data.features)
-				.enter()
-				.append("g")
+	var tooltip = d3.select('text')
+						.append('div')
+						.attr('class', 'tooltip');
+	var currentpath = "";
 
-				var projection=d3.geo.mercator()
-					.scale([78])
-					.center(d3.geo.centroid(data)) 
-					.translate([265,140]);
+	var currentjson = "";
+	var toggle=0;
 
-				var path=d3.geo.path().projection(projection);
+    //var base_color = d3.scale.category20();
+	// Add reference map
+	var svg_base=d3.select("#referencemap").append("svg")
+	               .attr("id","referenceSVG")
+	               .attr("width",350)
+	               .attr("height",240);
 
-				var areas=group.append("path")
-				.attr("d", path)
-				.attr("class","area")
-				.style("fill",function(d){
-					return base_color(d.properties.ADMIN);
-				});
-			});
+	d3.json("Referencemap.json", function(data){
+		var group=svg_base.selectAll("g")
+					    .data(data.features)
+						.enter()
+						.append("g")
 
-         // Function to remove all the missing values. Missing data is coded as "-999"
-        function remove(arr){
-        	var what, a = arguments, L = a.length, ax;
-    		while (L > 1 && arr.length) {
-        		what = a[--L];
-       			while ((ax= arr.indexOf(what)) !== -1) {
-           		arr.splice(ax, 1);
-        	}
-   		 }
-    		return arr;
-		}
-       
-        // Showing the base map in the large svg area
+		var projection=d3.geo.mercator()
+			.scale([78])
+			.center(d3.geo.centroid(data)) 
+			.translate([265,140]);
 
-        function loadBaseMap(dataset){
-        	var base_color = d3.scale.category20();
-		// Add reference map
-			var svg_base=d3.select("body").append("svg")
-			.attr("width",350)
-			.attr("height",240);
+		var path=d3.geo.path().projection(projection);
 
-			d3.json(dataset, function(data){
-				var group=svg_base.selectAll("g")
-				.data(data.features)
-				.enter()
-				.append("g")
+		var areas=group.append("path")
+		               .attr("d", path)
+		               .attr("class","area")
+		               .style("fill","steelblue");
+    });
 
-				var projection=d3.geo.mercator()
-					.scale([125])
-					.center(d3.geo.centroid(data)) 
-					.translate([630,245]);
-
-				var path=d3.geo.path().projection(projection);
-
-				var areas=group.append("path")
-				.attr("d", path)
-				.attr("class","area")
-				.style("fill","steelblue");
-			});
-        }
-
-		function loadImage(dataset) {
-		
-			currentjson = dataset;
-			
-			var margin = {
-    			top: 20,
-    			right: 10,
-    			bottom: 30,
-    			left: 50
-			};
-		
-			var h = window.innerHeight * 0.03 - margin.top - margin.bottom; 
-			var w = window.innerWidth * 1 - margin.left - margin.right;
-			var padding = 50;
-			var countryattr = [];
-			var color = [];
-			console.log("before accessing json: " + json);
-		
-			var svg = d3.select("body").append("svg")
-				//a box to contain the map
-				.attr("id", "mySVG")
-    			.attr("width", w)
-    			.attr("height", h);
-				//accesses the json and creates a projection
-			var map = d3.json(dataset, function (json) {
-    			// create a first guess for the projection
-    			var center = d3.geo.centroid(json);
-    			var scale = 120;
-    			var offset = [w / 2 + (margin.top*8), h / 2 + (margin.top*8)];
-    			var projection = d3.geo.mercator().scale(scale).center(center)
-        			.translate(offset);
-    			// create the path
-    			var path = d3.geo.path().projection(projection);
-    			
-    			// using the path to determine the bounds of the current
-    			// bounds of the current map and use these to determine
-    			// better values for scale and translation
-    			var bounds = path.bounds(json);
-    			var hscale = scale*w / (bounds[1][0] + bounds[0][0]);
-    			var vscale = scale*w / (bounds[1][1] - bounds[0][1]);
-    			var scale = (hscale < vscale) ? hscale : vscale;
-
-    			var offset = [w - (bounds[0][0] + bounds[1][0])/2, 
-    									h - (bounds[0][1] - bounds[1][1])/2];
-
-    			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
-    			// new projection
-    			projection = d3.geo.mercator().center(center)
-    							.scale(scale).translate(offset);
-    			path = path.projection(projection);
-    			for (var i = 0; i < json.features.length; i++) {
-	 				countryattr[i] = json.features[i].properties.GDPPCAP;
-	 			}
-			
-    			//sets a quantized scale based on the automatically-calculated data range
-				var colorScale = d3.scale.quantize()
-    							.range(['#ffffcc','#a1dab4',
-									'#41b6c4','#225ea8'])
-    							.domain([d3.min(remove(countryattr,-999)), d3.max(countryattr)]);
-
-				//links the data variable to the color scale
-				for (var i = 0; i < json.features.length; i++) {
-					if (countryattr[i]==-999){
-						color[i]="grey";
-					}else{
-						color[i] = colorScale(countryattr[i]);
-					}	
-	 			}
-
-			
-			var domainRange=d3.max(countryattr)-d3.min(remove(countryattr,-999));
-			var domainDiff=(d3.max(countryattr)-d3.min(remove(countryattr,-999)))/4;
-			var legendLabel={};
-				
-			for (i=0;i<colorScale.range().length;i++) {
-				legendLabel[i]=((d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2))+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
-			};
-					 
-				// Add legend 
-				var svg=d3.selectAll("#mySVG");
-				    svg.selectAll('.legend')
-					   .remove();
-                var legend=svg.selectAll('.legend')
-				             .data(colorScale.range())
-                             .enter()
-                             .append("g")
-                             .attr("class","legend");
-							 
-                     legend.append("rect")
-                             .attr("x",20)	
-                             .attr("y",function(d,i){
-							 return 355+i*40;
-							 })							 
-				             .attr("width",30)
-							 .attr("height",40)
-							 .style("fill",function(d,i){
-							 return colorScale.range()[i];
-							 });
-					 legend.append("text")
-					         .attr("x",60)
-							 .attr("y",function(d,i){
-							 return 380+i*40;
-							 })
-					         .text(function(d,i){
-							     return legendLabel[i];
-							 });
-					 legend.append("text")
-					 		.attr("x",20)
-					 		.attr("y",340)
-					 		.text("GDP per Capita");
-	 			var lock;
-	 		
-				//makes the map
-				svg.selectAll("path")
-    				.data(json.features)
-    				.enter()
-    				.append("path")
-    				.attr("d", d3.geo.path().projection(projection))
-					.attr("stroke", "black")
-					.attr("fill", function(json, i) {
-							return color[i];
-						}) //missing data is grey
-													
-    				.on("mouseover", function(d) {
-    					var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
-    					var dis = d3.select(this);
-    					console.log("left: " + mouse[0]);
-    					console.log("top: " + mouse[1]);
-    					div.transition()
-    						.duration(200)
-    						.style("opacity", .9);
-    					div.html(d.properties.ADMIN + "<br/>"+"Total Population"+d.properties.POPULAT+"<br>")
-    						.style("position", "absolute")
-    					    .style("x", (mouse[0]) + "px")
-    					    .style("y", (mouse[1]) + "px");
-    					if (lock) {
-    						d3.event.stopPropagation();
-    						dis.style('stroke-width', '2px')
-    							.style('fill-opacity', 2)
-    							.style('stroke',"red");
-    					} else {
-    						dis.style('stroke-width', '2px')
-    							.style('fill-opacity', 2)
-    							.style('stroke',"red");
+     // Function to remove all the missing values. Missing data is coded as "-999"
+    function removeElement(arr){
+    	var what, a = arguments, L = a.length, ax;
+		while (L > 1 && arr.length) {
+    		what = a[--L];
+   			while ((ax= arr.indexOf(what)) !== -1) {
+       		arr.splice(ax, 1);
+    	}
+		 }
+		return arr;
+	}
    
-    						var tooltipDiv = document.getElementById('tooltip');
-    						tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
-    						"Total Population: " + d.properties.POPULAT + "<br/>";
-    						tooltipDiv.style.display = "block";
-    					}
-    				})
-    			
-    				.on("click", function(d) {
-    					var dis = d3.select(this);
-    					if (toggle==0){
-							dis.style('stroke-width', '2px')
-	 					 		.style('fill-opacity', 2)
-	 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
-	 					 	console.log("item clicked");
-	 					 	toggle=1;
-	 					 	lock = true;
-	 						var tooltipDiv = document.getElementById('tooltip');
-	 						tooltipDiv.style.display = "block"; 
-    						tooltipDiv.innerHTML = 
-    						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
-    						"Total Population: " + d.properties.POPULAT + "<br/>" +
-    						"GDP per Capita: " + d.properties.GDPPCAP + "<br/>";
-    			 		}else{
-    						dis.style('stroke-width', '1px')
-	 					 		.style('fill-opacity', 2)
-	 					 		.style('fill',dis.attr('fill'));
-	 					 		toggle=0;
-	 					 		var tooltipDiv = document.getElementById('tooltip');
-	 								tooltipDiv.style.display = "none"; 
-    			 		}
-	 				})
-					.on("mouseout", function(d) {
-						div .transition()
-    						.duration(2000)
-    						.style("opacity", .9);
-    					div .html(d.properties.CNTRY_NAME + "<br/>" + 
-    						"Total Population: " + d.properties.POPULAT + "<br/>")
-    					    .style("left", (d3.event.pageX) + "px")
-    					    .style("top", (d3.event.pageY - 28) + "px"); 
-						if (lock) {
-							d3.select(this).style('stroke-width', '1px')
-	 							.style('fill-opacity', 1)
-	 							.style('stroke',"black");
-	 						console.log("item clicked");
-	 						var tooltipDiv = document.getElementById('tooltip');
-	 							if (toggle==0){
-	 							tooltipDiv.style.display = "none";
-	 						}else{
-	 							tooltipDiv.style.display = "block";
-	 						}
-						} else {
-	 						d3.select(this).style('stroke-width', '1px')
-	 								.style('fill-opacity', 1)
-	 								.style('stroke',"black");
-	 						var tooltipDiv = document.getElementById('tooltip');
-	 		             	if (toggle==0){
-	 							tooltipDiv.style.display = "none";
-	 						}else{
-	 							tooltipDiv.style.display = "block";
-	 						}
-						}
-	 				})
-			});
-		}// loadImage()
-			
-		function changeDataset(dataset) {	
-			console.log("current dataset: " + currentjson);
-			d3.selectAll("path")
-				.transition()
-				.duration(2000)
-				.ease("linear")
-				.attr("height", 0)
-				setTimeout(function() {
-					d3.selectAll("body")
-						.transition()
-						.duration(2000)
-						.ease("linear")
-						setTimeout(function() {
-							d3.selectAll("#mySVG").remove();
-							loadImage(dataset + ".json"); 
-							d3.selectAll("#map").transition().duration(2000).ease("linear").style("opacity", 1);
-							}, 0);
-					}, 0);
-			console.log("done");
-		}// changeDataset()
+    // Showing the base map in the large svg area
+
+    function loadBaseMap(dataset){
+    	var base_color = d3.scale.category20();
+	// Add reference map
+		var svg_base=d3.select("body").append("svg")
+		.attr("width",500)
+		.attr("height",240);
+
+		d3.json(dataset, function(data){
+			var group=svg_base.selectAll("g")
+			.data(data.features)
+			.enter()
+			.append("g")
+
+			var projection=d3.geo.mercator()
+				.scale([125])
+				.center(d3.geo.centroid(data)) 
+				.translate([630,245]);
+
+			var path=d3.geo.path().projection(projection);
+
+			var areas=group.append("path")
+			.attr("d", path)
+			.attr("class","area")
+			.style("fill","steelblue");
+		});
+    }
+
+function loadImage(dataset) {
+   var svg_base=d3.select("#referencemap").append("svg")
+                .attr("id","referenceSVG")
+				.attr("width",350)
+				.attr("height",240);
+
+
+		currentjson = dataset;
+		
+		var margin = {
+			top: 20,
+			right: 10,
+			bottom: 30,
+			left: 50
+		};
 	
-		function changeAttribute(attribute) {
-			var countryattr = [];
-			var color = [];
-			var lock;
-			//grab data from current dataset
-			var dataset = currentjson;
+		var h = window.innerHeight * 0.03 - margin.top - margin.bottom; 
+		var w = window.innerWidth * 1 - margin.left - margin.right;
+		var padding = 50;
+		var countryattr = [];
+		var color = [];
+		console.log("before accessing json: " + json);
+	
+		var svg = d3.select("body").append("svg")
+			//a box to contain the map
+			.attr("id", "mySVG")
+			.attr("width", w)
+			.attr("height", h);
+			//accesses the json and creates a projection
+		var map = d3.json(dataset, function (json) {
+			// create a first guess for the projection
+			var center = d3.geo.centroid(json);
+			var scale = 120;
+			var offset = [w / 2 + (margin.top*8), h / 2 + (margin.top*8)];
+			var projection = d3.geo.mercator().scale(scale).center(center)
+    			.translate(offset);
+			// create the path
+			var path = d3.geo.path().projection(projection);
+			
+			// using the path to determine the bounds of the current
+			// bounds of the current map and use these to determine
+			// better values for scale and translation
+			var bounds = path.bounds(json);
+			var hscale = scale*w / (bounds[1][0] + bounds[0][0]);
+			var vscale = scale*w / (bounds[1][1] - bounds[0][1]);
+			var scale = (hscale < vscale) ? hscale : vscale;
 
+			var offset = [w - (bounds[0][0] + bounds[1][0])/2, 
+									h - (bounds[0][1] - bounds[1][1])/2];
 
-			var map = d3.json(dataset, function (json) {
-				
-				for (var i = 0; i < json.features.length; i++) {
-					countryattr[i] = json.features[i].properties[attribute];
-				}
-	        
-
+			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
+			// new projection
+			projection = d3.geo.mercator().center(center)
+							.scale(scale).translate(offset);
+			path = path.projection(projection);
+			for (var i = 0; i < json.features.length; i++) {
+ 				countryattr[i] = json.features[i].properties.GDPPCAP;
+ 			}
+		
 			//sets a quantized scale based on the automatically-calculated data range
 			var colorScale = d3.scale.quantize()
-						.range(['#ffffcc','#a1dab4',
-							'#41b6c4','#225ea8'])
-						.domain([d3.min(remove(countryattr,-999)), d3.max(countryattr)]);
+							.range(['#ffffcc','#a1dab4',
+								'#41b6c4','#225ea8'])
+							.domain([d3.min(countryattr), d3.max(countryattr)]);
 
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
-				if (countryattr[i]==-999){
-					color[i]="grey"
-				}else{
+				if (countryattr[i]!=-999){
 					color[i] = colorScale(countryattr[i]);
-				}
-			}
-		
+				}else{
+					color[i]="grey";
+				}	
+ 			}
 
-				var domainRange=d3.max(countryattr)-d3.min(remove(countryattr,-999));
-				var domainDiff=(d3.max(countryattr)-d3.min(remove(countryattr,-999)))/4;
-				var legendLabel={};
-				for (i=0;i<colorScale.range().length;i++){
-				     legendLabel[i]=((d3.min(remove(countryattr,-999))+domainDiff*i).toFixed(2))+" to "+(d3.min(remove(countryattr,-999))+domainDiff*(i+1)).toFixed(2);
-					 console.log(legendLabel[i]);
-					 };
-
-				var svg=d3.selectAll("#mySVG");
-				    svg.selectAll('.legend')
-					   .remove();
-                var legend=svg.selectAll('.legend')
-				             .data(colorScale.range())
-                             .enter()
-                             .append("g")
-                             .attr("class","legend");
-							 
-                     legend.append("rect")
-                             .attr("x",20)	
-                             .attr("y",function(d,i){
-							 return 355+i*40;
-							 })							 
-				             .attr("width",30)
-							 .attr("height",40)
-							 .style("fill",function(d,i){
-							 return colorScale.range()[i];
-							 });
-					 legend.append("text")
-					         .attr("x",60)
-							 .attr("y",function(d,i){
-							 return 380+i*40;
-							 })
-					         .text(function(d,i){
-							     return legendLabel[i];
-							 });
-					 legend.append("text")
-					 		.attr("x",20)
-					 		.attr("y",340)
-					 		.text(attribute);
 		
-			console.log(attribute);
+		var domainRange=d3.max(countryattr)-d3.min(countryattr);
+		var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
+		var legendLabel=[];
+			
+		for (i=0;i<colorScale.range().length;i++) {
+			legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
+		};
+				 
+			// Add legend 
+			var svg=d3.selectAll("#mySVG");
+			    svg.selectAll('.legend')
+				   .remove();
+            var legend=svg.selectAll('.legend')
+			             .data(colorScale.range())
+                         .enter()
+                         .append("g")
+                         .attr("class","legend");
+						 
+                 legend.append("rect")
+                         .attr("x",20)	
+                         .attr("y",function(d,i){
+						 return 355+i*40;
+						 })							 
+			             .attr("width",30)
+						 .attr("height",40)
+						 .style("fill",function(d,i){
+						 return colorScale.range()[i];
+						 });
+				 legend.append("text")
+				         .attr("x",60)
+						 .attr("y",function(d,i){
+						 return 380+i*40;
+						 })
+				         .text(function(d,i){
+						     return legendLabel[i];
+						 });
+				 legend.append("text")
+				 		.attr("x",20)
+				 		.attr("y",340)
+				 		.text("GDP per Capita");
+ 			var lock;
+ 		
+			//makes the map
 			svg.selectAll("path")
-				.transition()
-				.duration(2000)
-				.attr("height", 0);
+				.data(json.features)
+				.enter()
+				.append("path")
+				.attr("d", d3.geo.path().projection(projection))
+				.attr("stroke", "black")
+				.attr("fill", function(json, i) {
+						return color[i];
+					}) //missing data is grey
+												
+				.on("mouseover", function(d) {
+					var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
+					var dis = d3.select(this);
 
-				setTimeout(function() {
-					d3.selectAll("body")
-						.transition()
-						.duration(2000)
-						.ease("linear");
-						setTimeout(function() {
-							svg.selectAll("path")
-								.attr("fill", function(json, i) {	
-									return color[i];
-								}) //missing data is grey
-								
-    					.on("mouseover", function(d) {
-    						var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
-    						var dis = d3.select(this);
-    					
-    						div.transition()
-    							.duration(200)
-    							.style("opacity", .9);
-    						div.html(d.properties.ADMIN + "<br/>"+"Total Population"+d.properties.POPULAT+"<br>")
-    							.style("position", "absolute")
-    					    	.style("x", (mouse[0]) + "px")
-    					    	.style("y", (mouse[1]) + "px");
-    						if (lock) {
-    							d3.event.stopPropagation();
-    							dis.style('stroke-width', '2px')
-    								.style('fill-opacity', 2)
-    								.style('stroke',"red");
-    						} else {
-    							dis.style('stroke-width', '2px')
-    								.style('fill-opacity', 2)
-    								.style('stroke',"red");
-    							console.log(dis);
-   
-    						var tooltipDiv = document.getElementById('tooltip');
-    							tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
-    							"Total Population: " + d.properties.POPULAT + "<br/>";
-    							tooltipDiv.style.display = "block";
-    					}
-    				})
-    				.on("click", function(d) {
-    					var dis = d3.select(this);
-    					if (toggle==0){
-							dis.style('stroke-width', '2px')
-	 					 		.style('fill-opacity', 2)
-	 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
-	
-	 					 	toggle=1;
-	 					 	lock = true;
-	 						var tooltipDiv = document.getElementById('tooltip');
-	 						tooltipDiv.style.display = "block"; 
-    						tooltipDiv.innerHTML = 
-    						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
-    						"Total Population: " + d.properties.POPULAT + "<br/>" +
-    						attribute+": " + d.properties[attribute] + "<br/>";
-    			 		}else{
-    						dis.style('stroke-width', '1px')
-	 					 		.style('fill-opacity', 2)
-	 					 		.style('fill',dis.attr('fill'));
-	 					 		toggle=0;
-	 					 		var tooltipDiv = document.getElementById('tooltip');
-	 								tooltipDiv.style.display = "none"; 
-    			 		}
-	 				})
-					.on("mouseout", function(d) {
+					div.transition()
+						.duration(200)
+						.style("opacity", .9);
+					div.html(d.properties.ADMIN + "<br/>"+"Total Population"+d.properties.POPULAT+"<br>")
+						.style("position", "absolute")
+					    .style("x", (mouse[0]) + "px")
+					    .style("y", (mouse[1]) + "px");
+					if (lock) {
+						d3.event.stopPropagation();
+						dis.style('stroke-width', '2px')
+							.style('fill-opacity', 2)
+							.style('stroke',"red");
+					} else {
+						dis.style('stroke-width', '2px')
+							.style('fill-opacity', 2)
+							.style('stroke',"red");
+
 						var tooltipDiv = document.getElementById('tooltip');
-						div .transition()
-    						.duration(200)
-    						.style("opacity", .9);
-    					div .html(d.properties.CNTRY_NAME + "<br/>" + 
-    						"Total Population: " + d.properties.POPULAT + "<br/>")
-    					    .style("left", (d3.event.pageX) + "px")
-    					    .style("top", (d3.event.pageY - 28) + "px"); 
-						if (lock) {
-							d3.select(this).style('stroke-width', '1px')
-	 							.style('fill-opacity', 1)
-	 							.style('stroke',"black");
-	 						if (toggle==0){
-	 							tooltipDiv.style.display = "none";
-	 						}else{
-	 							tooltipDiv.style.display = "block";
-	 						}
-	 						
-						} else {
-	 						d3.select(this).style('stroke-width', '1px')
-	 								.style('fill-opacity', 1)
-	 								.style('stroke',"black");
-	 		             	if (toggle==0){
-	 							tooltipDiv.style.display = "none";
-	 						}else{
-	 							tooltipDiv.style.display = "block";
-	 						}
-						}
-	 				});
+						tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
+						"Total Population: " + d.properties.POPULAT + "<br/>";
+						tooltipDiv.style.display = "block";
+					}
+				})
+			
+				.on("click", function(d) {
+					var dis = d3.select(this);
+
+					if (toggle==0){
+						dis.style('stroke-width', '2px')
+ 					 		.style('fill-opacity', 2)
+ 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
+ 					 	console.log("item clicked");
+
+ 					 	toggle=1;
+ 					 	lock = true;
+
+ 						var tooltipDiv = document.getElementById('tooltip');
+ 						tooltipDiv.style.display = "block"; 
+						tooltipDiv.innerHTML = 
+						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
+						"Total Population: " + d.properties.POPULAT + "<br/>" +
+						"GDP per Capita: " + d.properties.GDPPCAP + "<br/>";
+
+						// highlight the corresponding area in the base map
+
+						d3.json("Referencemap.json", function(data){
+							group=svg_base.selectAll("g")
+										  .data(data.features)
+										  .enter()
+										  .append("g")
+
+						 projection=d3.geo.mercator()
+								.scale([78])
+								.center(d3.geo.centroid(data)) 
+								.translate([265,140]);
+
+							path=d3.geo.path().projection(projection);
+
+						 areas=group.append("path")
+							.attr("d", path)
+							.attr("class","area")
+							.attr("fill",function(f){
+								return f.properties.ADMIN===d.properties.ADMIN? "rgba(193, 66, 66, 0.8)":"steelblue";
+							});
+						});
+
+			 		}else{
+						dis.style('stroke-width', '1px')
+ 					 		.style('fill-opacity', 2)
+ 					 		.style('fill',dis.attr('fill'));
+ 					 		var tooltipDiv = document.getElementById('tooltip');
+ 								tooltipDiv.style.display = "none"; 
+        
+							d3.json("Referencemap.json", function(data){
+							group=svg_base.selectAll("g")
+										  .data(data.features)
+										  .enter()
+										  .append("g")
+
+							 projection=d3.geo.mercator()
+									.scale([78])
+									.center(d3.geo.centroid(data)) 
+									.translate([265,140]);
+
+							 path=d3.geo.path().projection(projection);
+
+							 areas=group.append("path")
+								.attr("d", path)
+								.attr("class","area")
+								.attr("fill","steelblue");
+							});
+
+							toggle=0;
+			 		}
+ 				})
+				.on("mouseout", function(d) {
+					div .transition()
+						.duration(2000)
+						.style("opacity", .9);
+					div .html(d.properties.CNTRY_NAME + "<br/>" + 
+						"Total Population: " + d.properties.POPULAT + "<br/>")
+					    .style("left", (d3.event.pageX) + "px")
+					    .style("top", (d3.event.pageY - 28) + "px"); 
+					if (lock) {
+						d3.select(this).style('stroke-width', '1px')
+ 							.style('fill-opacity', 1)
+ 							.style('stroke',"black");
+ 						console.log("item clicked");
+ 						var tooltipDiv = document.getElementById('tooltip');
+ 							if (toggle==0){
+ 							tooltipDiv.style.display = "none";
+ 						}else{
+ 							tooltipDiv.style.display = "block";
+ 						}
+					} else {
+ 						d3.select(this).style('stroke-width', '1px')
+ 								.style('fill-opacity', 1)
+ 								.style('stroke',"black");
+ 						var tooltipDiv = document.getElementById('tooltip');
+ 		             	if (toggle==0){
+ 							tooltipDiv.style.display = "none";
+ 						}else{
+ 							tooltipDiv.style.display = "block";
+ 						}
+					}
+ 				})
+		});
+	}// loadImage()
+		
+	function changeDataset(dataset) {	
+		console.log("current dataset: " + currentjson);
+		d3.selectAll("path")
+			.transition()
+			.duration(2000)
+			.ease("linear")
+			.attr("height", 0)
+			setTimeout(function() {
+				d3.selectAll("body")
+					.transition()
+					.duration(2000)
+					.ease("linear")
+					setTimeout(function() {
+						 d3.selectAll("#mySVG").remove();
+						 d3.selectAll("#referenceSVG").remove();
+						loadImage(dataset + ".json"); 
+						d3.selectAll("#map").transition().duration(2000).ease("linear").style("opacity", 1);
 						}, 0);
 				}, 0);
-			});
-   			console.log("done");
-		}// changeAttribute()
+		console.log("done");
+	}// changeDataset()
 
-		var dropDown = document.getElementById("selectBar");
-		var dropDownColor = document.getElementById("selectBarColor");
+	function changeAttribute(attribute) {
+		var countryattr = [];
+		var color = [];
+		var lock;
+		var toggle=0;
+	    var fullname;
+		//grab data from current dataset
+		var dataset = currentjson;
+
+        // get the full name of attribute
+        attributesJSON.forEach(function(d){
+        	if (d.id==attribute){
+        		return fullname=d.name;
+        	}
+        })
+
+        d3.selectAll("#referenceSVG").remove();
+       var svg_base=d3.select("#referencemap").append("svg")
+            .attr("id","referenceSVG")
+			.attr("width",350)
+			.attr("height",240);
+
+		var map = d3.json(dataset, function (json) {
 			
-	</script>
+			for (var i = 0; i < json.features.length; i++) {
+				countryattr[i] = json.features[i].properties[attribute];
+			}
+        
+
+		//sets a quantized scale based on the automatically-calculated data range
+		var colorScale = d3.scale.quantize()
+					.range(['#ffffcc','#a1dab4',
+						'#41b6c4','#225ea8'])
+					.domain([d3.min(countryattr), d3.max(countryattr)]);
+
+		//links the data variable to the color scale
+		for (var i = 0; i < json.features.length; i++) {
+			if (countryattr[i]!=-999){
+				color[i] = colorScale(countryattr[i]);
+			}else{
+				color[i]="grey";
+			}
+		}
+	
+
+	    var domainRange=d3.max(countryattr)-d3.min(countryattr);
+		var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
+		var legendLabel=[];
+			
+		for (i=0;i<colorScale.range().length;i++) {
+			legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
+		};
+
+			var svg=d3.selectAll("#mySVG");
+			    svg.selectAll('.legend')
+				   .remove();
+            var legend=svg.selectAll('.legend')
+			             .data(colorScale.range())
+                         .enter()
+                         .append("g")
+                         .attr("class","legend");
+						 
+                 legend.append("rect")
+                         .attr("x",20)	
+                         .attr("y",function(d,i){
+						 return 355+i*40;
+						 })							 
+			             .attr("width",30)
+						 .attr("height",40)
+						 .style("fill",function(d,i){
+						 return colorScale.range()[i];
+						 });
+				 legend.append("text")
+				         .attr("x",60)
+						 .attr("y",function(d,i){
+						 return 380+i*40;
+						 })
+				         .text(function(d,i){
+						     return legendLabel[i];
+						 });
+				 legend.append("text")
+				 		.attr("x",20)
+				 		.attr("y",340)
+				 		.text(attribute);
+	
+		svg.selectAll("path")
+			.transition()
+			.duration(2000)
+			.attr("height", 0);
+
+			setTimeout(function() {
+				d3.selectAll("body")
+					.transition()
+					.duration(2000)
+					.ease("linear");
+					setTimeout(function() {
+						svg.selectAll("path")
+							.attr("fill", function(json, i) {	
+								return color[i];
+							}) //missing data is grey
+							
+					.on("mouseover", function(d) {
+						var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
+						var dis = d3.select(this);
+					
+						div.transition()
+							.duration(200)
+							.style("opacity", .9);
+						div.html(d.properties.ADMIN + "<br/>"+"Total Population"+d.properties.POPULAT+"<br>")
+							.style("position", "absolute")
+					    	.style("x", (mouse[0]) + "px")
+					    	.style("y", (mouse[1]) + "px");
+						if (lock) {
+							d3.event.stopPropagation();
+							dis.style('stroke-width', '2px')
+								.style('fill-opacity', 2)
+								.style('stroke',"red");
+						} else {
+							dis.style('stroke-width', '2px')
+								.style('fill-opacity', 2)
+								.style('stroke',"red");
+							console.log(dis);
+
+						var tooltipDiv = document.getElementById('tooltip');
+							tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
+							"Total Population: " + d.properties.POPULAT + "<br/>";
+							tooltipDiv.style.display = "block";
+					}
+				})
+				.on("click", function(d) {
+					var dis = d3.select(this);
+					if (toggle==0){
+						dis.style('stroke-width', '2px')
+ 					 		.style('fill-opacity', 2)
+ 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
+
+ 					 	toggle=1;
+ 					 	lock = true;
+ 						var tooltipDiv = document.getElementById('tooltip');
+ 						tooltipDiv.style.display = "block"; 
+						tooltipDiv.innerHTML = 
+						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
+						"Total Population: " + d.properties.POPULAT + "<br/>" +
+						fullname+": " + d.properties[attribute] + "<br/>";
+
+						// highlight the corresponding area in the base map
+	
+						d3.json("Referencemap.json", function(data){
+						group=svg_base.selectAll("g")
+									  .data(data.features)
+									  .enter()
+									  .append("g")
+
+						 projection=d3.geo.mercator()
+								.scale([78])
+								.center(d3.geo.centroid(data)) 
+								.translate([265,140]);
+
+						 path=d3.geo.path().projection(projection);
+
+						 areas=group.append("path")
+							.attr("d", path)
+							.attr("class","area")
+							.attr("fill",function(f){
+								return f.properties.ADMIN===d.properties.ADMIN? "rgba(193, 66, 66, 0.8)":"steelblue";
+							});
+						});
+
+			 		}else{
+						dis.style('stroke-width', '1px')
+ 					 		.style('fill-opacity', 2)
+ 					 		.style('fill',dis.attr('fill'));
+ 					 		toggle=0;
+ 					 		var tooltipDiv = document.getElementById('tooltip');
+ 								tooltipDiv.style.display = "none"; 
+                                
+ 						d3.json("Referencemap.json", function(data){
+							group=svg_base.selectAll("g")
+										  .data(data.features)
+										  .enter()
+										  .append("g")
+
+							 projection=d3.geo.mercator()
+									.scale([78])
+									.center(d3.geo.centroid(data)) 
+									.translate([265,140]);
+
+							 path=d3.geo.path().projection(projection);
+
+							 areas=group.append("path")
+								.attr("d", path)
+								.attr("class","area")
+								.attr("fill","steelblue");
+							});
+
+							toggle=0;
+			 		}
+ 				})
+				.on("mouseout", function(d) {
+					var tooltipDiv = document.getElementById('tooltip');
+					div .transition()
+						.duration(200)
+						.style("opacity", .9);
+					div .html(d.properties.CNTRY_NAME + "<br/>" + 
+						"Total Population: " + d.properties.POPULAT + "<br/>")
+					    .style("left", (d3.event.pageX) + "px")
+					    .style("top", (d3.event.pageY - 28) + "px"); 
+					if (lock) {
+						d3.select(this).style('stroke-width', '1px')
+ 							.style('fill-opacity', 1)
+ 							.style('stroke',"black");
+ 						if (toggle==0){
+ 							tooltipDiv.style.display = "none";
+ 						}else{
+ 							tooltipDiv.style.display = "block";
+ 						}
+ 						
+					} else {
+ 						d3.select(this).style('stroke-width', '1px')
+ 								.style('fill-opacity', 1)
+ 								.style('stroke',"black");
+ 		             	if (toggle==0){
+ 							tooltipDiv.style.display = "none";
+ 						}else{
+ 							tooltipDiv.style.display = "block";
+ 						}
+					}
+ 				});
+					}, 0);
+			}, 0);
+		});
+			console.log("done");
+	}// changeAttribute()
+
+	var dropDown = document.getElementById("selectBar");
+	var dropDownColor = document.getElementById("selectBarColor");
+		
+</script>
 </body>
 </html>
