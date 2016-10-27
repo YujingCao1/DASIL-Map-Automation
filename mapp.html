@@ -168,14 +168,31 @@ function loadImage(dataset) {
 				.attr("width",350)
 				.attr("height",240);
 	var unit;
-
-		currentjson = dataset;
-		
-      	attributesJSON.forEach(function(d){
+	var attribute=document.getElementById('selectBarColor').value;
+	var fullname;
+    
+    if (attribute==="Select an Attribute"){
+    	fullname="GDP per Capita";
+    	attribute="GDPPCAP";
+    	attributesJSON.forEach(function(d){
         	if (d.id=="GDPPCAP"){
         		return unit=d.unit;
         	}
         });
+    }else{
+    	attributesJSON.forEach(function(d){
+        	if (d.id==attribute){
+        		return fullname=d.name;
+        	}
+        });
+        attributesJSON.forEach(function(d){
+        	if (d.id==attribute){
+        		return unit=d.unit;
+        	}
+        });
+    }
+
+		currentjson = dataset;
 
 		var margin = {
 			top: 20,
@@ -224,7 +241,7 @@ function loadImage(dataset) {
 							.scale(scale).translate(offset);
 			path = path.projection(projection);
 			for (var i = 0; i < json.features.length; i++) {
- 				countryattr[i] = json.features[i].properties.GDPPCAP;
+ 				countryattr[i] = json.features[i].properties[attribute];
  			}
 		
 			//sets a quantized scale based on the automatically-calculated data range
@@ -282,7 +299,7 @@ function loadImage(dataset) {
 				 legend.append("text")
 				 		.attr("x",20)
 				 		.attr("y",320)
-				 		.text("GDP per Capita");
+				 		.text(fullname);
 				 legend.append("text")
 				 	   .attr("x",20)
 				 	   .attr("y",355)
@@ -346,7 +363,7 @@ function loadImage(dataset) {
 						tooltipDiv.innerHTML = 
 						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>" +
-						"GDP per Capita: " + d.properties.GDPPCAP + "<br/>";
+						fullname+": " + d.properties[attribute] + "<br/>";
 
 						// highlight the corresponding area in the base map
 
@@ -412,7 +429,6 @@ function loadImage(dataset) {
 						d3.select(this).style('stroke-width', '1px')
  							.style('fill-opacity', 1)
  							.style('stroke',"black");
- 						console.log("item clicked");
  						var tooltipDiv = document.getElementById('tooltip');
  							if (toggle==0){
  							tooltipDiv.style.display = "none";
