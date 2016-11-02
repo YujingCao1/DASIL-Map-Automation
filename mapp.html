@@ -240,10 +240,25 @@ function loadImage(dataset) {
 			projection = d3.geo.mercator().center(center)
 							.scale(scale).translate(offset);
 			path = path.projection(projection);
+			
 			for (var i = 0; i < json.features.length; i++) {
  				countryattr[i] = json.features[i].properties[attribute];
  			}
-		
+
+ 			// Store countryattr in countryattr_missing and remove missing values from countryattr
+             
+             var countryattr_missing=[];
+            for (var i=0; i<countryattr.length; i++){
+            	countryattr_missing.push(countryattr[i]);
+            }
+
+ 			for (var i=countryattr.length-1; i--;){
+ 				if (countryattr[i]==-999){
+ 					countryattr.splice(i,1);
+ 				}
+ 			}
+
+		    
 			//sets a quantized scale based on the automatically-calculated data range
 			var colorScale = d3.scale.quantize()
 							.range(['#ffffcc','#a1dab4',
@@ -252,8 +267,8 @@ function loadImage(dataset) {
 
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
-				if (countryattr[i]!=-999){
-					color[i] = colorScale(countryattr[i]);
+				if (countryattr_missing[i]!=-999){
+					color[i] = colorScale(countryattr_missing[i]);
 				}else{
 					color[i]="grey";
 				}	
@@ -474,6 +489,7 @@ function loadImage(dataset) {
 
 	function changeAttribute(attribute) {
 		var countryattr = [];
+		var countryattr_missing=[];
 		var color = [];
 		var lock;
 		var toggle=0;
@@ -495,7 +511,7 @@ function loadImage(dataset) {
         });
 
         d3.selectAll("#referenceSVG").remove();
-       var svg_base=d3.select("#referencemap").append("svg")
+        var svg_base=d3.select("#referencemap").append("svg")
             .attr("id","referenceSVG")
 			.attr("width",350)
 			.attr("height",240);
@@ -503,24 +519,37 @@ function loadImage(dataset) {
 		var map = d3.json(dataset, function (json) {
 			
 			for (var i = 0; i < json.features.length; i++) {
-				countryattr[i] = json.features[i].properties[attribute];
-			}
-        
+ 				countryattr[i] = json.features[i].properties[attribute];
+ 			}
 
-		//sets a quantized scale based on the automatically-calculated data range
-		var colorScale = d3.scale.quantize()
-					.range(['#ffffcc','#a1dab4',
-						'#41b6c4','#225ea8'])
-					.domain([d3.min(countryattr), d3.max(countryattr)]);
+ 			// Store countryattr in countryattr_missing and remove missing values from countryattr
+             
+             var countryattr_missing=[];
+            for (var i=0; i<countryattr.length; i++){
+            	countryattr_missing.push(countryattr[i]);
+            }
 
-		//links the data variable to the color scale
-		for (var i = 0; i < json.features.length; i++) {
-			if (countryattr[i]!=-999){
-				color[i] = colorScale(countryattr[i]);
-			}else{
-				color[i]="grey";
-			}
-		}
+ 			for (var i=countryattr.length-1; i--;){
+ 				if (countryattr[i]==-999){
+ 					countryattr.splice(i,1);
+ 				}
+ 			}
+
+		    
+			//sets a quantized scale based on the automatically-calculated data range
+			var colorScale = d3.scale.quantize()
+							.range(['#ffffcc','#a1dab4',
+								'#41b6c4','#225ea8'])
+							.domain([d3.min(countryattr), d3.max(countryattr)]);
+
+			//links the data variable to the color scale
+			for (var i = 0; i < json.features.length; i++) {
+				if (countryattr_missing[i]!=-999){
+					color[i] = colorScale(countryattr_missing[i]);
+				}else{
+					color[i]="grey";
+				}	
+ 			}
 	
 
 	    var domainRange=d3.max(countryattr)-d3.min(countryattr);
@@ -713,11 +742,7 @@ function loadImage(dataset) {
 					}, 0);
 			}, 0);
 		});
-			console.log("done");
 	}// changeAttribute()
-
-	var dropDown = document.getElementById("selectBar");
-	var dropDownColor = document.getElementById("selectBarColor");
 		
 </script>
 </body>
