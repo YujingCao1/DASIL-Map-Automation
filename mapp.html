@@ -206,7 +206,6 @@ function loadImage(dataset) {
 		var padding = 50;
 		var countryattr = [];
 		var color = [];
-		console.log("before accessing json: " + json);
 	
 		var svg = d3.select("body").append("svg")
 			//a box to contain the map
@@ -336,10 +335,11 @@ function loadImage(dataset) {
 				.on("mouseover", function(d) {
 					var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
 					var dis = d3.select(this);
-
+                      
 					div.transition()
 						.duration(200)
 						.style("opacity", .9);
+
 					div.html(d.properties.ADMIN + "<br/>"+"Total Population"+d.properties.POPULAT+"<br>")
 						.style("position", "absolute")
 					    .style("x", (mouse[0]) + "px")
@@ -355,24 +355,21 @@ function loadImage(dataset) {
 							.style('stroke',"red");
 
 						var tooltipDiv = document.getElementById('tooltip');
-						tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
-						"Total Population: " + d.properties.POPULAT + "<br/>";
-						tooltipDiv.style.display = "block";
+							tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
+							"Total Population: " + d.properties.POPULAT + "<br/>";
+							tooltipDiv.style.display = "block";
+
 					}
 				})
-			
 				.on("click", function(d) {
 					var dis = d3.select(this);
-
 					if (toggle==0){
 						dis.style('stroke-width', '2px')
  					 		.style('fill-opacity', 2)
  					 		.style('fill',"rgba(193, 66, 66, 0.8)");
  					 	console.log("item clicked");
 
- 					 	toggle=1;
- 					 	lock = true;
-
+                        
  						var tooltipDiv = document.getElementById('tooltip');
  						tooltipDiv.style.display = "block"; 
 						tooltipDiv.innerHTML = 
@@ -403,6 +400,8 @@ function loadImage(dataset) {
 							});
 						});
 
+ 					 	toggle=1;
+ 					 	lock = true;
 			 		}else{
 						dis.style('stroke-width', '1px')
  					 		.style('fill-opacity', 2)
@@ -434,18 +433,19 @@ function loadImage(dataset) {
  				})
 				.on("mouseout", function(d) {
 					div .transition()
-						.duration(2000)
-						.style("opacity", .9);
-					div .html(d.properties.CNTRY_NAME + "<br/>" + 
+						.duration(0)
+						.style("opacity", 0);
+					div .html(d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>")
 					    .style("left", (d3.event.pageX) + "px")
 					    .style("top", (d3.event.pageY - 28) + "px"); 
+
 					if (lock) {
 						d3.select(this).style('stroke-width', '1px')
  							.style('fill-opacity', 1)
  							.style('stroke',"black");
  						var tooltipDiv = document.getElementById('tooltip');
- 							if (toggle==0){
+ 						if (toggle==0){
  							tooltipDiv.style.display = "none";
  						}else{
  							tooltipDiv.style.display = "block";
