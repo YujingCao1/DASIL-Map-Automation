@@ -40,7 +40,6 @@ $(document).ready(function() {
 
 <div id="tooltip"></div>
 <div id="tooltipTest"></div>
-<div id="#referencemap"></div>
 
 <script>
 
@@ -177,6 +176,8 @@ function loadImage(dataset) {
 	var unit;
 	var attribute=document.getElementById('selectBarColor').value;
 	var fullname;
+
+	console.log(attribute);
     
     if (attribute==="Select an Attribute"){
     	fullname="GDP per Capita";
@@ -223,9 +224,9 @@ function loadImage(dataset) {
 		var map = d3.json(dataset, function (json) {
 			// create a first guess for the projection
 			var center = d3.geo.centroid(json);
-			var scale = 120;
+			var scale = 115;
 			var offset = [w / 2 + (margin.top*8), h / 2 + (margin.top*8)];
-			var projection = d3.geo.mercator().scale(scale).center(center)
+			var projection = d3.geo.mercator().scale(scale).center([38,80])
     			.translate(offset);
 			// create the path
 			var path = d3.geo.path().projection(projection);
@@ -234,16 +235,18 @@ function loadImage(dataset) {
 			// bounds of the current map and use these to determine
 			// better values for scale and translation
 			var bounds = path.bounds(json);
-			var hscale = scale*w / (bounds[1][0] + bounds[0][0]);
-			var vscale = scale*w / (bounds[1][1] - bounds[0][1]);
-			var scale = (hscale < vscale) ? hscale : vscale;
+			// var hscale = scale*w / (bounds[1][0] + bounds[0][0]);
+			// var vscale = scale*w / (bounds[1][1] - bounds[0][1]);
+			// var scale = (hscale < vscale) ? hscale : vscale;
 
 			var offset = [w - (bounds[0][0] + bounds[1][0])/2, 
 									h - (bounds[0][1] - bounds[1][1])/2];
 
+			console.log(center);
+
 			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
 			// new projection
-			projection = d3.geo.mercator().center(center)
+			projection = d3.geo.mercator().center([38,80])
 							.scale(scale).translate(offset);
 			path = path.projection(projection);
 			
@@ -253,7 +256,7 @@ function loadImage(dataset) {
 
  			// Store countryattr in countryattr_missing and remove missing values from countryattr
              
-             var countryattr_missing=[];
+            var countryattr_missing=[];
             for (var i=0; i<countryattr.length; i++){
             	countryattr_missing.push(countryattr[i]);
             }
@@ -300,7 +303,7 @@ function loadImage(dataset) {
                          .attr("class","legend");
 						 
                  legend.append("rect")
-                         .attr("x",20)	
+                         .attr("x",45)	
                          .attr("y",function(d,i){
 						 return 370+i*40;
 						 })							 
@@ -310,7 +313,7 @@ function loadImage(dataset) {
 						 return colorScale.range()[i];
 						 });
 				 legend.append("text")
-				         .attr("x",60)
+				         .attr("x",85)
 						 .attr("y",function(d,i){
 						 return 395+i*40;
 						 })
@@ -318,11 +321,11 @@ function loadImage(dataset) {
 						     return legendLabel[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",20)
+				 		.attr("x",30)
 				 		.attr("y",320)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",20)
+				 	   .attr("x",30)
 				 	   .attr("y",355)
 				 	   .text("Unit: "+unit);
 
@@ -380,7 +383,7 @@ function loadImage(dataset) {
 						tooltipDiv.innerHTML = 
 						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>" +
-						fullname+": " + d.properties[attribute] + "<br/>";
+						fullname+": " + d.properties[attribute_1] + "<br/>";
 
 						// highlight the corresponding area in the base map
 
@@ -498,17 +501,25 @@ function loadImage(dataset) {
 		var toggle=0;
 	    var fullname;
 	    var unit;
+	    var attribute_1;
 		//grab data from current dataset
 		var dataset = currentjson;
 
+		// get the id of corresponding selected attribute
+		attributesJSON.forEach(function(d){
+			if (d.name==attribute){
+				return attribute_1=d.id;
+			}
+		});
+
         // get the full name of attribute
         attributesJSON.forEach(function(d){
-        	if (d.id==attribute){
+        	if (d.name==attribute){
         		return fullname=d.name;
         	}
         });
       	attributesJSON.forEach(function(d){
-        	if (d.id==attribute){
+        	if (d.name==attribute){
         		return unit=d.unit;
         	}
         });
@@ -522,7 +533,7 @@ function loadImage(dataset) {
 		var map = d3.json(dataset, function (json) {
 			
 			for (var i = 0; i < json.features.length; i++) {
- 				countryattr[i] = json.features[i].properties[attribute];
+ 				countryattr[i] = json.features[i].properties[attribute_1];
  			}
 
  			// Store countryattr in countryattr_missing and remove missing values from countryattr
@@ -572,8 +583,8 @@ function loadImage(dataset) {
                          .append("g")
                          .attr("class","legend");
 						 
-                 legend.append("rect")
-                         .attr("x",20)	
+                legend.append("rect")
+                         .attr("x",45)	
                          .attr("y",function(d,i){
 						 return 370+i*40;
 						 })							 
@@ -583,7 +594,7 @@ function loadImage(dataset) {
 						 return colorScale.range()[i];
 						 });
 				 legend.append("text")
-				         .attr("x",60)
+				         .attr("x",85)
 						 .attr("y",function(d,i){
 						 return 395+i*40;
 						 })
@@ -591,11 +602,11 @@ function loadImage(dataset) {
 						     return legendLabel[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",20)
+				 		.attr("x",30)
 				 		.attr("y",320)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",20)
+				 	   .attr("x",30)
 				 	   .attr("y",355)
 				 	   .text("Unit: "+unit);
 	
@@ -647,8 +658,7 @@ function loadImage(dataset) {
 					var dis = d3.select(this);
 					if (toggle==0){
 						dis.style('stroke-width', '2px')
- 					 		.style('fill-opacity', 2)
- 					 		.style('fill',"rgba(193, 66, 66, 0.8)");
+ 					 		.style('fill-opacity', 2);
 
  					 	toggle=1;
  					 	lock = true;
@@ -657,7 +667,7 @@ function loadImage(dataset) {
 						tooltipDiv.innerHTML = 
 						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>" +
-						fullname+": " + d.properties[attribute] + "<br/>";
+						fullname+": " + d.properties[attribute_1] + "<br/>";
 
 						// highlight the corresponding area in the base map
 	
