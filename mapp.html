@@ -41,7 +41,7 @@ $(document).ready(function() {
 <div id="tooltip"></div>
 <div id="tooltipTest"></div>
 
-<script>
+<script id="map">
 
 	 var div = d3.select("body").append("div")
 	 			.style("position","relative")
@@ -226,7 +226,7 @@ function loadImage(dataset) {
 			var center = d3.geo.centroid(json);
 			var scale = 115;
 			var offset = [w / 2 + (margin.top*8), h / 2 + (margin.top*8)];
-			var projection = d3.geo.mercator().scale(scale).center([38,80])
+			var projection = d3.geo.mercator().scale(scale).center([38,77])
     			.translate(offset);
 			// create the path
 			var path = d3.geo.path().projection(projection);
@@ -246,7 +246,7 @@ function loadImage(dataset) {
 
 			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
 			// new projection
-			projection = d3.geo.mercator().center([38,80])
+			projection = d3.geo.mercator().center([38,77])
 							.scale(scale).translate(offset);
 			path = path.projection(projection);
 			
@@ -646,8 +646,7 @@ function loadImage(dataset) {
 							dis.style('stroke-width', '2px')
 								.style('fill-opacity', 2)
 								.style('stroke',"red");
-							console.log(dis);
-
+							
 						var tooltipDiv = document.getElementById('tooltip');
 							tooltipDiv.innerHTML = d.properties.ADMIN + "<br/>" + 
 							"Total Population: " + d.properties.POPULAT + "<br/>";
@@ -691,6 +690,8 @@ function loadImage(dataset) {
 						// 		return f.properties.ADMIN===d.properties.ADMIN? "rgba(193, 66, 66, 0.8)":"steelblue";
 						// 	});
 						// });
+						toggle=1;
+						lock=true;
 
 			 		}else{
 						dis.style('stroke-width', '1px')
@@ -723,10 +724,10 @@ function loadImage(dataset) {
 			 		}
  				})
 				.on("mouseout", function(d) {
-					var tooltipDiv = document.getElementById('tooltip');
+					//var tooltipDiv = document.getElementById('tooltip');
 					div .transition()
 						.duration(200)
-						.style("opacity", .9);
+						.style("opacity", .0);
 					div .html(d.properties.CNTRY_NAME + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>")
 					    .style("left", (d3.event.pageX) + "px")
