@@ -99,32 +99,7 @@ $(document).ready(function() {
 	var currentjson = "";
 	var toggle=0;
 
- //    var base_color = d3.scale.category20();
-	// //Add reference map
-	// var svg_base=d3.select("#referencemap").append("svg")
-	//                .attr("id","referenceSVG")
-	//                .attr("width",350)
-	//                .attr("height",240);
-
-	// d3.json("Referencemap.json", function(data){
-	// 	var group=svg_base.selectAll("g")
-	// 				    .data(data.features)
-	// 					.enter()
-	// 					.append("g")
-
-	// 	var projection=d3.geo.mercator()
-	// 		.scale([78])
-	// 		.center(d3.geo.centroid(data)) 
-	// 		.translate([265,140]);
-
-	// 	var path=d3.geo.path().projection(projection);
-
-	// 	var areas=group.append("path")
-	// 	               .attr("d", path)
-	// 	               .attr("class","area")
-	// 	               .style("fill","steelblue");
- //    });
-
+ 
      // Function to remove all the missing values. Missing data is coded as "-999"
     function removeElement(arr){
     	var what, a = arguments, L = a.length, ax;
@@ -169,10 +144,7 @@ $(document).ready(function() {
     }
 
 function loadImage(dataset) {
-   // var svg_base=d3.select("#referencemap").append("svg")
-   //              .attr("id","referenceSVG")
-			// 	.attr("width",350)
-			// 	.attr("height",240);
+
 	var unit;
 	var attribute=document.getElementById('selectBarColor').value;
 	var fullname;
@@ -294,8 +266,7 @@ function loadImage(dataset) {
 				 
 			// Add legend 
 			var svg=d3.selectAll("#mySVG");
-			    svg.selectAll('.legend')
-				   .remove();
+			    
             var legend=svg.selectAll('.legend')
 			             .data(colorScale.range())
                          .enter()
@@ -336,13 +307,16 @@ function loadImage(dataset) {
 				.data(json.features)
 				.enter()
 				.append("path")
+				.transition()
+				.duration(1000)
+				.ease("elastic")
 				.attr("d", d3.geo.path().projection(projection))
 				.attr("stroke", "black")
 				.attr("fill", function(json, i) {
 						return color[i];
 					}) //missing data is grey
 												
-				.on("mouseover", function(d) {
+				svg.selectAll("path").on("mouseover", function(d) {
 					var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
 					var dis = d3.select(this);
                       
@@ -383,30 +357,7 @@ function loadImage(dataset) {
 						tooltipDiv.innerHTML = 
 						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>" +
-						fullname+": " + d.properties[attribute_1] + "<br/>";
-
-						// highlight the corresponding area in the base map
-
-						// d3.json("Referencemap.json", function(data){
-						// 	group=svg_base.selectAll("g")
-						// 				  .data(data.features)
-						// 				  .enter()
-						// 				  .append("g")
-
-						//  projection=d3.geo.mercator()
-						// 		.scale([78])
-						// 		.center(d3.geo.centroid(data)) 
-						// 		.translate([265,140]);
-
-						// 	path=d3.geo.path().projection(projection);
-
-						//  areas=group.append("path")
-						// 	.attr("d", path)
-						// 	.attr("class","area")
-						// 	.attr("fill",function(f){
-						// 		return f.properties.ADMIN===d.properties.ADMIN? "rgba(193, 66, 66, 0.8)":"steelblue";
-						// 	});
-						// });
+						fullname+": " + d.properties[attribute] + "<br/>";
 
  					 	toggle=1;
  					 	lock = true;
@@ -415,26 +366,7 @@ function loadImage(dataset) {
  					 		.style('fill-opacity', 2)
  					 		.style('fill',dis.attr('fill'));
  					 		var tooltipDiv = document.getElementById('tooltip');
- 								tooltipDiv.style.display = "none"; 
-        
-							// d3.json("Referencemap.json", function(data){
-							// group=svg_base.selectAll("g")
-							// 			  .data(data.features)
-							// 			  .enter()
-							// 			  .append("g")
-
-							//  projection=d3.geo.mercator()
-							// 		.scale([78])
-							// 		.center(d3.geo.centroid(data)) 
-							// 		.translate([265,140]);
-
-							//  path=d3.geo.path().projection(projection);
-
-							//  areas=group.append("path")
-							// 	.attr("d", path)
-							// 	.attr("class","area")
-							// 	.attr("fill","steelblue");
-							// });
+ 								tooltipDiv.style.display = "none";
 
 							toggle=0;
 			 		}
@@ -476,21 +408,14 @@ function loadImage(dataset) {
 	function changeDataset(dataset) {	
 		document.getElementById("pagetitle").innerHTML=
 		d3.selectAll("path")
-			.transition()
-			.duration(2000)
-			.ease("linear")
-			.attr("height", 0)
-			setTimeout(function() {
+			.attr("height", 0);
 				d3.selectAll("body")
 					.transition()
-					.duration(2000)
-					.ease("linear")
-					setTimeout(function() {
-						 d3.selectAll("#mySVG").remove();
-						loadImage(dataset + ".json"); 
-						d3.selectAll("#map").transition().duration(2000).ease("linear").style("opacity", 1);
-						}, 0);
-				}, 0);
+					.duration(1000)
+					.ease("elastic");
+	
+		d3.selectAll("#mySVG").transition().duration(2000).ease("elastic").remove();
+		loadImage(dataset + ".json") 
 	}// changeDataset()
 
 	function changeAttribute(attribute) {
@@ -523,12 +448,6 @@ function loadImage(dataset) {
         		return unit=d.unit;
         	}
         });
-
-   //      d3.selectAll("#referenceSVG").remove();
-   //      var svg_base=d3.select("#referencemap").append("svg")
-   //          .attr("id","referenceSVG")
-			// .attr("width",350)
-			// .attr("height",240);
 
 		var map = d3.json(dataset, function (json) {
 			
@@ -575,7 +494,7 @@ function loadImage(dataset) {
 		};
 
 			var svg=d3.selectAll("#mySVG");
-			    svg.selectAll('.legend')
+			   svg.selectAll('.legend')
 				   .remove();
             var legend=svg.selectAll('.legend')
 			             .data(colorScale.range())
@@ -615,18 +534,20 @@ function loadImage(dataset) {
 			.duration(2000)
 			.attr("height", 0);
 
-			setTimeout(function() {
 				d3.selectAll("body")
 					.transition()
 					.duration(2000)
 					.ease("linear");
-					setTimeout(function() {
+
 						svg.selectAll("path")
+							.transition()
+							.duration(1500)
+							.ease("linear")
 							.attr("fill", function(json, i) {	
 								return color[i];
-							}) //missing data is grey
+							}); //missing data is grey
 							
-					.on("mouseover", function(d) {
+					svg.selectAll("path").on("mouseover", function(d) {
 						var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
 						var dis = d3.select(this);
 					
@@ -667,29 +588,6 @@ function loadImage(dataset) {
 						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>" +
 						fullname+": " + d.properties[attribute_1] + "<br/>";
-
-						// highlight the corresponding area in the base map
-	
-						// d3.json("Referencemap.json", function(data){
-						// group=svg_base.selectAll("g")
-						// 			  .data(data.features)
-						// 			  .enter()
-						// 			  .append("g")
-
-						//  projection=d3.geo.mercator()
-						// 		.scale([78])
-						// 		.center(d3.geo.centroid(data)) 
-						// 		.translate([265,140]);
-
-						//  path=d3.geo.path().projection(projection);
-
-						//  areas=group.append("path")
-						// 	.attr("d", path)
-						// 	.attr("class","area")
-						// 	.attr("fill",function(f){
-						// 		return f.properties.ADMIN===d.properties.ADMIN? "rgba(193, 66, 66, 0.8)":"steelblue";
-						// 	});
-						// });
 						toggle=1;
 						lock=true;
 
@@ -700,31 +598,11 @@ function loadImage(dataset) {
  					 		toggle=0;
  					 		var tooltipDiv = document.getElementById('tooltip');
  								tooltipDiv.style.display = "none"; 
-                                
- 						// d3.json("Referencemap.json", function(data){
-							// group=svg_base.selectAll("g")
-							// 			  .data(data.features)
-							// 			  .enter()
-							// 			  .append("g")
-
-							//  projection=d3.geo.mercator()
-							// 		.scale([78])
-							// 		.center(d3.geo.centroid(data)) 
-							// 		.translate([265,140]);
-
-							//  path=d3.geo.path().projection(projection);
-
-							//  areas=group.append("path")
-							// 	.attr("d", path)
-							// 	.attr("class","area")
-							// 	.attr("fill","steelblue");
-							// });
-
 							toggle=0;
 			 		}
  				})
 				.on("mouseout", function(d) {
-					//var tooltipDiv = document.getElementById('tooltip');
+					var tooltipDiv = document.getElementById('tooltip');
 					div .transition()
 						.duration(200)
 						.style("opacity", .0);
@@ -753,8 +631,6 @@ function loadImage(dataset) {
  						}
 					}
  				});
-					}, 0);
-			}, 0);
 		});
 	}// changeAttribute()
 		
