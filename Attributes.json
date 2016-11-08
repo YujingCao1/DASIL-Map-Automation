@@ -1,0 +1,366 @@
+[
+    {
+    "id": "Select an Attribute",
+    "name": "Select an Attribute"
+    },
+    {
+    "id": "EXCHANGE",
+    "name":"Official Exchange Rate",
+    "unit":"relative to US Dollar"
+	},
+	{
+    "id": "OREEXPRT", 
+    "name":"Ore and Metal Exports",
+    "unit":"% of Exports"
+	},
+	{
+    "id": "OREIMPRT",
+    "name":"Ore and Metal Imports",
+    "unit":"% of Imports"
+	},
+	{
+    "id": "GDPGRWTH",
+    "name":"GDP Growth Rate",
+    "unit":"Annual %"
+	},
+	{
+    "id": "CHILDHIV",
+    "name":"Children with HIV",
+    "unit":"Number of Children Under 14"
+	},
+	{
+    "id": "CPI",
+    "name":"Consumer Price Index",
+    "unit":"Unknown"
+	},
+	{
+    "id": "GDPMKP",
+    "name":"GDP at Purchaser Prices",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "GDPPCAP",
+    "name":"GDP per Capita",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "GDPPCAPG",
+    "name":"Growth Rate of GDP per Capita",
+    "unit":"Annual %"
+	},
+	{
+    "id": "IMPORTS",
+    "name":"Imports of Goods and Services",
+    "unit":"Percentage of GDP"
+	},
+	{
+    "id": "IMMUNDPT",
+    "name":"Child Immunization: DPT",
+    "unit":"Percentage"
+	},
+	{
+    "id": "IMMUNMEA",
+    "name":"Child Immunization: Measles",
+    "unit":"Percentage"
+	},
+	{
+    "id": "INFLATCP",
+    "name":"Inflation as Measured by the CPI",
+    "unit":"Annual Percentage Change"
+	},
+	{
+    "id": "LABORPRT",
+    "name":"Labor Force Participation Rate",
+    "unit":"Percentage"
+	},
+	{
+    "id": "RISKMAT",
+    "name":"Life Time Risk of Maternal Death",
+    "unit":"Percentage"
+	},
+	{
+    "id": "MILEXPEN",
+    "name":"Military Expenditures",
+    "unit":"Percentage of GDP"
+	},
+	{
+    "id": "GNIPCAP",
+    "name":"GNI per Capita, Atlas Method",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "EXPORTS",
+    "name":"Exports of Goods and Services",
+    "unit":"Percentage of GDP"
+	},
+	{
+    "id": "FDI",
+    "name":"FOregin Direct Investment",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "GNIPCPPP",
+    "name":"GNI per Capita, PPP",
+    "unit":"Current International Dollar"
+	},
+	{
+    "id": "INTERNET",
+    "name":"Internet Users",
+    "unit":"Unknown"
+	},
+	{
+    "id": "POPULAT",
+    "name":"Total Population",
+    "unit":"Unknown"
+	},
+	{
+    "id": "NETCAPAC",
+    "name":"Net Capital Account",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "NETCRED",
+    "name":"Net Domestic Credit",
+    "unit":"Current Local Currency"
+	},
+	{
+    "id": "GENDEVIN",
+    "name":"Gender Development Index",
+    "unit":"Ratio of Female to Male HDI Values"
+	},
+	{
+    "id": "WOMPARL",
+    "name":"Women in Parliaments",
+    "unit":"Percentage"
+	},
+	{
+    "id": "FERTIL",
+    "name":"Total Fertility",
+    "unit":"Number of Children"
+	},
+	{
+    "id": "LIFEEXP",
+    "name":"Life Expectancey",
+    "unit":"Years"
+	},
+	{
+    "id": "INFMORT",
+    "name":"Infant Mortality Rate",
+    "unit":"Deaths per 1000 Live Births"
+	},
+	{
+    "id": "NETCAPAC",
+    "name":"Net Capital Account",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "NETFORAS",
+    "name":"Net Foreign Assets",
+    "unit":"Current Local Currency"
+	},
+	{
+    "id": "INFDEATH",
+    "name":"Infant Mortality",
+    "unit":"Total Number of Deaths"
+	},
+	{
+    "id": "0_5Death",
+    "name":"Under 5 Mortality",
+    "unit":"Total Number of Deaths"
+	},
+	{
+    "id": "65_POP",
+    "name":"Percentage of Population over 65",
+    "unit":"Percentage"
+	},
+	{
+    "id": "POPDENS",
+    "name":"Population Density",
+    "unit":"People Per Square km"
+	},
+	{
+    "id": "EXTDEBT",
+    "name":"External Debt",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "RAILNGTH",
+    "name":"Railway Length",
+    "unit":"km"
+	},
+	{
+    "id": "RAILGOOD",
+    "name":"Goods Transported by Railway",
+    "unit":"Metric Tons times Kilometers Traveled"
+	},
+	{
+    "id": "RAILPASS",
+    "name":"Passengers Carried by Railway",
+    "unit":"Number of Passengers Times Kilometers Traveled"
+	},
+	{
+    "id": "RIR",
+    "name":"Real Interest Rate",
+    "unit":"Unkown"
+	},
+	{
+    "id": "RURALPOP",
+    "name":"Rural Population",
+    "unit":"Unknown"
+	},
+	{
+    "id": "EXPSERV",
+    "name":"Exported Services",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "IMPSERV",
+    "name":"Imported Services",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "STCKTRAD",
+    "name":"Value of Shares Traded",
+    "unit":"End of Year US Dollar"
+	},
+	{
+    "id": "URBANPOP",
+    "name":"Urban Population",
+    "unit":"Unknown"
+	},
+	{
+    "id": "IMFCRED",
+    "name":"IMF Credit",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "EASEBUSI",
+    "name":"Ease of Doing Business",
+    "unit":"1-189, lower is better"
+	},
+	{
+    "id": "OTHERGAS",
+    "name":"Other Greenhouse Gas Emissions",
+    "unit":"Thousand Metric Tons of CO2 Equivalent"
+	},
+	{
+    "id": "NITOXIDE",
+    "name":"Nitrous Oxide Emissions",
+    "unit":"Thousand Metric Tons of CO2 Equivalent"
+	},
+	{
+    "id": "METHANE",
+    "name":"Methane Emissions",
+    "unit":"Thousand Metric Tons of CO2 Equivalent"
+	},
+	{
+    "id": "COMWASTE",
+    "name":"Combustile Renewables and Waste",
+    "unit":"Percentage of Total Energy Use"
+	},
+	{
+    "id": "FOSSCOMP",
+    "name":"Fossil Fuel",
+    "unit":"Percentage of Energy Use"
+	},
+	{
+    "id": "GASPRICE",
+    "name":"Gasoline Prices",
+    "unit":"US Dollar Per Liter"
+	},
+	{
+    "id": "ENRGGDP",
+    "name":"GDP per Unit of Energy",
+    "unit":"PPP GDP per kg"
+	},
+	{
+    "id": "ELECTACC",
+    "name":"Access to Electricity",
+    "unit":"Percentage of Population"
+	},
+	{
+    "id": "CELLULAR",
+    "name":"Mobile Cellular Telephone Subscriptions",
+    "unit":"Per 100 Inhabitants"
+	},
+	{
+    "id": "ENERGINT",
+    "name":"Energy Intensity Level",
+    "unit":"Percentage of PPP GDP"
+	},
+	{
+    "id": "PM2_5EXP",
+    "name":"Population-weighted Exposure to Ambient PM 2.5 Pollution",
+    "unit":"Annual Micrograms per Meter Cubed"
+	},
+	{
+    "id": "PM2_5WHO",
+    "name":"Exposure to Ambient PM2.5 that Exceed the WHO Guidline Value",
+    "unit":"Percentage of Population"
+	},
+	{
+    "id": "STRINDEX",
+    "name":"Strength of Legal Rights Index",
+    "unit":"0-12, higher is better"
+	},
+	{
+    "id": "STARTBUS",
+    "name":"Time required to start a business",
+    "unit":"Number of Calendar Days"
+	},
+	{
+    "id": "GDPEMPLO",
+    "name":"GDP per Person Employed",
+    "unit":"1990 International Dollar"
+	},
+	{
+    "id": "URBANPOP",
+    "name":"Urban Population",
+    "unit":"Unknown"
+	},
+	{
+    "id": "TOTALTAXR",
+    "name":"Total Tax Rate",
+    "unit":"Unknown"
+	},
+	{
+    "id": "AIRTRANS",
+    "name":"Registered Carrier Departures Worldwide",
+    "unit":"Unknown"
+	},
+	{
+    "id": "MATMORTR",
+    "name":"Maternal Mortality Ratio",
+    "unit":"Deaths per 100,000 Live Births"
+	},
+	{
+    "id": "HLTHEXP_",
+    "name":"Total Health Expenditure",
+    "unit":"Percentage of GDP"
+	},
+	{
+    "id": "DIABETES",
+    "name":"Diabetes Prevalence",
+    "unit":"Percentage of Adults"
+	},
+	{
+    "id": "RESERVES",
+    "name":"Total Reserves",
+    "unit":"US Dollar"
+	},
+	{
+    "id": "EMPLOYAG",
+    "name":"Employment in Agriculture",
+    "unit":"Number of People"
+	},
+	{
+    "id": "CO2EMISS",
+    "name":"Carbon Dioxide Emissions",
+    "unit":"Billion Metric Tons"
+	},
+    {
+    "id":"INFLATDEF",
+    "name":"Inflation as measured by the GDP deflator",
+    "unit":" "
+    }
+    ]
