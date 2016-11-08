@@ -148,12 +148,17 @@ function loadImage(dataset) {
 	var unit;
 	var attribute=document.getElementById('selectBarColor').value;
 	var fullname;
-
-	console.log(attribute);
+	var attribute_1;
     
+    attributesJSON.forEach(function(d){
+    	if (d.name==attribute){
+    		return attribute_1=d.id;
+    	}
+    });
+
     if (attribute==="Select an Attribute"){
     	fullname="GDP per Capita";
-    	attribute="GDPPCAP";
+    	attribute=attribute_1="GDPPCAP";
     	attributesJSON.forEach(function(d){
         	if (d.id=="GDPPCAP"){
         		return unit=d.unit;
@@ -161,12 +166,12 @@ function loadImage(dataset) {
         });
     }else{
     	attributesJSON.forEach(function(d){
-        	if (d.id==attribute){
+        	if (d.name==attribute){
         		return fullname=d.name;
         	}
         });
         attributesJSON.forEach(function(d){
-        	if (d.id==attribute){
+        	if (d.name==attribute){
         		return unit=d.unit;
         	}
         });
@@ -223,7 +228,7 @@ function loadImage(dataset) {
 			path = path.projection(projection);
 			
 			for (var i = 0; i < json.features.length; i++) {
- 				countryattr[i] = json.features[i].properties[attribute];
+ 				countryattr[i] = json.features[i].properties[attribute_1];
  			}
 
  			// Store countryattr in countryattr_missing and remove missing values from countryattr
@@ -357,7 +362,7 @@ function loadImage(dataset) {
 						tooltipDiv.innerHTML = 
 						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>" +
-						fullname+": " + d.properties[attribute] + "<br/>";
+						fullname+": " + d.properties[attribute_1] + "<br/>";
 
  					 	toggle=1;
  					 	lock = true;
