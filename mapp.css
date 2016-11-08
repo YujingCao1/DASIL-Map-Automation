@@ -15,7 +15,6 @@
 *{
 	box-sizing: border-box;
 }
-
 body{
 	position: relative;
 }
@@ -31,6 +30,8 @@ body{
    text-transform: uppercase;
    text-align: left;
    margin-left: 1%;
+   margin-top: 10%;
+   
 }
 g.legend {
 	margin-top: 30%;
@@ -181,7 +182,7 @@ svg{
 	width: 64%;
 	height: 50em;
 	left: 10%;
-	margin-top: 5%;
+	margin-top: 2%;
 	position: absolute;
 }
 

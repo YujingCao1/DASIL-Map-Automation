@@ -238,12 +238,12 @@ function loadImage(dataset) {
             	countryattr_missing.push(countryattr[i]);
             }
 
- 			for (var i=countryattr.length-1; i--;){
- 				if (countryattr[i]==-999){
- 					countryattr.splice(i,1);
- 				}
- 			}
-
+ 			// for (var i=countryattr.length-1; i--;){
+ 			// 	if (countryattr[i]==-999){
+ 			// 		countryattr.splice(i,1);
+ 			// 	}
+ 			// }
+ 			removeElement(countryattr,-999)
 		    
 			//sets a quantized scale based on the automatically-calculated data range
 			var colorScale = d3.scale.quantize()
@@ -321,7 +321,8 @@ function loadImage(dataset) {
 						return color[i];
 					}) //missing data is grey
 												
-				svg.selectAll("path").on("mouseover", function(d) {
+				svg.selectAll("path")
+					.on("mouseover", function(d) {
 					var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
 					var dis = d3.select(this);
                       
@@ -333,6 +334,7 @@ function loadImage(dataset) {
 						.style("position", "absolute")
 					    .style("x", (mouse[0]) + "px")
 					    .style("y", (mouse[1]) + "px");
+
 					if (lock) {
 						d3.event.stopPropagation();
 						dis.style('stroke-width', '2px')
@@ -355,15 +357,12 @@ function loadImage(dataset) {
 					if (toggle==0){
 						dis.style('stroke-width', '2px')
  					 		.style('fill-opacity', 2);
-
-                        
  						var tooltipDiv = document.getElementById('tooltip');
  						tooltipDiv.style.display = "block"; 
 						tooltipDiv.innerHTML = 
 						"Selected Country: " + d.properties.ADMIN + "<br/>" + 
 						"Total Population: " + d.properties.POPULAT + "<br/>" +
 						fullname+": " + d.properties[attribute_1] + "<br/>";
-
  					 	toggle=1;
  					 	lock = true;
 			 		}else{
@@ -372,7 +371,6 @@ function loadImage(dataset) {
  					 		.style('fill',dis.attr('fill'));
  					 		var tooltipDiv = document.getElementById('tooltip');
  								tooltipDiv.style.display = "none";
-
 							toggle=0;
 			 		}
  				})
@@ -467,12 +465,13 @@ function loadImage(dataset) {
             	countryattr_missing.push(countryattr[i]);
             }
 
- 			for (var i=countryattr.length-1; i--;){
- 				if (countryattr[i]==-999){
- 					countryattr.splice(i,1);
- 				}
- 			}
+ 			// for (var i=0;i<countryattr.length;i++){
+ 			// 	if (countryattr[i]==-999){
+ 			// 		countryattr.splice(i,1);
+ 			// 	}
+ 			// }
 
+ 			removeElement(countryattr,-999);
 		    
 			//sets a quantized scale based on the automatically-calculated data range
 			var colorScale = d3.scale.quantize()
@@ -539,20 +538,21 @@ function loadImage(dataset) {
 			.duration(2000)
 			.attr("height", 0);
 
-				d3.selectAll("body")
-					.transition()
-					.duration(2000)
-					.ease("linear");
+		d3.selectAll("body")
+			.transition()
+			.duration(2000)
+			.ease("linear");
 
-						svg.selectAll("path")
-							.transition()
-							.duration(1500)
-							.ease("linear")
-							.attr("fill", function(json, i) {	
-								return color[i];
-							}); //missing data is grey
-							
-					svg.selectAll("path").on("mouseover", function(d) {
+		svg.selectAll("path")
+			.transition()
+			.duration(1500)
+			.ease("linear")
+			.attr("fill", function(json, i) {	
+				return color[i];
+			}); //missing data is grey
+			
+					svg.selectAll("path")
+					    .on("mouseover", function(d) {
 						var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
 						var dis = d3.select(this);
 					
@@ -584,9 +584,6 @@ function loadImage(dataset) {
 					if (toggle==0){
 						dis.style('stroke-width', '2px')
  					 		.style('fill-opacity', 2);
-
- 					 	toggle=1;
- 					 	lock = true;
  						var tooltipDiv = document.getElementById('tooltip');
  						tooltipDiv.style.display = "block"; 
 						tooltipDiv.innerHTML = 
