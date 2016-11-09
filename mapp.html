@@ -40,6 +40,7 @@ $(document).ready(function() {
 
 <div id="tooltip"></div>
 <div id="tooltipTest"></div>
+<div id="legend"></div>
 
 <script id="map">
 
@@ -183,28 +184,29 @@ function loadImage(dataset) {
 			top: 20,
 			right: 10,
 			bottom: 30,
-			left: 50
+			left: 10
 		};
 	
-		var h = window.innerHeight * 0.03 - margin.top - margin.bottom; 
-		var w = window.innerWidth * 1 - margin.left - margin.right;
+		var h = window.innerHeight; 
+		var w = window.innerWidth;
 		var padding = 50;
 		var countryattr = [];
 		var color = [];
-	
+
 		var svg = d3.select("body").append("svg")
 			//a box to contain the map
-			.attr("id", "mySVG")
-			.attr("width", w)
-			.attr("height", h);
+			.attr("id", "mySVG");
+			// .attr("width", w)
+			// .attr("height", h);
 			//accesses the json and creates a projection
 		var map = d3.json(dataset, function (json) {
 			// create a first guess for the projection
 			var center = d3.geo.centroid(json);
-			var scale = 115;
-			var offset = [w / 2 + (margin.top*8), h / 2 + (margin.top*8)];
-			var projection = d3.geo.mercator().scale(scale).center([38,77])
+			var scale = 150;
+			var offset = [w / 2 , h / 2 ];
+			var projection = d3.geo.mercator().scale(scale).center(center)
     			.translate(offset);
+
 			// create the path
 			var path = d3.geo.path().projection(projection);
 			
@@ -212,19 +214,19 @@ function loadImage(dataset) {
 			// bounds of the current map and use these to determine
 			// better values for scale and translation
 			var bounds = path.bounds(json);
-			// var hscale = scale*w / (bounds[1][0] + bounds[0][0]);
-			// var vscale = scale*w / (bounds[1][1] - bounds[0][1]);
-			// var scale = (hscale < vscale) ? hscale : vscale;
 
-			var offset = [w - (bounds[0][0] + bounds[1][0])/2, 
-									h - (bounds[0][1] - bounds[1][1])/2];
+			var hscale = scale*w / (bounds[1][0] - bounds[0][0]);
+			var vscale = scale*h / (bounds[1][1] - bounds[0][1]);
+			var scale = (hscale < vscale) ? hscale : vscale;
+            
+			var offset = [w - 1.1*(bounds[0][0] + bounds[1][0])/2, 
+									h - 1.1*(bounds[0][1] + bounds[1][1])/2];
 
-			console.log(center);
 
 			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
 			// new projection
-			projection = d3.geo.mercator().center([38,77])
-							.scale(scale).translate(offset);
+			projection = d3.geo.mercator().center(center)
+							.scale(scale*0.9).translate(offset);
 			path = path.projection(projection);
 			
 			for (var i = 0; i < json.features.length; i++) {
@@ -270,39 +272,53 @@ function loadImage(dataset) {
 		};
 				 
 			// Add legend 
+			var colors=[];
+
+			for (var i=0;i<colorScale.range().length;i++){
+				colors.push(colorScale.range()[i]);
+			}
+
+			colors.push("grey");
+
 			var svg=d3.selectAll("#mySVG");
 			    
             var legend=svg.selectAll('.legend')
-			             .data(colorScale.range())
+			             .data(colors)
                          .enter()
                          .append("g")
                          .attr("class","legend");
 						 
                  legend.append("rect")
-                         .attr("x",45)	
+                         .attr("x",10)	
                          .attr("y",function(d,i){
-						 return 370+i*40;
+						 return 470+i*40;
 						 })							 
 			             .attr("width",30)
 						 .attr("height",40)
 						 .style("fill",function(d,i){
-						 return colorScale.range()[i];
+						 return colors[i];
 						 });
+                var legendLabel_1=[];
+                for (var i=0;i<legendLabel.length;i++){
+                	legendLabel_1.push(legendLabel[i]);
+                }
+                legendLabel_1.push("missing value");
+
 				 legend.append("text")
-				         .attr("x",85)
+				         .attr("x",55)
 						 .attr("y",function(d,i){
-						 return 395+i*40;
+						 return 495+i*40;
 						 })
 				         .text(function(d,i){
-						     return legendLabel[i];
+						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",30)
-				 		.attr("y",320)
+				 		.attr("x",10)
+				 		.attr("y",420)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",30)
-				 	   .attr("y",355)
+				 	   .attr("x",10)
+				 	   .attr("y",455)
 				 	   .text("Unit: "+unit);
 
  			var lock;
@@ -496,41 +512,57 @@ function loadImage(dataset) {
 		for (i=0;i<colorScale.range().length;i++) {
 			legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
 		};
+            
+            var colors=[];
+
+			for (var i=0;i<colorScale.range().length;i++){
+				colors.push(colorScale.range()[i]);
+			}
+
+			colors.push("grey");
 
 			var svg=d3.selectAll("#mySVG");
 			   svg.selectAll('.legend')
 				   .remove();
+
             var legend=svg.selectAll('.legend')
-			             .data(colorScale.range())
+			             .data(colors)
                          .enter()
                          .append("g")
                          .attr("class","legend");
 						 
                 legend.append("rect")
-                         .attr("x",45)	
+                         .attr("x",10)	
                          .attr("y",function(d,i){
-						 return 370+i*40;
+						 return 470+i*40;
 						 })							 
 			             .attr("width",30)
 						 .attr("height",40)
 						 .style("fill",function(d,i){
-						 return colorScale.range()[i];
+						 return colors[i];
 						 });
+
+				var legendLabel_1=[];
+                for (var i=0;i<legendLabel.length;i++){
+                	legendLabel_1.push(legendLabel[i]);
+                }
+                legendLabel_1.push("missing value");
+
 				 legend.append("text")
-				         .attr("x",85)
+				         .attr("x",55)
 						 .attr("y",function(d,i){
-						 return 395+i*40;
+						 return 495+i*40;
 						 })
 				         .text(function(d,i){
-						     return legendLabel[i];
+						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",30)
-				 		.attr("y",320)
+				 		.attr("x",10)
+				 		.attr("y",420)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",30)
-				 	   .attr("y",355)
+				 	   .attr("x",10)
+				 	   .attr("y",455)
 				 	   .text("Unit: "+unit);
 	
 		svg.selectAll("path")

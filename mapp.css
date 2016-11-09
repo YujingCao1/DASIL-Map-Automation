@@ -148,8 +148,8 @@ path:hover {
 	line-height: 200%;
 	font-family: "Source Sans Pro";
     position: absolute;
-    margin-top: 8%;
-    right: 10%;
+    margin-top: 5%;
+    right: 5%;
     padding: 1%;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
@@ -180,11 +180,11 @@ path:hover {
 }*/
 
 
-svg{
+#mySVG{
 	width: 100%;
-	height: 80em;
-	left: 10%;
-	margin-top: 2%;
+	height: 120em;
+	margin-left: 2%;
+	margin-top: 0%;
 	position: absolute;
 }
 
