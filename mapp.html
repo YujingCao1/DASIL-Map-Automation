@@ -20,7 +20,7 @@ $(document).ready(function() {
 });
 </script>
 </head>
-<body>
+<body onload="loadBaseMap('Referencemap.json')">
 
 <a id="pagetitle">World Map</a>
 <!-- <div id="credit">
@@ -40,7 +40,6 @@ $(document).ready(function() {
 
 <div id="tooltip"></div>
 <div id="tooltipTest"></div>
-<div id="legend"></div>
 
 <script id="map">
 
@@ -118,9 +117,10 @@ $(document).ready(function() {
     function loadBaseMap(dataset){
     	var base_color = d3.scale.category20();
 	// Add reference map
-		var svg_base=d3.select("#referencemap").append("svg")
-		.attr("width",2000)
-		.attr("height",1000);
+		var svg_base=d3.select("body").append("svg")
+		.attr("id","mySVG")
+		.attr("width",window.innerWidth)
+		.attr("height",window.innerHeight);
 
 		d3.json(dataset, function(data){
 			var group=svg_base.selectAll("g")
@@ -129,9 +129,9 @@ $(document).ready(function() {
 			.append("g")
 
 			var projection=d3.geo.mercator()
-				.scale([125])
+				.scale(190)
 				.center(d3.geo.centroid(data))
-				.translate([900,350]);
+				.translate([990,430]);
 
 			var path=d3.geo.path().projection(projection);
 
@@ -145,8 +145,8 @@ $(document).ready(function() {
     }
 
 function loadImage(dataset) {
-
-	var unit;
+    
+    d3.selectAll("#mySVG").transition().duration(2000).ease("elastic").remove();
 	var attribute=document.getElementById('selectBarColor').value;
 	var fullname;
 	var attribute_1;
@@ -203,7 +203,7 @@ function loadImage(dataset) {
 			// create a first guess for the projection
 			var center = d3.geo.centroid(json);
 			var scale = 150;
-			var offset = [w / 2 , h / 2 ];
+			var offset = [w / 2, h / 2];
 			var projection = d3.geo.mercator().scale(scale).center(center)
     			.translate(offset);
 
@@ -217,10 +217,10 @@ function loadImage(dataset) {
 
 			var hscale = scale*w / (bounds[1][0] - bounds[0][0]);
 			var vscale = scale*h / (bounds[1][1] - bounds[0][1]);
-			var scale = (hscale < vscale) ? hscale : vscale;
+			var scale = (hscale < vscale) ? hscale*0.9 : vscale*0.9;
             
-			var offset = [w - 1.1*(bounds[0][0] + bounds[1][0])/2, 
-									h - 1.1*(bounds[0][1] + bounds[1][1])/2];
+			var offset = [w - 1.05*(bounds[0][0] + bounds[1][0])/2, 
+									h - 1.09*(bounds[0][1] + bounds[1][1])/2];
 
 
 			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
@@ -240,11 +240,6 @@ function loadImage(dataset) {
             	countryattr_missing.push(countryattr[i]);
             }
 
- 			// for (var i=countryattr.length-1; i--;){
- 			// 	if (countryattr[i]==-999){
- 			// 		countryattr.splice(i,1);
- 			// 	}
- 			// }
  			removeElement(countryattr,-999)
 		    
 			//sets a quantized scale based on the automatically-calculated data range
@@ -289,9 +284,9 @@ function loadImage(dataset) {
                          .attr("class","legend");
 						 
                  legend.append("rect")
-                         .attr("x",10)	
+                         .attr("x",20)	
                          .attr("y",function(d,i){
-						 return 470+i*40;
+						 return 620+i*40;
 						 })							 
 			             .attr("width",30)
 						 .attr("height",40)
@@ -305,20 +300,20 @@ function loadImage(dataset) {
                 legendLabel_1.push("missing value");
 
 				 legend.append("text")
-				         .attr("x",55)
+				         .attr("x",65)
 						 .attr("y",function(d,i){
-						 return 495+i*40;
+						 return 645+i*40;
 						 })
 				         .text(function(d,i){
 						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",10)
-				 		.attr("y",420)
+				 		.attr("x",20)
+				 		.attr("y",570)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",10)
-				 	   .attr("y",455)
+				 	   .attr("x",20)
+				 	   .attr("y",605)
 				 	   .text("Unit: "+unit);
 
  			var lock;
@@ -532,9 +527,9 @@ function loadImage(dataset) {
                          .attr("class","legend");
 						 
                 legend.append("rect")
-                         .attr("x",10)	
+                         .attr("x",20)	
                          .attr("y",function(d,i){
-						 return 470+i*40;
+						 return 620+i*40;
 						 })							 
 			             .attr("width",30)
 						 .attr("height",40)
@@ -549,20 +544,20 @@ function loadImage(dataset) {
                 legendLabel_1.push("missing value");
 
 				 legend.append("text")
-				         .attr("x",55)
+				         .attr("x",65)
 						 .attr("y",function(d,i){
-						 return 495+i*40;
+						 return 645+i*40;
 						 })
 				         .text(function(d,i){
 						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",10)
-				 		.attr("y",420)
+				 		.attr("x",20)
+				 		.attr("y",570)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",10)
-				 	   .attr("y",455)
+				 	   .attr("x",20)
+				 	   .attr("y",605)
 				 	   .text("Unit: "+unit);
 	
 		svg.selectAll("path")
