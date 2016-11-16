@@ -12,17 +12,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
 <link type="text/css" rel="stylesheet" href="mapp.css">
 <script>
-$(document).ready(function() {
-	$("select#selectBar").change(function() {
-		var thisvalue = $("#selectBar option:selected").text();
-		$('a#pagetitle').text(thisvalue);
-	});
-});
+// $(document).ready(function() {
+// 	$("select#selectBar").change(function() {
+// 		var thisvalue = $("#selectBar option:selected").text();
+// 		$('a#pagetitle').text(thisvalue);
+// 	});
+// });
 </script>
 </head>
 <body onload="loadBaseMap('Referencemap.json')">
 
-<a id="pagetitle">World Map</a>
+<!-- <a id="pagetitle">World Map</a> -->
 <!-- <div id="credit">
 	<p class="date"> August 20, 2015 </p>
 	<p class="by">by</p>
@@ -30,14 +30,17 @@ $(document).ready(function() {
 </div> -->
 
 <div id="interactive_panel">
-			<!-- <div id="tittle1"> Data Set </div>
-		    <div id="tittle2"> Attribute</div> -->
-	<div id="option_menu">
-		<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
-		<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
-	</div> <!-- option_menu -->
+	<div style="display:inline-block; vertical-align:center; font-size: 23px">Cartogram of world's</div>
+	<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
+	<div style="display:inline-block; vertical-align:center; font-size: 23px;margin-left:-2%">scale by</div>
+	<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
 </div>
 
+<div id="acknowledge">
+	<h3>Acknowledge</h3>
+	<p> Data source is data source</p>
+	<p>The cartogram implementation is designed and built by Amanda Hinchman-Dominguez, Krit Petrachaianan, <a href="https://www.grinnell.edu/users/caoyujin"> Yujing Cao </a>and <a href="https://www.grinnell.edu/users/kamp">Kathy Kamp </a>at <a href="http://dasil.grinnell.edu/">DASIL</a></p>
+</div>
 <div id="tooltip"></div>
 <div id="tooltipTest"></div>
 
@@ -202,7 +205,7 @@ function loadImage(dataset) {
 		var map = d3.json(dataset, function (json) {
 			// create a first guess for the projection
 			var center = d3.geo.centroid(json);
-			var scale = 150;
+			var scale = 197;
 			var offset = [w / 2, h / 2];
 			var projection = d3.geo.mercator().scale(scale).center(center)
     			.translate(offset);
@@ -217,10 +220,10 @@ function loadImage(dataset) {
 
 			var hscale = scale*w / (bounds[1][0] - bounds[0][0]);
 			var vscale = scale*h / (bounds[1][1] - bounds[0][1]);
-			var scale = (hscale < vscale) ? hscale*0.9 : vscale*0.9;
+			var scale = (hscale < vscale) ? hscale : vscale;
             
-			var offset = [w - 1.05*(bounds[0][0] + bounds[1][0])/2, 
-									h - 1.09*(bounds[0][1] + bounds[1][1])/2];
+			var offset = [w - 1.04*(bounds[0][0] + bounds[1][0])/2, 
+									h - 1.1*(bounds[0][1] + bounds[1][1])/2];
 
 
 			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
@@ -284,12 +287,12 @@ function loadImage(dataset) {
                          .attr("class","legend");
 						 
                  legend.append("rect")
-                         .attr("x",20)	
+                         .attr("x",30)	
                          .attr("y",function(d,i){
-						 return 620+i*40;
+						 return 120+i*40;
 						 })							 
-			             .attr("width",30)
-						 .attr("height",40)
+			             .attr("width",40)
+						 .attr("height",50)
 						 .style("fill",function(d,i){
 						 return colors[i];
 						 });
@@ -300,20 +303,20 @@ function loadImage(dataset) {
                 legendLabel_1.push("missing value");
 
 				 legend.append("text")
-				         .attr("x",65)
+				         .attr("x",75)
 						 .attr("y",function(d,i){
-						 return 645+i*40;
+						 return 145+i*40;
 						 })
 				         .text(function(d,i){
 						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",20)
-				 		.attr("y",570)
+				 		.attr("x",30)
+				 		.attr("y",70)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",20)
-				 	   .attr("y",605)
+				 	   .attr("x",30)
+				 	   .attr("y",105)
 				 	   .text("Unit: "+unit);
 
  			var lock;
@@ -420,13 +423,13 @@ function loadImage(dataset) {
 	}// loadImage()
 		
 	function changeDataset(dataset) {	
-		document.getElementById("pagetitle").innerHTML=
-		d3.selectAll("path")
-			.attr("height", 0);
-				d3.selectAll("body")
-					.transition()
-					.duration(1000)
-					.ease("elastic");
+		// document.getElementById("pagetitle").innerHTML=
+		// d3.selectAll("path")
+		// 	.attr("height", 0);
+		// 		d3.selectAll("body")
+		// 			.transition()
+		// 			.duration(1000)
+		// 			.ease("elastic");
 	
 		d3.selectAll("#mySVG").transition().duration(2000).ease("elastic").remove();
 		loadImage(dataset + ".json") 
@@ -527,12 +530,12 @@ function loadImage(dataset) {
                          .attr("class","legend");
 						 
                 legend.append("rect")
-                         .attr("x",20)	
+                         .attr("x",30)	
                          .attr("y",function(d,i){
-						 return 620+i*40;
+						 return 120+i*40;
 						 })							 
-			             .attr("width",30)
-						 .attr("height",40)
+			             .attr("width",40)
+						 .attr("height",50)
 						 .style("fill",function(d,i){
 						 return colors[i];
 						 });
@@ -544,20 +547,20 @@ function loadImage(dataset) {
                 legendLabel_1.push("missing value");
 
 				 legend.append("text")
-				         .attr("x",65)
+				         .attr("x",75)
 						 .attr("y",function(d,i){
-						 return 645+i*40;
+						 return 145+i*40;
 						 })
 				         .text(function(d,i){
 						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",20)
-				 		.attr("y",570)
+				 		.attr("x",30)
+				 		.attr("y",70)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",20)
-				 	   .attr("y",605)
+				 	   .attr("x",30)
+				 	   .attr("y",105)
 				 	   .text("Unit: "+unit);
 	
 		svg.selectAll("path")
