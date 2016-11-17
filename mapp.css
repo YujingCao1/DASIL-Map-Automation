@@ -35,45 +35,32 @@ body{
 }
 g.legend {
 	margin-top: 30%;
-	font-size: 1.1em;
+	font-size: 1em;
 }
 
-/*#credit {
-	font-family: "Source Sans Pro";
-	color: #767676;
-	position: absolute;
-	top: 20%;
-	left: 68%;
+#description{
+  color: #464646;
+  display: none;
+  font-size: 16px;
+  text-align: left;
+  width: 18%;
+  z-index: 1001;
+  line-height: 140%;
+  font-family: "Source Sans Pro";
+  position: absolute;
+  right: 2%;
+  margin-top: 3%;
+  padding: 1%;
+  border:2px rgba(193, 66, 66, 0.8) solid;
+  border-radius: 5px;
 }
-
-
-.date {
-	font-family: "Source Sans Pro";
-	padding: 3px;
-	float: left;
-	text-transform: uppercase;
-}
-
-.by {
-	font-family: "Source Sans Pro";
-	padding: 3px;
-	float: left;
-	text-transform: italicize;
-}
-
-.id {
-	font-family: "Source Sans Pro";
-	padding: 3px;
-	float: left;
-	text-transform: uppercase;
-}*/
 
 #acknowledge{
   float: left;
-  margin-top: 30%;
+  margin-top: 43%;
   margin-left: 2%;
   position: absolute;
-  width: 10%;
+  width: 100%;
   z-index: 10001;
 }
 
@@ -86,12 +73,6 @@ path:hover {
 	width: 100%;
 	margin-left: 1%;
 }
-
-
-/*#option_menu {
-	width: 100%;
-	height:100%;
-}*/
 
 
 #selectBarColor {
@@ -148,15 +129,15 @@ path:hover {
 	display: none;
 	font-size: 18px;
 	text-align: left;
-	width: 18%;
+	width: 16%;
 	z-index: 1001;
 	line-height: 200%;
 	font-family: "Source Sans Pro";
-    position: absolute;
-    margin-top: 5%;
-    right: 3%;
-    padding: 1%;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  margin-top: 22%;
+  left: 1%;
+  padding: 1%;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 
 #tooltipTest{
@@ -193,17 +174,3 @@ path:hover {
   stroke: #FFF;
   stroke-width: 1.5px;
 }
-
-/*#keybox {
-	width:338px;
-	height:22px;
- 	background-color:#ffffcc;
- 	margin-top: 20px;
- 	filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr=#ffffcc, endColorstr=#a1dab4);
- 	background-image:-moz-linear-gradient(left, #ffffcc 0%, #a1dab4 25%,#41b6c4 50%,#225ea8 100%);
-	background-image:linear-gradient(left, #ffffcc 0%, #a1dab4 25%,#41b6c4 50%,#225ea8 100%);
-	background-image:-webkit-linear-gradient(left, #ffffcc 0%, #a1dab4 25%,#41b6c4 50%,#225ea8 100%);
-	background-image:-o-linear-gradient(left, #ffffcc 0%, #a1dab4 25%,#41b6c4 50%,#225ea8 100%);
-	background-image:-ms-linear-gradient(left, #ffffcc 0%, #a1dab4 25%,#41b6c4 50%,#225ea8 100%);
- 	background-image:-webkit-gradient(linear, left bottom, right bottom, color-stop(0%,#ffffcc), color-stop(25%,#a1dab4),color-stop(50%,#41b6c4),color-stop(100%,#225ea8));
- }*/
