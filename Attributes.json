@@ -6,361 +6,496 @@
     {
     "id": "EXCHANGE",
     "name":"Official Exchange Rate",
-    "unit":"relative to US Dollar"
+    "unit":"relative to US Dollar",
+    "description":"Official exchange rate (LCU per US$, period average)",
+    "source":"World bank"
 	},
 	{
     "id": "OREEXPRT", 
     "name":"Ore and Metal Exports",
-    "unit":"% of Exports"
+    "unit":"% of Exports",
+    "description":"Ores and metals exports (% of merchandise exports)",
+    "source":"World bank"
 	},
 	{
     "id": "OREIMPRT",
     "name":"Ore and Metal Imports",
-    "unit":"% of Imports"
+    "unit":"% of Imports",
+    "description":"Ores and metals imports (% of merchandise imports)",
+    "source":"World bank"
 	},
 	{
     "id": "GDPGRWTH",
     "name":"GDP Growth Rate",
-    "unit":"Annual %"
-	},
+    "unit":"Annual %",
+    "description":"Annual percentage growth rate of GDP at market prices based on constant local currency. Aggregates are based on constant 2005 U.S. dollars. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. (World Bank)",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
+    },
 	{
     "id": "CHILDHIV",
     "name":"Children with HIV",
-    "unit":"Number of Children Under 14"
+    "unit":"Number of Children Under 14",
+    "description":"Number of children ages 0-14 who are infected with HIV.",
+    "source":"UNAIDS estimates"
 	},
 	{
     "id": "CPI",
     "name":"Consumer Price Index",
-    "unit":"Unknown"
-	},
+    "unit":"Unknown",
+    "description":"Consumer price index reflects changes in the cost to the average consumer of acquiring a basket of goods and services that may be fixed or changed at specified intervals, such as yearly. The Laspeyres formula is generally used. Data are period averages.",
+    "source":"International Monetary Fund, International Financial Statistics and data files"
+    },
 	{
     "id": "GDPMKP",
     "name":"GDP at Purchaser Prices",
-    "unit":"US Dollar"
-	},
+    "unit":"US Dollar",
+    "description":"GDP at purchaser's prices is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars. Dollar figures for GDP are converted from 2014domestic currencies using single year official exchange rates. For a few countries where the official exchange rate does not reflect the rate effectively applied to actual foreign exchange transactions, an alternative conversion factor is used.",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
+    },
 	{
     "id": "GDPPCAP",
     "name":"GDP per Capita",
-    "unit":"US Dollar"
-	},
+    "unit":"US Dollar",
+    "description":"GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
+    },
 	{
     "id": "GDPPCAPG",
     "name":"Growth Rate of GDP per Capita",
-    "unit":"Annual %"
-	},
+    "unit":"Annual %",
+    "description":"Annual percentage growth rate of GDP per capita based on constant local currency. Aggregates are based on constant 2005 U.S. dollars. GDP per capita is gross domestic product divided by midyear population. GDP at purchaser's prices is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources.",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
+    },
 	{
     "id": "IMPORTS",
     "name":"Imports of Goods and Services",
-    "unit":"Percentage of GDP"
-	},
+    "unit":"Percentage of GDP",
+    "description":"Imports of goods and services represent the value of all goods and other market services received from the rest of the world. They include the value of merchandise, freight, insurance, transport, travel, royalties, license fees, and other services, such as communication, construction, financial, information, business, personal, and government services. They exclude compensation of employees and investment income (formerly called factor services) and transfer payments.",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
+    },
 	{
     "id": "IMMUNDPT",
     "name":"Child Immunization: DPT",
-    "unit":"Percentage"
-	},
-	{
+    "unit":"Percentage",
+    "description":"Child immunization measures the percentage of children ages 12-23 months who received vaccinations before 12 months or at any time before the survey. A child is considered adequately immunized against diphtheria, pertussis (or whooping cough), and tetanus (DPT) after receiving three doses of vaccine.",
+    "source":"World Health Organization"
+    },
+    {
     "id": "IMMUNMEA",
     "name":"Child Immunization: Measles",
-    "unit":"Percentage"
-	},
+    "unit":"Percentage",
+    "description":"Child immunization measures the percentage of children ages 12-23 months who received vaccinations before 12 months or at any time before the survey. A child is considered adequately immunized against measles after receiving one dose of vaccine.",
+    "source":"WHO and UNICEF"
+    },
 	{
     "id": "INFLATCP",
     "name":"Inflation as Measured by the CPI",
-    "unit":"Annual Percentage Change"
-	},
+    "unit":"Annual Percentage Change",
+    "description":"Inflation as measured by the consumer price index reflects the annual percentage change in the cost to the average consumer of acquiring a basket of goods and services that may be fixed or changed at specified intervals, such as yearly. The Laspeyres formula is generally used.",
+    "source":"International Monetary Fund, International Financial Statistics and data files"
+    },
 	{
     "id": "LABORPRT",
     "name":"Labor Force Participation Rate",
-    "unit":"Percentage"
-	},
+    "unit":"Percentage",
+    "description":"Labor force participation rate is the proportion of the population ages 15 and older that is economically active: all people who supply labor for the production of goods and services during a specified period.",
+    "source":"International Labour Organization, Key Indicators of the Labour Market database"
+    },
 	{
     "id": "RISKMAT",
     "name":"Life Time Risk of Maternal Death",
-    "unit":"Percentage"
-	},
+    "unit":"Percentage",
+    "description":"Life time risk of maternal death is the probability that a 15-year-old female will die eventually from a maternal cause assuming that current levels of fertility and mortality (including maternal mortality) do not change in the future, taking into account competing causes of death.",
+    "source":"WHO, UNICEF, UNFPA, The World Bank, and the United Nations Population Division. Trends in Maternal Mortality: 1990 to 2015. Geneva, World Health Organization, 2015"
+    },
 	{
     "id": "MILEXPEN",
     "name":"Military Expenditures",
-    "unit":"Percentage of GDP"
-	},
-	{
-    "id": "GNIPCAP",
+    "unit":"Percentage of GDP",
+    "description":"Military expenditures data from SIPRI are derived from the NATO definition, which includes all current and capital expenditures on the armed forces, including peacekeeping forces; defense ministries and other government agencies engaged in defense projects; paramilitary forces, if these are judged to be trained and equipped for military operations; and military space activities. Such expenditures include military and civil personnel, including retirement pensions of military personnel and social services for personnel; operation and maintenance; procurement; military research and development; and military aid (in the military expenditures of the donor country). Excluded are civil defense and current expenditures for previous military activities, such as for veterans' benefits, demobilization, conversion, and destruction of weapons. This definition cannot be applied for all countries, however, since that would require much more detailed information than is available about what is included in military budgets and off-budget military expenditure items. (For example, military budgets might or might not cover civil defense, reserves and auxiliary forces, police and paramilitary forces, dual-purpose forces such as military and civilian police, military grants in kind, pensions for military personnel, and social security contributions paid by one part of government to another.",
+    "source":"Stockholm International Peace Research Institute (SIPRI), Yearbook: Armaments, Disarmament and International Security"
+    },
+    {
+	"id": "GNIPCAP",
     "name":"GNI per Capita, Atlas Method",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"GNI per capita (formerly GNP per capita) is the gross national income, converted to U.S. dollars using the World Bank Atlas method, divided by the midyear population. GNI is the sum of value added by all resident producers plus any product taxes (less subsidies) not included in the valuation of output plus net receipts of primary income (compensation of employees and property income) from abroad. GNI, calculated in national currency, is usually converted to U.S. dollars at official exchange rates for comparisons across economies, although an alternative rate is used when the official exchange rate is judged to diverge by an exceptionally large margin from the rate actually applied in international transactions. To smooth fluctuations in prices and exchange rates, a special Atlas method of conversion is used by the World Bank. This applies a conversion factor that averages the exchange rate for a given year and the two preceding years, adjusted for differences in rates of inflation between the country, and through 2000, the G-5 countries (France, Germany, Japan, the United Kingdom, and the United States). From 2001, these countries include the Euro area, Japan, the United Kingdom, and the United States.",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
+    },
+    {
     "id": "EXPORTS",
     "name":"Exports of Goods and Services",
-    "unit":"Percentage of GDP"
-	},
+    "unit":"Percentage of GDP",
+    "description":"Exports of goods and services represent the value of all goods and other market services provided to the rest of the world. They include the value of merchandise, freight, insurance, transport, travel, royalties, license fees, and other services, such as communication, construction, financial, information, business, personal, and government services. They exclude compensation of employees and investment income (formerly called factor services) and transfer payments.",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
+    },
 	{
     "id": "FDI",
-    "name":"FOregin Direct Investment",
-    "unit":"US Dollar"
-	},
-	{
+    "name":"Foregin Direct Investment",
+    "unit":"US Dollar",
+    "description":"Foreign direct investment are the net inflows of investment to acquire a lasting management interest (10 percent or more of voting stock) in an enterprise operating in an economy other than that of the investor. It is the sum of equity capital, reinvestment of earnings, other long-term capital, and short-term capital as shown in the balance of payments. This series shows total net FDI. In BPM6, financial account balances are calculated as the change in assets minus the change in liabilities. Net FDI outflows are assets and net FDI inflows are liabilities. Data are in current U.S. dollars.",
+    "source":"International Monetary Fund, Balance of Payments Statistics Yearbook and data files"
+    },
+    {
     "id": "GNIPCPPP",
     "name":"GNI per Capita, PPP",
-    "unit":"Current International Dollar"
-	},
+    "unit":"Current International Dollar",
+    "description":"GNI per capita based on purchasing power parity (PPP). PPP GNI is gross national income (GNI) converted to international dollars using purchasing power parity rates. An international dollar has the same purchasing power over GNI as a U.S. dollar has in the United States. GNI is the sum of value added by all resident producers plus any product taxes (less subsidies) not included in the valuation of output plus net receipts of primary income (compensation of employees and property income) from abroad. Data are in current international dollars based on the 2011 ICP round.",
+    "source":"World Bank, International Comparison Program database"
+    },
 	{
     "id": "INTERNET",
     "name":"Internet Users",
-    "unit":"Unknown"
-	},
-	{
+    "unit":"Unknown",
+    "description":"Internet users are individuals who have used the Internet (from any location) in the last 12 months. Internet can be used via a computer, mobile phone, personal digital assistant, games machine, digital TV etc.",
+    "source":"International Telecommunication Union, World Telecommunication/ICT Development Report and database, and World Bank estimates"},
+    {
     "id": "POPULAT",
     "name":"Total Population",
-    "unit":"Unknown"
-	},
-	{
+    "unit":"Unknown",
+    "description":"Total population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship--except for refugees not permanently settled in the country of asylum, who are generally considered part of the population of their country of origin. The values shown are midyear estimates.",
+    "source":"(1) United Nations Population Division. World Population Prospects, (2) United Nations Statistical Division. Population and Vital Statistics Report (various years), (3) Census reports and other statistical publications from national statistical offices, (4) Eurostat"
+    },
+    {
     "id": "NETCAPAC",
     "name":"Net Capital Account",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"Net capital account records acquisitions and disposals of nonproduced nonfinancial assets, such as land sold to embassies and sales of leases and licenses, as well as capital transfers, including government debt forgiveness. The use of the term capital account in this context is designed to be consistent with the System of National Accounts, which distinguishes between capital transactions and financial transactions. Data are in current U.S. dollars.",
+    "source":"International Monetary Fund, Balance of Payments Statistics Yearbook and data files"
+    },
+    {
     "id": "NETCRED",
     "name":"Net Domestic Credit",
-    "unit":"Current Local Currency"
-	},
-	{
+    "unit":"Current Local Currency",
+    "description":"Net domestic credit is the sum of net claims on the central government and claims on other sectors of the domestic economy (IFS line 32).  Data are in current local currency.",
+    "source":"International Monetary Fund, International Financial Statistics and data files"
+    },
+    {
     "id": "GENDEVIN",
     "name":"Gender Development Index",
-    "unit":"Ratio of Female to Male HDI Values"
-	},
-	{
+    "unit":"Ratio of Female to Male HDI Values",
+    "description":"Ratio of female to male HDI values..",
+    "source":"HDRO calculations based on data from UNDESA (2015), UNESCO Institute for Statistics (2015), Barro and Lee (2014), World Bank (2015a), ILO (2015a) and IMF (2015)"
+    },
+    {
     "id": "WOMPARL",
     "name":"Women in Parliaments",
-    "unit":"Percentage"
-	},
-	{
+    "unit":"Percentage",
+    "description":"Women in parliaments are the percentage of parliamentary seats in a single or lower chamber held by women.",
+    "source":"Inter-Parliamentary Union (IPU)"
+    },
+    {
     "id": "FERTIL",
     "name":"Total Fertility",
-    "unit":"Number of Children"
-	},
-	{
+    "unit":"Number of Children",
+    "description":"Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with current age-specific fertility rates.",
+    "source":"(1) United Nations Population Division. World Population Prospects, (2) United Nations Statistical Division. Population and Vital Statistics Report (various years), (3) Census reports and other statistical publications from national statistical offices, (4) Eurostat"
+    },
+    {
     "id": "LIFEEXP",
     "name":"Life Expectancey",
-    "unit":"Years"
-	},
-	{
+    "unit":"Years",
+    "description":"Life expectancy at birth indicates the number of years a newborn infant would live if prevailing patterns of mortality at the time of its birth were to stay the same throughout its life.",
+    "source":"(1) United Nations Population Division. World Population Prospects, (2) United Nations Statistical Division. Population and Vital Statistics Report (various years), (3) Census reports and other statistical publications from national statistical offices, (4) Eurostat"
+    },
+    {
     "id": "INFMORT",
     "name":"Infant Mortality Rate",
-    "unit":"Deaths per 1000 Live Births"
-	},
-	{
+    "unit":"Deaths per 1000 Live Births",
+    "description":"Infant mortality rate is the number of infants dying before reaching one year of age, per 1,000 live births in a given year.",
+    "source":"UN Inter-agency Group for Child Mortality Estimation (UNICEF, WHO, World Bank, UN DESA Population Division) at www.childmortality.org"
+    },
+    {
     "id": "NETCAPAC",
     "name":"Net Capital Account",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"Net capital account records acquisitions and disposals of nonproduced nonfinancial assets, such as land sold to embassies and sales of leases and licenses, as well as capital transfers, including government debt forgiveness. The use of the term capital account in this context is designed to be consistent with the System of National Accounts, which distinguishes between capital transactions and financial transactions. Data are in current U.S. dollars.",
+    "source":"International Monetary Fund, Balance of Payments Statistics Yearbook and data files"
+    },
+    {
     "id": "NETFORAS",
     "name":"Net Foreign Assets",
-    "unit":"Current Local Currency"
-	},
-	{
+    "unit":"Current Local Currency",
+    "description":"Net foreign assets are the sum of foreign assets held by monetary authorities and deposit money banks, less their foreign liabilities. Data are in current local currency.",
+    "source":"International Monetary Fund, International Financial Statistics and data files"
+    },
+    {
     "id": "INFDEATH",
     "name":"Infant Mortality",
-    "unit":"Total Number of Deaths"
-	},
-	{
-    "id": "0_5Death",
-    "name":"Under 5 Mortality",
-    "unit":"Total Number of Deaths"
-	},
-	{
+    "unit":"Total Number of Deaths",
+    "description":"Number of infants dying before reaching one year of age.",
+    "source":"Estimates developed by the UN Inter-agency Group for Child Mortality Estimation (UNICEF, WHO, World Bank, UN DESA Population Division) at www.childmortality.org"
+    },
+    {
     "id": "65_POP",
     "name":"Percentage of Population over 65",
-    "unit":"Percentage"
-	},
-	{
+    "unit":"Percentage",
+    "description":"Population ages 65 and above as a percentage of the total population. Population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship--except for refugees not permanently settled in the country of asylum, who are generally considered part of the population of the country of origin.",
+    "source":"The United Nations Population Division's World Population Prospects"
+    },
+    {
     "id": "POPDENS",
     "name":"Population Density",
-    "unit":"People Per Square km"
-	},
-	{
+    "unit":"People Per Square km",
+    "description":"Population density is midyear population divided by land area in square kilometers. Population is based on the de facto definition of population, which counts all residents regardless of legal status or citizenship--except for refugees not permanently settled in the country of asylum, who are generally considered part of the population of their country of origin. Land area is a country's total area, excluding area under inland water bodies, national claims to continental shelf, and exclusive economic zones. In most cases the definition of inland water bodies includes major rivers and lakes.",
+    "source":"Food and Agriculture Organization and World Bank population estimates"
+    },
+    {
     "id": "EXTDEBT",
     "name":"External Debt",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"Present value of debt is the sum of short-term external debt plus the discounted sum of total debt service payments due on public, publicly guaranteed, and private nonguaranteed long-term external debt over the life of existing loans. Data are in current U.S. dollars.",
+    "source":"World Bank, International Debt Statistics"
+    },
+    {
     "id": "RAILNGTH",
     "name":"Railway Length",
-    "unit":"km"
-	},
-	{
+    "unit":"km",
+    "description":"Rail lines are the length of railway route available for train service, irrespective of the number of parallel tracks.",
+    "source":"World Bank, Transportation, Water, and Information and Communications Technologies Department, Transport Division"
+    },
+    {
     "id": "RAILGOOD",
     "name":"Goods Transported by Railway",
-    "unit":"Metric Tons times Kilometers Traveled"
-	},
-	{
+    "unit":"Metric Tons times Kilometers Traveled",
+    "description":"Goods transported by railway are the volume of goods transported by railway, measured in metric tons times kilometers traveled.",
+    "source":"World Bank, Transportation, Water, and Information and Communications Technologies Department, Transport Division"
+    },
+    {
     "id": "RAILPASS",
     "name":"Passengers Carried by Railway",
-    "unit":"Number of Passengers Times Kilometers Traveled"
-	},
-	{
+    "unit":"Number of Passengers Times Kilometers Traveled",
+    "description":"Passengers carried by railway are the number of passengers transported by rail times kilometers traveled.",
+    "source":"World Bank, Transportation, Water, and Information and Communications Technologies Department, Transport Division"
+    },
+    {
     "id": "RIR",
     "name":"Real Interest Rate",
-    "unit":"Unkown"
-	},
-	{
+    "unit":"Unkown",
+    "description":"Real interest rate is the lending interest rate adjusted for inflation as measured by the GDP deflator. The terms and conditions attached to lending rates differ by country, however, limiting their comparability.",
+    "source":"International Monetary Fund, International Financial Statistics and data files using World Bank data on the GDP deflator"
+    },
+    {
     "id": "RURALPOP",
     "name":"Rural Population",
-    "unit":"Unknown"
-	},
-	{
+    "unit":"Unknown",
+    "description":"Rural population refers to people living in rural areas as defined by national statistical offices. It is calculated as the difference between total population and urban population. Aggregation of urban and rural population may not add up to total population because of different country coverages.",
+    "source":"The data on urban population shares used to estimate rural population come from the United Nations, World Urbanization Prospects. Total population figures are World Bank estimates"
+    },
+    {
     "id": "EXPSERV",
     "name":"Exported Services",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"Services refer to economic output of intangible commodities that may be produced, transferred, and consumed at the same time. Data are in current U.S. dollars.",
+    "source":"International Monetary Fund, Balance of Payments Statistics Yearbook and data files"
+    },
+    {
     "id": "IMPSERV",
     "name":"Imported Services",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"Services refer to economic output of intangible commodities that may be produced, transferred, and consumed at the same time. Data are in current U.S. dollars.",
+    "source":"International Monetary Fund, Balance of Payments Statistics Yearbook and data files"
+    },
+    {
     "id": "STCKTRAD",
     "name":"Value of Shares Traded",
-    "unit":"End of Year US Dollar"
-	},
-	{
+    "unit":"End of Year US Dollar",
+    "description":"The value of shares traded is the total number of shares traded, both domestic and foreign, multiplied by their respective matching prices. Figures are single counted (only one side of the transaction is considered). Companies admitted to listing and admitted to trading are included in the data. Data are end of year values converted to U.S. dollars using corresponding year-end foreign exchange rates.",
+    "source":"World Federation of Exchanges database"
+    },
+    {
     "id": "URBANPOP",
     "name":"Urban Population",
-    "unit":"Unknown"
-	},
-	{
+    "unit":"Unknown",
+    "description":"Urban population refers to people living in urban areas as defined by national statistical offices. It is calculated using World Bank population estimates and urban ratios from the United Nations World Urbanization Prospects. Aggregation of urban and rural population may not add up to total population because of different country coverages.",
+    "source":"World Bank Staff estimates based on United Nations, World Urbanization Prospects"
+    },
+    {
     "id": "IMFCRED",
     "name":"IMF Credit",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"Use of IMF credit denotes members' drawings on the IMF other than amounts drawn against the country's reserve tranche position. Use of IMF credit includes purchases and drawings under Stand-By, Extended, Structural Adjustment, Enhanced Structural Adjustment, and Systemic Transformation Facility Arrangements as well as Trust Fund loans. SDR allocations are also included in this category. Note: Data related to the operations of the IMF are provided by the IMF Treasurer’s Department. They are converted from special drawing rights into dollars using end-of-period exchange rates for stocks and average-over-the-period exchange rates for flows. Data are in current U.S. dollars.",
+    "source":"World Bank, International Debt Statistics"
+    },
+    {
     "id": "EASEBUSI",
     "name":"Ease of Doing Business",
-    "unit":"1-189, lower is better"
-	},
-	{
+    "unit":"1-189, lower is better",
+    "description":"Ease of doing business ranks economies from 1 to 189, with first place being the best. A high ranking (a low numerical rank) means that the regulatory environment is conducive to business operation. The index averages the country's percentile rankings on 10 topics covered in the World Bank's Doing Business. The ranking on each topic is the simple average of the percentile rankings on its component indicators.",
+    "source":"World Bank, Doing Business project (http://www.doingbusiness.org/)"
+    },
+    {
     "id": "OTHERGAS",
     "name":"Other Greenhouse Gas Emissions",
-    "unit":"Thousand Metric Tons of CO2 Equivalent"
-	},
-	{
+    "unit":"Thousand Metric Tons of CO2 Equivalent",
+    "description":"Other greenhouse gas emissions are by-product emissions of hydrofluorocarbons, perfluorocarbons, and sulfur hexafluoride.",
+    "source":"European Commission, Joint Research Centre (JRC)/Netherlands Environmental Assessment Agency (PBL). Emission Database for Global Atmospheric Research (EDGAR): http://edgar.jrc.ec.europa.eu/" 
+    },
+    {
     "id": "NITOXIDE",
     "name":"Nitrous Oxide Emissions",
-    "unit":"Thousand Metric Tons of CO2 Equivalent"
-	},
-	{
+    "unit":"Thousand Metric Tons of CO2 Equivalent",
+    "description":"Nitrous oxide emissions are emissions from agricultural biomass burning, industrial activities, and livestock management. (thousand metric tons of CO2 equivalent)",
+    "source":"European Commission, Joint Research Centre (JRC)/Netherlands Environmental Assessment Agency (PBL). Emission Database for Global Atmospheric Research (EDGAR): http://edgar.jrc.ec.europa.eu/"
+    },
+    {
     "id": "METHANE",
     "name":"Methane Emissions",
-    "unit":"Thousand Metric Tons of CO2 Equivalent"
-	},
-	{
+    "unit":"Thousand Metric Tons of CO2 Equivalent",
+    "description":"Methane emissions are those stemming from human activities such as agriculture and from industrial methane production. (kt of CO2 equivalent)",
+    "source":"European Commission, Joint Research Centre (JRC)/Netherlands Environmental Assessment Agency (PBL). Emission Database for Global Atmospheric Research (EDGAR): http://edgar.jrc.ec.europa.eu/"
+    },
+    {
     "id": "COMWASTE",
     "name":"Combustile Renewables and Waste",
-    "unit":"Percentage of Total Energy Use"
-	},
-	{
+    "unit":"Percentage of Total Energy Use",
+    "description":"Combustible renewables and waste comprise solid biomass, liquid biomass, biogas, industrial waste, and municipal waste, measured as a percentage of total energy use.",
+    "source":"IEA Statistics © OECD/IEA 2014 (http://www.iea.org/stats/index.asp)"
+    },
+    {
     "id": "FOSSCOMP",
     "name":"Fossil Fuel",
-    "unit":"Percentage of Energy Use"
-	},
-	{
+    "unit":"Percentage of Energy Use",
+    "description":"Fossil fuel comprises coal, oil, petroleum, and natural gas products.",
+    "source":"IEA Statistics © OECD/IEA 2014 (http://www.iea.org/stats/index.asp)"
+    },
+    {
     "id": "GASPRICE",
     "name":"Gasoline Prices",
-    "unit":"US Dollar Per Liter"
-	},
-	{
+    "unit":"US Dollar Per Liter",
+    "description":"Fuel prices refer to the pump prices of the most widely sold grade of gasoline. Prices have been converted from the local currency to U.S. dollars per liter.",
+    "source":"German Agency for International Cooperation (GIZ)"
+    },
+    {
     "id": "ENRGGDP",
     "name":"GDP per Unit of Energy",
-    "unit":"PPP GDP per kg"
-	},
-	{
+    "unit":"PPP GDP per kg",
+    "description":"GDP per unit of energy use is the PPP GDP per kilogram of oil equivalent of energy use. PPP GDP is gross domestic product converted to 2011 constant international dollars using purchasing power parity rates. An international dollar has the same purchasing power over GDP as a U.S. dollar has in the United States.",
+    "source":"IEA Statistics © OECD/IEA 2014 (http://www.iea.org/stats/index.asp)"
+    },
+    {
     "id": "ELECTACC",
     "name":"Access to Electricity",
-    "unit":"Percentage of Population"
-	},
-	{
+    "unit":"Percentage of Population",
+    "description":"Access to electricity is the percentage of population with access to electricity. Electrification data are collected from industry, national surveys and international sources.",
+    "source":"World Bank, Sustainable Energy for All (SE4ALL) database from World Bank, Global Electrification database"
+    },
+    {
     "id": "CELLULAR",
     "name":"Mobile Cellular Telephone Subscriptions",
-    "unit":"Per 100 Inhabitants"
-	},
-	{
+    "unit":"Per 100 Inhabitants",
+    "description":"Mobile cellular telephone subscriptions are subscriptions to a public mobile telephone service that provide access to the PSTN using cellular technology. The indicator includes (and is split into) the number of postpaid subscriptions, and the number of active prepaid accounts (i.e. that have been used during the last three months). The indicator applies to all mobile cellular subscriptions that offer voice communications. It excludes subscriptions via data cards or USB modems, subscriptions to public mobile data services, private trunked mobile radio, telepoint, radio paging and telemetry services.",
+    "source":"International Telecommunication Union, World Telecommunication/ICT Development Report and database"
+    },
+    {
     "id": "ENERGINT",
     "name":"Energy Intensity Level",
-    "unit":"Percentage of PPP GDP"
-	},
-	{
+    "unit":"Percentage of PPP GDP",
+    "description":"Energy intensity level of primary energy is the ratio between energy supply and gross domestic product measured at purchasing power parity. Energy intensity is an indication of how much energy is used to produce one unit of economic output. Lower ratio indicates that less energy is used to produce one unit of output.",
+    "source":"© OECD/IEA and World Bank, based on IEA data in IEA World Energy Balances © OECD/IEA 2013 edition"
+    },
+    {
     "id": "PM2_5EXP",
     "name":"Population-weighted Exposure to Ambient PM 2.5 Pollution",
-    "unit":"Annual Micrograms per Meter Cubed"
-	},
-	{
+    "unit":"Annual Micrograms per Meter Cubed",
+    "description":"Population-weighted exposure to ambient PM2.5 pollution is defined as the average level of exposure of a nation's population to concentrations of suspended particles measuring less than 2.5 microns in aerodynamic diameter, which are capable of penetrating deep into the respiratory tract and causing severe health damage. Exposure is calculated by weighting mean annual concentrations of PM2.5 by population in both urban and rural areas.",
+    "source":"Brauer, M. et al. 2015. Ambient Air Pollution Exposure Estimation for the Global Burden of Disease 2013"
+    },
+    {
     "id": "PM2_5WHO",
     "name":"Exposure to Ambient PM2.5 that Exceed the WHO Guidline Value",
-    "unit":"Percentage of Population"
-	},
-	{
+    "unit":"Percentage of Population",
+    "description":"Percent of population exposed to ambient concentrations of PM2.5 that exceed the WHO guideline value is defined as the portion of a country’s population living in places where mean annual concentrations of PM2.5 are greater than 10 micrograms per cubic meter, the guideline value recommended by the World Health Organization as the lower end of the range of concentrations over which adverse health effects due to PM2.5 exposure have been observed.",
+    "source":"Brauer, M. et al. 2015. Ambient Air Pollution Exposure Estimation for the Global Burden of Disease 2013"
+    },
+    {
     "id": "STRINDEX",
     "name":"Strength of Legal Rights Index",
-    "unit":"0-12, higher is better"
-	},
-	{
+    "unit":"0-12, higher is better",
+    "description":"Strength of legal rights index measures the degree to which collateral and bankruptcy laws protect the rights of borrowers and lenders and thus facilitate lending. The index ranges from 0 to 12, with higher scores indicating that these laws are better designed to expand access to credit.",
+    "source":"World Bank, Doing Business project (http://www.doingbusiness.org/)"
+    },
+    {
     "id": "STARTBUS",
     "name":"Time required to start a business",
-    "unit":"Number of Calendar Days"
-	},
-	{
+    "unit":"Number of Calendar Days",
+    "description":"Time required to start a business is the number of calendar days needed to complete the procedures to legally operate a business. If a procedure can be speeded up at additional cost, the fastest procedure, independent of cost, is chosen.",
+    "source":"World Bank, Doing Business project (http://www.doingbusiness.org/)"
+    },
+    {
     "id": "GDPEMPLO",
     "name":"GDP per Person Employed",
-    "unit":"1990 International Dollar"
-	},
-	{
+    "unit":"1990 International Dollar",
+    "description":"GDP per person employed is gross domestic product (GDP) divided by total employment in the economy. Purchasing power parity (PPP) GDP is GDP converted to 1990 constant international dollars using PPP rates. An international dollar has the same purchasing power over GDP that a U.S. dollar has in the United States.",
+    "source":"International Labour Organization, Key Indicators of the Labour Market database"
+    },
+    {
     "id": "URBANPOP",
     "name":"Urban Population",
-    "unit":"Unknown"
-	},
-	{
+    "unit":"Unknown",
+    "description":"Urban population refers to people living in urban areas as defined by national statistical offices. It is calculated using World Bank population estimates and urban ratios from the United Nations World Urbanization Prospects.",
+    "source":"United Nations, World Urbanization Prospects"},
+    {
     "id": "TOTALTAXR",
     "name":"Total Tax Rate",
-    "unit":"Unknown"
-	},
-	{
+    "unit":"Unknown",
+    "description":"Total tax rate measures the amount of taxes and mandatory contributions payable by businesses after accounting for allowable deductions and exemptions as a share of commercial profits. Taxes withheld (such as personal income tax) or collected and remitted to tax authorities (such as value added taxes, sales taxes or goods and service taxes) are excluded.",
+    "source":"World Bank, Doing Business project (http://www.doingbusiness.org/)"
+    },
+    {
     "id": "AIRTRANS",
     "name":"Registered Carrier Departures Worldwide",
-    "unit":"Unknown"
-	},
-	{
+    "unit":"Unknown",
+    "description":"Registered carrier departures worldwide are domestic takeoffs and takeoffs abroad of air carriers registered in the country.",
+    "source":"International Civil Aviation Organization, Civil Aviation Statistics of the World and ICAO staff estimates"
+    },
+    {
     "id": "MATMORTR",
     "name":"Maternal Mortality Ratio",
-    "unit":"Deaths per 100,000 Live Births"
-	},
-	{
+    "unit":"Deaths per 100,000 Live Births",
+    "description":"Maternal mortality ratio is the number of women who die from pregnancy-related causes while pregnant or within 42 days of pregnancy termination per 100,000 live births. The data are estimated with a regression model using information on the proportion of maternal deaths among non-AIDS deaths in women ages 15-49, fertility, birth attendants, and GDP.",
+    "source":"WHO, UNICEF, UNFPA, The World Bank, and the United Nations Population Division. Trends in Maternal Mortality: 1990 to 2015. Geneva, World Health Organization, 2015"
+    },
+    {
     "id": "HLTHEXP_",
     "name":"Total Health Expenditure",
-    "unit":"Percentage of GDP"
-	},
-	{
+    "unit":"Percentage of GDP",
+    "description":"Total health expenditure is the sum of public and private health expenditure. It covers the provision of health services (preventive and curative), family planning activities, nutrition activities, and emergency aid designated for health but does not include provision of water and sanitation.",
+    "source":"World Health Organization Global Health Expenditure database (see http://apps.who.int/nha/database for the most recent updates)"
+    },
+    {
     "id": "DIABETES",
     "name":"Diabetes Prevalence",
-    "unit":"Percentage of Adults"
-	},
-	{
+    "unit":"Percentage of Adults",
+    "description":"Diabetes prevalence refers to the percentage of people ages 20-79 who have type 1 or type 2 diabetes.",
+    "source":"International Diabetes Federation, Diabetes Atlas"
+    },
+    {
     "id": "RESERVES",
     "name":"Total Reserves",
-    "unit":"US Dollar"
-	},
-	{
+    "unit":"US Dollar",
+    "description":"Total reserves comprise holdings of monetary gold, special drawing rights, reserves of IMF members held by the IMF, and holdings of foreign exchange under the control of monetary authorities. The gold component of these reserves is valued at year-end (December 31) London prices. Data are in current U.S. dollars.",
+    "source":"International Monetary Fund, International Financial Statistics and data files"
+    },
+    {
     "id": "EMPLOYAG",
     "name":"Employment in Agriculture",
-    "unit":"Number of People"
-	},
-	{
+    "unit":"Number of People",
+    "description":"Employment is defined as persons of working age who were engaged in any activity to produce goods or provide services for pay or profit, whether at work during the reference period or not at work due to temporary absence from a job, or to working-time arrangement. The agriculture sector consists of activities in agriculture, hunting, forestry and fishing, in accordance with division 1 (ISIC 2) or categories A-B (ISIC 3) or category A (ISIC 4).",
+    "source":"International Labour Organization, Key Indicators of the Labour Market database"
+    },
+    {
     "id": "CO2EMISS",
     "name":"Carbon Dioxide Emissions",
-    "unit":"Billion Metric Tons"
-	},
+    "unit":"Billion Metric Tons",
+    "description":"Carbon dioxide emissions are those stemming from the burning of fossil fuels and the manufacture of cement. They include carbon dioxide produced during consumption of solid, liquid, and gas fuels and gas flaring.",
+    "source":"Carbon Dioxide Information Analysis Center, Environmental Sciences Division, Oak Ridge National Laboratory, Tennessee, United States"
+    },
     {
     "id":"INFLATDEF",
     "name":"Inflation as measured by the GDP deflator",
-    "unit":" "
+    "unit":"GDP deflator",
+    "description":"Inflation as measured by the annual growth rate of the GDP implicit deflator shows the rate of price change in the economy as a whole. The GDP implicit deflator is the ratio of GDP in current local currency to GDP in constant local currency.",
+    "source":"World Bank national accounts data, and OECD National Accounts data files"
     }
     ]

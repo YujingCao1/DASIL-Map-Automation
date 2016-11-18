@@ -15,31 +15,23 @@
 // $(document).ready(function() {
 // 	$("select#selectBar").change(function() {
 // 		var thisvalue = $("#selectBar option:selected").text();
-// 		$('a#pagetitle').text(thisvalue);
+// 		$('a#description_title').text(thisvalue);
 // 	});
 // });
 </script>
 </head>
 <body onload="loadBaseMap('Referencemap.json')">
 
-<!-- <a id="pagetitle">World Map</a> -->
-<!-- <div id="credit">
-	<p class="date"> August 20, 2015 </p>
-	<p class="by">by</p>
-	<p class="id"> Amanda Hinchman-Dominguez, Student, Grinnell College </p>
-</div> -->
-
 <div id="interactive_panel">
 	<div style="display:inline-block; vertical-align:center; font-size: 23px">Cartogram of world's</div>
-	<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
-	<div style="display:inline-block; vertical-align:center; font-size: 23px;margin-left:-2%">scale by</div>
 	<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
+	<div style="display:inline-block; vertical-align:center; font-size: 23px">showing</div>
+	<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
 </div>
 
+<div id="description"></div>
 <div id="acknowledge">
-	<h3>Acknowledge</h3>
-	<p> Data source is data source</p>
-	<p>The cartogram implementation is designed and built by Amanda Hinchman-Dominguez, Krit Petrachaianan, <a href="https://www.grinnell.edu/users/caoyujin"> Yujing Cao </a>and <a href="https://www.grinnell.edu/users/kamp">Kathy Kamp </a>at <a href="http://dasil.grinnell.edu/">DASIL</a></p>
+	<p><strong>Acknowledge</strong>: The cartogram implementation is designed and built by Amanda Hinchman-Dominguez and<a href="https://www.grinnell.edu/users/caoyujin"> Yujing Cao </a>at <a href="http://dasil.grinnell.edu/">DASIL</a></p>
 </div>
 <div id="tooltip"></div>
 <div id="tooltipTest"></div>
@@ -132,9 +124,9 @@
 			.append("g")
 
 			var projection=d3.geo.mercator()
-				.scale(190)
+				.scale(180)
 				.center(d3.geo.centroid(data))
-				.translate([990,430]);
+				.translate([990,410]);
 
 			var path=d3.geo.path().projection(projection);
 
@@ -205,7 +197,7 @@ function loadImage(dataset) {
 		var map = d3.json(dataset, function (json) {
 			// create a first guess for the projection
 			var center = d3.geo.centroid(json);
-			var scale = 197;
+			var scale = 180;
 			var offset = [w / 2, h / 2];
 			var projection = d3.geo.mercator().scale(scale).center(center)
     			.translate(offset);
@@ -222,7 +214,7 @@ function loadImage(dataset) {
 			var vscale = scale*h / (bounds[1][1] - bounds[0][1]);
 			var scale = (hscale < vscale) ? hscale : vscale;
             
-			var offset = [w - 1.04*(bounds[0][0] + bounds[1][0])/2, 
+			var offset = [w - 1.05*(bounds[0][0] + bounds[1][0])/2, 
 									h - 1.1*(bounds[0][1] + bounds[1][1])/2];
 
 
@@ -291,8 +283,8 @@ function loadImage(dataset) {
                          .attr("y",function(d,i){
 						 return 120+i*40;
 						 })							 
-			             .attr("width",40)
-						 .attr("height",50)
+			             .attr("width",30)
+						 .attr("height",40)
 						 .style("fill",function(d,i){
 						 return colors[i];
 						 });
@@ -302,7 +294,7 @@ function loadImage(dataset) {
                 }
                 legendLabel_1.push("missing value");
 
-				 legend.append("text")
+				legend.append("text")
 				         .attr("x",75)
 						 .attr("y",function(d,i){
 						 return 145+i*40;
@@ -318,7 +310,6 @@ function loadImage(dataset) {
 				 	   .attr("x",30)
 				 	   .attr("y",105)
 				 	   .text("Unit: "+unit);
-
  			var lock;
  		
 			//makes the map
@@ -423,15 +414,9 @@ function loadImage(dataset) {
 	}// loadImage()
 		
 	function changeDataset(dataset) {	
-		// document.getElementById("pagetitle").innerHTML=
-		// d3.selectAll("path")
-		// 	.attr("height", 0);
-		// 		d3.selectAll("body")
-		// 			.transition()
-		// 			.duration(1000)
-		// 			.ease("elastic");
-	
-		d3.selectAll("#mySVG").transition().duration(2000).ease("elastic").remove();
+
+		//d3.selectAll("#mySVG").transition().duration(2000).ease("elastic").remove();
+		d3.selectAll("#mySVG").remove();
 		loadImage(dataset + ".json") 
 	}// changeDataset()
 
@@ -444,6 +429,8 @@ function loadImage(dataset) {
 	    var fullname;
 	    var unit;
 	    var attribute_1;
+	    var detail;
+	    var dataSource;
 		//grab data from current dataset
 		var dataset = currentjson;
 
@@ -466,6 +453,25 @@ function loadImage(dataset) {
         	}
         });
 
+      	attributesJSON.forEach(function(d){
+      		if (d.name==attribute){
+      			return detail=d.description;
+      		}
+      	});
+        
+	    attributesJSON.forEach(function(d){
+        	if (d.name==attribute){
+        		return dataSource=d.source; 
+        	}
+        });
+
+      	attributesJSON.forEach(function(d){
+      		if (d.name!="Select an Attribute"){
+      			document.getElementById("description").style.display="block";
+      		}
+      	})
+
+      	document.getElementById("description").innerHTML="<strong>"+attribute+"</strong>:"+"<br>"+detail+"<br>"+"<strong>"+"Data Source:"+"</strong>"+"<br>"+dataSource;
 		var map = d3.json(dataset, function (json) {
 			
 			for (var i = 0; i < json.features.length; i++) {
@@ -479,11 +485,6 @@ function loadImage(dataset) {
             	countryattr_missing.push(countryattr[i]);
             }
 
- 			// for (var i=0;i<countryattr.length;i++){
- 			// 	if (countryattr[i]==-999){
- 			// 		countryattr.splice(i,1);
- 			// 	}
- 			// }
 
  			removeElement(countryattr,-999);
 		    
@@ -534,8 +535,8 @@ function loadImage(dataset) {
                          .attr("y",function(d,i){
 						 return 120+i*40;
 						 })							 
-			             .attr("width",40)
-						 .attr("height",50)
+			             .attr("width",30)
+						 .attr("height",40)
 						 .style("fill",function(d,i){
 						 return colors[i];
 						 });
@@ -562,6 +563,7 @@ function loadImage(dataset) {
 				 	   .attr("x",30)
 				 	   .attr("y",105)
 				 	   .text("Unit: "+unit);
+
 	
 		svg.selectAll("path")
 			.transition()
