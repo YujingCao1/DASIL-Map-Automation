@@ -10,6 +10,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
+<script src="colorbrewer.js"></script>
 <link type="text/css" rel="stylesheet" href="mapp.css">
 <script>
 // $(document).ready(function() {
@@ -238,11 +239,15 @@ function loadImage(dataset) {
  			removeElement(countryattr,-999)
 		    
 			//sets a quantized scale based on the automatically-calculated data range
-			var colorScale = d3.scale.quantize()
+			var colorScale = d3.scale.quantile()
 							.range(['#ffffcc','#a1dab4',
 								'#41b6c4','#225ea8'])
-							.domain([d3.min(countryattr), d3.max(countryattr)]);
+							.domain(countryattr);
 
+            var thresholds=colorScale.quantiles();
+			// var colorScale = d3.scale.quantize()
+			// 				.range(colorbrewer.Blues[4])
+			// 				.domain([d3.min(countryattr), d3.max(countryattr)]);
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
 				if (countryattr_missing[i]!=-999){
@@ -253,13 +258,17 @@ function loadImage(dataset) {
  			}
 
 		
-		var domainRange=d3.max(countryattr)-d3.min(countryattr);
-		var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
+		// var domainRange=d3.max(countryattr)-d3.min(countryattr);
+		// var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
 		var legendLabel=[];
 			
-		for (i=0;i<colorScale.range().length;i++) {
-			legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
-		};
+		// for (i=0;i<colorScale.range().length;i++) {
+		// 	legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
+		// };
+		legendLabel[0]="< "+thresholds[0].toFixed(2);
+		legendLabel[1]=thresholds[0].toFixed(2)+" to "+thresholds[1].toFixed(2);
+		legendLabel[2]=thresholds[1].toFixed(2)+" to "+thresholds[2].toFixed(2);
+		legendLabel[3]="> "+thresholds[2].toFixed(2);
 				 
 			// Add legend 
 			var colors=[];
@@ -292,8 +301,9 @@ function loadImage(dataset) {
                 for (var i=0;i<legendLabel.length;i++){
                 	legendLabel_1.push(legendLabel[i]);
                 }
-                legendLabel_1.push("missing value");
-
+                legendLabel_1.push("missing value(-999)");
+                 
+                console.log(legendLabel_1);
 				legend.append("text")
 				         .attr("x",75)
 						 .attr("y",function(d,i){
@@ -489,11 +499,16 @@ function loadImage(dataset) {
  			removeElement(countryattr,-999);
 		    
 			//sets a quantized scale based on the automatically-calculated data range
-			var colorScale = d3.scale.quantize()
+			var colorScale = d3.scale.quantile()
 							.range(['#ffffcc','#a1dab4',
 								'#41b6c4','#225ea8'])
-							.domain([d3.min(countryattr), d3.max(countryattr)]);
-
+							.domain(countryattr);
+            
+             var thresholds=colorScale.quantiles();
+			// var colorScale = d3.scale.quantize()
+			// 				.range(['#ffffcc','#a1dab4',
+			// 					'#41b6c4','#225ea8'])
+			// 				.domain([d3.min(countryattr), d3.max(countryattr)]);
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
 				if (countryattr_missing[i]!=-999){
@@ -504,14 +519,18 @@ function loadImage(dataset) {
  			}
 	
 
-	    var domainRange=d3.max(countryattr)-d3.min(countryattr);
-		var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
+	 //    var domainRange=d3.max(countryattr)-d3.min(countryattr);
+		// var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
 		var legendLabel=[];
 			
-		for (i=0;i<colorScale.range().length;i++) {
-			legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
-		};
-            
+		// for (i=0;i<colorScale.range().length;i++) {
+		// 	legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
+		// };
+        legendLabel[0]="< "+thresholds[0].toFixed(2);
+		legendLabel[1]=thresholds[0].toFixed(2)+" to "+thresholds[1].toFixed(2);
+		legendLabel[2]=thresholds[1].toFixed(2)+" to "+thresholds[2].toFixed(2);
+		legendLabel[3]="> "+thresholds[2].toFixed(2);
+
             var colors=[];
 
 			for (var i=0;i<colorScale.range().length;i++){
@@ -545,7 +564,7 @@ function loadImage(dataset) {
                 for (var i=0;i<legendLabel.length;i++){
                 	legendLabel_1.push(legendLabel[i]);
                 }
-                legendLabel_1.push("missing value");
+                legendLabel_1.push("missing value(-999)");
 
 				 legend.append("text")
 				         .attr("x",75)
