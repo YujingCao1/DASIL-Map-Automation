@@ -12,14 +12,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
 <script src="colorbrewer.js"></script>
 <link type="text/css" rel="stylesheet" href="mapp.css">
-<script>
-// $(document).ready(function() {
-// 	$("select#selectBar").change(function() {
-// 		var thisvalue = $("#selectBar option:selected").text();
-// 		$('a#description_title').text(thisvalue);
-// 	});
-// });
-</script>
 </head>
 <body onload="loadBaseMap('Referencemap.json')">
 
@@ -94,7 +86,6 @@
 
 	var currentjson = "";
 	var toggle=0;
-
  
      // Function to remove all the missing values. Missing data is coded as "-999"
     function removeElement(arr){
@@ -146,6 +137,7 @@ function loadImage(dataset) {
 	var attribute=document.getElementById('selectBarColor').value;
 	var fullname;
 	var attribute_1;
+	var active;
     
     attributesJSON.forEach(function(d){
     	if (d.name==attribute){
@@ -173,7 +165,7 @@ function loadImage(dataset) {
         	}
         });
     }
-
+    
 		currentjson = dataset;
 
 		var margin = {
@@ -188,12 +180,37 @@ function loadImage(dataset) {
 		var padding = 50;
 		var countryattr = [];
 		var color = [];
+		var centered;
 
 		var svg = d3.select("body").append("svg")
 			//a box to contain the map
-			.attr("id", "mySVG");
-			// .attr("width", w)
-			// .attr("height", h);
+			.attr("id", "mySVG")
+		    .attr("width", w)
+			.attr("height", h)
+			.on("dblclick", function(d){
+				var x, y, k;
+
+			  if (d && centered !== d) {
+					    var centroid = path.centroid(d);
+					    x = centroid[0];
+					    y = centroid[1];
+					    k = 4;
+					    centered = d;
+					  } else {
+					    x = width / 2;
+					    y = height / 2;
+					    k = 1;
+					    centered = null;
+					  }
+
+					  g.selectAll("path")
+					      .classed("active", centered && function(d) { return d === centered; });
+
+					  g.transition()
+					      .duration(750)
+					      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+						});
+		var g=svg.append("g");
 			//accesses the json and creates a projection
 		var map = d3.json(dataset, function (json) {
 			// create a first guess for the projection
@@ -225,6 +242,16 @@ function loadImage(dataset) {
 							.scale(scale*0.9).translate(offset);
 			path = path.projection(projection);
 			
+			// zoom
+			var zoom=d3.behavior.zoom()
+				.translate(projection.translate())
+				.scale(projection.scale())
+				.scaleExtent([h,8*h])
+				.on("zoom", function(){
+					projection.translate(d3.event.translate).scale(d3.event.scale);
+					svg.selectAll("path").attr("d",path);
+				});
+
 			for (var i = 0; i < json.features.length; i++) {
  				countryattr[i] = json.features[i].properties[attribute_1];
  			}
@@ -257,14 +284,8 @@ function loadImage(dataset) {
 				}	
  			}
 
-		
-		// var domainRange=d3.max(countryattr)-d3.min(countryattr);
-		// var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
 		var legendLabel=[];
-			
-		// for (i=0;i<colorScale.range().length;i++) {
-		// 	legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
-		// };
+
 		legendLabel[0]="< "+thresholds[0].toFixed(2);
 		legendLabel[1]=thresholds[0].toFixed(2)+" to "+thresholds[1].toFixed(2);
 		legendLabel[2]=thresholds[1].toFixed(2)+" to "+thresholds[2].toFixed(2);
@@ -302,8 +323,7 @@ function loadImage(dataset) {
                 	legendLabel_1.push(legendLabel[i]);
                 }
                 legendLabel_1.push("missing value(-999)");
-                 
-                console.log(legendLabel_1);
+
 				legend.append("text")
 				         .attr("x",75)
 						 .attr("y",function(d,i){
@@ -323,7 +343,7 @@ function loadImage(dataset) {
  			var lock;
  		
 			//makes the map
-			svg.selectAll("path")
+			g.selectAll("path")
 				.data(json.features)
 				.enter()
 				.append("path")
@@ -334,9 +354,9 @@ function loadImage(dataset) {
 				.attr("stroke", "black")
 				.attr("fill", function(json, i) {
 						return color[i];
-					}) //missing data is grey
+					});
 												
-				svg.selectAll("path")
+				g.selectAll("path")
 					.on("mouseover", function(d) {
 					var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
 					var dis = d3.select(this);
@@ -420,6 +440,30 @@ function loadImage(dataset) {
  						}
 					}
  				})
+ 				.on("dblclick", function(d){
+ 					var x, y, k;
+
+					  if (d && centered !== d) {
+					    var centroid = path.centroid(d);
+					    x = centroid[0];
+					    y = centroid[1];
+					    k = 4;
+					    centered = d;
+					  } else {
+					    x = w / 2;
+					    y = h / 2;
+					    k = 1;
+					    centered = null;
+					  }
+
+					  g.selectAll("path")
+					      .classed("active", centered && function(d) { return d === centered; });
+
+					  g.transition()
+					      .duration(750)
+					      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+					 				});
+ 				//.call(zoom);
 		});
 	}// loadImage()
 		
@@ -441,6 +485,7 @@ function loadImage(dataset) {
 	    var attribute_1;
 	    var detail;
 	    var dataSource;
+	    var centered;
 		//grab data from current dataset
 		var dataset = currentjson;
 
@@ -683,7 +728,30 @@ function loadImage(dataset) {
  							tooltipDiv.style.display = "block";
  						}
 					}
- 				});
+ 				})
+ 				.on("dblclick", function(d){
+ 					var x, y, k;
+
+					  if (d && centered !== d) {
+					    var centroid = path.centroid(d);
+					    x = centroid[0];
+					    y = centroid[1];
+					    k = 4;
+					    centered = d;
+					  } else {
+					    x = w / 2;
+					    y = h / 2;
+					    k = 1;
+					    centered = null;
+					  }
+
+					  g.selectAll("path")
+					      .classed("active", centered && function(d) { return d === centered; });
+
+					  g.transition()
+					      .duration(750)
+					      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+					 				});
 		});
 	}// changeAttribute()
 		
