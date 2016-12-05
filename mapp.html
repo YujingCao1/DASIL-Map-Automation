@@ -186,30 +186,8 @@ function loadImage(dataset) {
 			//a box to contain the map
 			.attr("id", "mySVG")
 		    .attr("width", w)
-			.attr("height", h)
-			.on("dblclick", function(d){
-				var x, y, k;
-
-			  if (d && centered !== d) {
-					    var centroid = path.centroid(d);
-					    x = centroid[0];
-					    y = centroid[1];
-					    k = 4;
-					    centered = d;
-					  } else {
-					    x = width / 2;
-					    y = height / 2;
-					    k = 1;
-					    centered = null;
-					  }
-
-					  g.selectAll("path")
-					      .classed("active", centered && function(d) { return d === centered; });
-
-					  g.transition()
-					      .duration(750)
-					      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
-						});
+			.attr("height", h);
+	
 		var g=svg.append("g");
 			//accesses the json and creates a projection
 		var map = d3.json(dataset, function (json) {
@@ -242,16 +220,6 @@ function loadImage(dataset) {
 							.scale(scale*0.9).translate(offset);
 			path = path.projection(projection);
 			
-			// zoom
-			var zoom=d3.behavior.zoom()
-				.translate(projection.translate())
-				.scale(projection.scale())
-				.scaleExtent([h,8*h])
-				.on("zoom", function(){
-					projection.translate(d3.event.translate).scale(d3.event.scale);
-					svg.selectAll("path").attr("d",path);
-				});
-
 			for (var i = 0; i < json.features.length; i++) {
  				countryattr[i] = json.features[i].properties[attribute_1];
  			}
@@ -447,11 +415,11 @@ function loadImage(dataset) {
 					    var centroid = path.centroid(d);
 					    x = centroid[0];
 					    y = centroid[1];
-					    k = 4;
+					    k = 1.5;
 					    centered = d;
 					  } else {
 					    x = w / 2;
-					    y = h / 2;
+					    y = h / 4;
 					    k = 1;
 					    centered = null;
 					  }
@@ -461,7 +429,7 @@ function loadImage(dataset) {
 
 					  g.transition()
 					      .duration(750)
-					      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+					      .attr("transform", "translate(" + w / 2 + "," + h / 4+ ")scale(" + k + ")translate(" + -x + "," + -y + ")");
 					 				});
  				//.call(zoom);
 		});
@@ -469,12 +437,13 @@ function loadImage(dataset) {
 		
 	function changeDataset(dataset) {	
 
-		//d3.selectAll("#mySVG").transition().duration(2000).ease("elastic").remove();
-		d3.selectAll("#mySVG").remove();
+		d3.selectAll("#mySVG").transition().duration(5000).ease("elastic").remove();
+		//d3.selectAll("#mySVG").remove();
 		loadImage(dataset + ".json") 
 	}// changeDataset()
 
 	function changeAttribute(attribute) {
+		d3.selectAll("#mySVG").transition().duration(1000).ease("elastic").remove();
 		var countryattr = [];
 		var countryattr_missing=[];
 		var color = [];
@@ -488,6 +457,17 @@ function loadImage(dataset) {
 	    var centered;
 		//grab data from current dataset
 		var dataset = currentjson;
+		var h = window.innerHeight; 
+		var w = window.innerWidth;
+		var padding = 50;
+
+		var svg = d3.select("body").append("svg")
+			//a box to contain the map
+			.attr("id", "mySVG")
+		    .attr("width", w)
+			.attr("height", h);
+	
+		var g=svg.append("g");
 
 		// get the id of corresponding selected attribute
 		attributesJSON.forEach(function(d){
@@ -526,8 +506,38 @@ function loadImage(dataset) {
       		}
       	})
 
+      	
       	document.getElementById("description").innerHTML="<strong>"+attribute+"</strong>:"+"<br>"+detail+"<br>"+"<strong>"+"Data Source:"+"</strong>"+"<br>"+dataSource;
+
 		var map = d3.json(dataset, function (json) {
+
+			var center = d3.geo.centroid(json);
+			var scale = 180;
+			var offset = [w / 2, h / 2];
+			var projection = d3.geo.mercator().scale(scale).center(center)
+    			.translate(offset);
+
+			// create the path
+			var path = d3.geo.path().projection(projection);
+			
+			// using the path to determine the bounds of the current
+			// bounds of the current map and use these to determine
+			// better values for scale and translation
+			var bounds = path.bounds(json);
+
+			var hscale = scale*w / (bounds[1][0] - bounds[0][0]);
+			var vscale = scale*h / (bounds[1][1] - bounds[0][1]);
+			var scale = (hscale < vscale) ? hscale : vscale;
+            
+			var offset = [w - 1.05*(bounds[0][0] + bounds[1][0])/2, 
+									h - 1.1*(bounds[0][1] + bounds[1][1])/2];
+
+
+			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
+			// new projection
+			projection = d3.geo.mercator().center(center)
+							.scale(scale*0.9).translate(offset);
+			path = path.projection(projection);
 			
 			for (var i = 0; i < json.features.length; i++) {
  				countryattr[i] = json.features[i].properties[attribute_1];
@@ -550,10 +560,7 @@ function loadImage(dataset) {
 							.domain(countryattr);
             
              var thresholds=colorScale.quantiles();
-			// var colorScale = d3.scale.quantize()
-			// 				.range(['#ffffcc','#a1dab4',
-			// 					'#41b6c4','#225ea8'])
-			// 				.domain([d3.min(countryattr), d3.max(countryattr)]);
+
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
 				if (countryattr_missing[i]!=-999){
@@ -563,14 +570,8 @@ function loadImage(dataset) {
 				}	
  			}
 	
-
-	 //    var domainRange=d3.max(countryattr)-d3.min(countryattr);
-		// var domainDiff=(d3.max(countryattr)-(d3.min(countryattr)))/4;
 		var legendLabel=[];
 			
-		// for (i=0;i<colorScale.range().length;i++) {
-		// 	legendLabel[i]=((d3.min(countryattr)+domainDiff*i).toFixed(2))+" to "+(d3.min(countryattr)+domainDiff*(i+1)).toFixed(2);
-		// };
         legendLabel[0]="< "+thresholds[0].toFixed(2);
 		legendLabel[1]=thresholds[0].toFixed(2)+" to "+thresholds[1].toFixed(2);
 		legendLabel[2]=thresholds[1].toFixed(2)+" to "+thresholds[2].toFixed(2);
@@ -606,9 +607,11 @@ function loadImage(dataset) {
 						 });
 
 				var legendLabel_1=[];
+                
                 for (var i=0;i<legendLabel.length;i++){
                 	legendLabel_1.push(legendLabel[i]);
                 }
+                
                 legendLabel_1.push("missing value(-999)");
 
 				 legend.append("text")
@@ -628,26 +631,20 @@ function loadImage(dataset) {
 				 	   .attr("y",105)
 				 	   .text("Unit: "+unit);
 
-	
-		svg.selectAll("path")
-			.transition()
-			.duration(2000)
-			.attr("height", 0);
-
-		d3.selectAll("body")
-			.transition()
-			.duration(2000)
-			.ease("linear");
-
-		svg.selectAll("path")
-			.transition()
-			.duration(1500)
-			.ease("linear")
-			.attr("fill", function(json, i) {	
-				return color[i];
-			}); //missing data is grey
+			g.selectAll("path")
+				.data(json.features)
+				.enter()
+				.append("path")
+				.transition()
+				.duration(1000)
+				.ease("elastic")
+				.attr("d", d3.geo.path().projection(projection))
+				.attr("stroke", "black")
+				.attr("fill", function(json, i) {
+						return color[i];
+					}); //missing data is grey
 			
-					svg.selectAll("path")
+					g.selectAll("path")
 					    .on("mouseover", function(d) {
 						var mouse = d3.mouse(svg.node()).map(function(d) { return parseInt(d); });
 						var dis = d3.select(this);
@@ -736,7 +733,7 @@ function loadImage(dataset) {
 					    var centroid = path.centroid(d);
 					    x = centroid[0];
 					    y = centroid[1];
-					    k = 4;
+					    k = 1.5;
 					    centered = d;
 					  } else {
 					    x = w / 2;
@@ -751,7 +748,7 @@ function loadImage(dataset) {
 					  g.transition()
 					      .duration(750)
 					      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
-					 				});
+				});
 		});
 	}// changeAttribute()
 		
