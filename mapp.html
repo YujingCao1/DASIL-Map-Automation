@@ -5,12 +5,16 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <script type="text/javascript" src="d3.min.js"></script>
 <script src="http://d3js.org/topojson.v0.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="jquery.min.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.js"></script>
 <script src="colorbrewer.js"></script>
+<script src="bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href="mapp.css">
 </head>
 <body onload="loadBaseMap('Referencemap.json')">
@@ -104,7 +108,11 @@
     }else{
         var acknowledgement=document.getElementById('acknowledge')
         acknowledgement.style.display = "none";
-        document.getElementById('description').style.display="block";
+      		if (document.getElementById('selectBarColor').selectedIndex==0){
+      			document.getElementById("description").style.display="none";
+      		}else{
+      			document.getElementById('description').style.display="block";
+      		}
         acknowledge_1=0;
     }
 }
