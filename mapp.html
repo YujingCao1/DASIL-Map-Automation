@@ -21,30 +21,32 @@
 
 <body onload="loadBaseMap('Referencemap.json')">
 
-<div class="container-fluid" id="interactive_panel">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="interactive_panel">
 				<div style="display:inline-block; vertical-align:center; font-size: 25px">Cartogram of world's</div>
 				<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
 				<div style="display:inline-block; vertical-align:center; font-size: 25px">showing</div>
 				<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
-				<div class="row">
-					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="about">
-						<button class="button" id="acknowledgement_button">Acknowledgements</button>
-					</div>
+
+			<div class="row">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 right" id="about">
+					<button class="button" id="acknowledgement_button">Acknowledgements</button>
 				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="description"></div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="acknowledge"></div>
+		    </div>
+
+			<div class="row">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="tooltip"></div>
+			</div>
+
 		</div>
 	</div>
-
-	<div class="row">
-		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="description"></div>
-		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="acknowledge"></div>
-	</div>
-
-	<div class="row">
-		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="tooltip"></div>
-	</div>
 </div>
+
 <div id="tooltipTest"></div>
 <script id="map">
 
@@ -154,7 +156,7 @@
 		.attr("id", "mySVG")
 		.attr("width",w)
 		.attr("height",h)
-		.attr('viewBox','-200 150 '+w*2.5+' '+h*2.5)
+		.attr('viewBox','-100 20 '+w*2.5+' '+h*2.5)
         .attr('perserveAspectRatio','xMinYMin meet');
 
 		d3.json(dataset, function(data){
@@ -237,7 +239,7 @@ function loadImage(dataset) {
 			.attr("id","mySVG")
 		    .attr("width", w)
 			.attr("height", h)
-			.attr('viewBox','-100 100 '+w*1.2+' '+h*1.2)
+			.attr('viewBox','-80 10 '+w*1.2+' '+h*1.2)
         	.attr('perserveAspectRatio','xMinYMin meet');
 	
 		var g=svg.append("g");
@@ -326,7 +328,18 @@ function loadImage(dataset) {
                          .enter()
                          .append("g")
                          .attr("class","legend");
-						 
+				
+				legend.append("text")
+				 		.attr("x",0)
+				 		.attr("y",10)
+				 		.attr("font-size",14)
+				 		.text(fullname);
+				 legend.append("text")
+				 	   .attr("x",0)
+				 	   .attr("y",35)
+				 	   .attr("font-size",14)
+				 	   .text("Unit: "+unit);
+
                  legend.append("rect")
                          .attr("x",0)	
                          .attr("y",function(d,i){
@@ -351,16 +364,6 @@ function loadImage(dataset) {
 				         .text(function(d,i){
 						     return legendLabel_1[i];
 						 });
-				 legend.append("text")
-				 		.attr("x",0)
-				 		.attr("y",10)
-				 		.attr("font-size",14)
-				 		.text(fullname);
-				 legend.append("text")
-				 	   .attr("x",0)
-				 	   .attr("y",35)
-				 	   .attr("font-size",14)
-				 	   .text("Unit: "+unit);
  			var lock;
  		
 			//makes the map
@@ -497,7 +500,7 @@ function loadImage(dataset) {
 	function changeAttribute(attribute) {
 		d3.selectAll("#mySVG").transition().duration(1000).ease("elastic").remove();
 		d3.selectAll("#legends").transition().duration(1000).ease("elastic").remove();
-		
+
 		var countryattr = [];
 		var countryattr_missing=[];
 		var color = [];
@@ -520,7 +523,7 @@ function loadImage(dataset) {
 			.attr("id", "mySVG")
 		    .attr("width", w)
 			.attr("height", h)
-			.attr('viewBox','-100 100 '+w*1.2+' '+h*1.2)
+			.attr('viewBox','-80 20 '+w*1.2+' '+h*1.2)
         	.attr('perserveAspectRatio','xMinYMin meet');
 	
 		var g=svg.append("g");
@@ -649,7 +652,18 @@ function loadImage(dataset) {
 	                 .enter()
 	                 .append("g")
 	                 .attr("class","legend");
-					 
+			
+			legend.append("text")
+			 		.attr("x",0)
+			 		.attr("y",10)
+			 		.attr("font-size",14)
+			 		.text(fullname);
+			 legend.append("text")
+			 	   .attr("x",0)
+			 	   .attr("y",35)
+			 	   .attr("font-size",14)
+			 	   .text("Unit: "+unit);
+
 	         legend.append("rect")
 	                 .attr("x",0)	
 	                 .attr("y",function(d,i){
@@ -674,16 +688,6 @@ function loadImage(dataset) {
 			         .text(function(d,i){
 					     return legendLabel_1[i];
 					 });
-			 legend.append("text")
-			 		.attr("x",0)
-			 		.attr("y",10)
-			 		.attr("font-size",14)
-			 		.text(fullname);
-			 legend.append("text")
-			 	   .attr("x",0)
-			 	   .attr("y",35)
-			 	   .attr("font-size",14)
-			 	   .text("Unit: "+unit);
 
 			g.selectAll("path")
 				.data(json.features)
