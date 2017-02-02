@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <script type="text/javascript" src="d3.min.js"></script>
 <script src="http://d3js.org/topojson.v0.min.js"></script>
@@ -17,23 +17,35 @@
 <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href="mapp.css">
 </head>
+
+
 <body onload="loadBaseMap('Referencemap.json')">
 
-<div id="interactive_panel">
-	<div style="display:inline-block; vertical-align:center; font-size: 23px">Cartogram of world's</div>
-	<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
-	<div style="display:inline-block; vertical-align:center; font-size: 23px">showing</div>
-	<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
-</div>
+<div class="container-fluid" id="interactive_panel">
+	<div class="row">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="interactive_panel">
+				<div style="display:inline-block; vertical-align:center; font-size: 25px">Cartogram of world's</div>
+				<select id="selectBar"  onChange="changeDataset(this.options[this.selectedIndex].innerHTML);"></select>
+				<div style="display:inline-block; vertical-align:center; font-size: 25px">showing</div>
+				<select id="selectBarColor" onChange="changeAttribute(this.options[this.selectedIndex].innerHTML)"></select>
+				<div class="row">
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="about">
+						<button class="button" id="acknowledgement_button">Acknowledgements</button>
+					</div>
+				</div>
+		</div>
+	</div>
 
-<div id="description"></div>
-<div id="about">
-    <button class="button" id="acknowledgement_button">Acknowledgements</button>
+	<div class="row">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="description"></div>
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="acknowledge"></div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" id="tooltip"></div>
+	</div>
 </div>
-<div id="acknowledge"></div>
-<div id="tooltip"></div>
 <div id="tooltipTest"></div>
-
 <script id="map">
 
 	 var div = d3.select("body").append("div")
@@ -132,12 +144,18 @@
     // Showing the base map in the large svg area
 
     function loadBaseMap(dataset){
+
+    	var w=window.innerWidth*0.5;
+    	var h=window.innerHeight*0.5;
+
     	var base_color = d3.scale.category20();
 	// Add reference map
 		var svg_base=d3.select("body").append("svg")
-		.attr("id","mySVG")
-		.attr("width",window.innerWidth)
-		.attr("height",window.innerHeight);
+		.attr("id", "mySVG")
+		.attr("width",w)
+		.attr("height",h)
+		.attr('viewBox','-200 150 '+w*2.5+' '+h*2.5)
+        .attr('perserveAspectRatio','xMinYMin meet');
 
 		d3.json(dataset, function(data){
 			var group=svg_base.selectAll("g")
@@ -163,7 +181,9 @@
 
 function loadImage(dataset) {
     
-    d3.selectAll("#mySVG").transition().duration(2000).ease("elastic").remove();
+    d3.selectAll("#mySVG").transition().duration(1000).ease("elastic").remove();
+    d3.selectAll("#legends").transition().duration(1000).ease("elastic").remove();
+
 	var attribute=document.getElementById('selectBarColor').value;
 	var fullname;
 	var attribute_1;
@@ -205,8 +225,8 @@ function loadImage(dataset) {
 			left: 10
 		};
 	
-		var h = window.innerHeight; 
-		var w = window.innerWidth;
+		var h = window.innerHeight*0.8; 
+		var w = window.innerWidth*0.8;
 		var padding = 50;
 		var countryattr = [];
 		var color = [];
@@ -214,9 +234,11 @@ function loadImage(dataset) {
 
 		var svg = d3.select("body").append("svg")
 			//a box to contain the map
-			.attr("id", "mySVG")
+			.attr("id","mySVG")
 		    .attr("width", w)
-			.attr("height", h);
+			.attr("height", h)
+			.attr('viewBox','-100 100 '+w*1.2+' '+h*1.2)
+        	.attr('perserveAspectRatio','xMinYMin meet');
 	
 		var g=svg.append("g");
 			//accesses the json and creates a projection
@@ -240,8 +262,8 @@ function loadImage(dataset) {
 			var vscale = scale*h / (bounds[1][1] - bounds[0][1]);
 			var scale = (hscale < vscale) ? hscale : vscale;
             
-			var offset = [w - 1.05*(bounds[0][0] + bounds[1][0])/2, 
-									h - 1.1*(bounds[0][1] + bounds[1][1])/2];
+			var offset = [w - 0.9*(bounds[0][0] + bounds[1][0])/2, 
+									h - 0.9*(bounds[0][1] + bounds[1][1])/2];
 
 
 			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
@@ -270,9 +292,7 @@ function loadImage(dataset) {
 							.domain(countryattr);
 
             var thresholds=colorScale.quantiles();
-			// var colorScale = d3.scale.quantize()
-			// 				.range(colorbrewer.Blues[4])
-			// 				.domain([d3.min(countryattr), d3.max(countryattr)]);
+	
 			//links the data variable to the color scale
 			for (var i = 0; i < json.features.length; i++) {
 				if (countryattr_missing[i]!=-999){
@@ -298,7 +318,8 @@ function loadImage(dataset) {
 
 			colors.push("grey");
 
-			var svg=d3.selectAll("#mySVG");
+			var svg=d3.select("body").append("svg")
+					.attr("id","legends");
 			    
             var legend=svg.selectAll('.legend')
 			             .data(colors)
@@ -307,12 +328,12 @@ function loadImage(dataset) {
                          .attr("class","legend");
 						 
                  legend.append("rect")
-                         .attr("x",30)	
+                         .attr("x",0)	
                          .attr("y",function(d,i){
-						 return 120+i*40;
+						 return 55+i*25;
 						 })							 
-			             .attr("width",30)
-						 .attr("height",40)
+			             .attr("width",25)
+						 .attr("height",25)
 						 .style("fill",function(d,i){
 						 return colors[i];
 						 });
@@ -323,20 +344,22 @@ function loadImage(dataset) {
                 legendLabel_1.push("missing value(-999)");
 
 				legend.append("text")
-				         .attr("x",75)
+				         .attr("x",35)
 						 .attr("y",function(d,i){
-						 return 145+i*40;
+						 return 70+i*25;
 						 })
 				         .text(function(d,i){
 						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
-				 		.attr("x",30)
-				 		.attr("y",70)
+				 		.attr("x",0)
+				 		.attr("y",20)
+				 		.attr("font-size",14)
 				 		.text(fullname);
 				 legend.append("text")
-				 	   .attr("x",30)
-				 	   .attr("y",105)
+				 	   .attr("x",0)
+				 	   .attr("y",45)
+				 	   .attr("font-size",14)
 				 	   .text("Unit: "+unit);
  			var lock;
  		
@@ -449,7 +472,7 @@ function loadImage(dataset) {
 					    centered = d;
 					  } else {
 					    x = w / 2;
-					    y = h / 4;
+					    y = h / 2;
 					    k = 1;
 					    centered = null;
 					  }
@@ -459,7 +482,7 @@ function loadImage(dataset) {
 
 					  g.transition()
 					      .duration(750)
-					      .attr("transform", "translate(" + w / 2 + "," + h / 4+ ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+					      .attr("transform", "translate(" + x + "," + y + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
 					 				});
  				//.call(zoom);
 		});
@@ -468,7 +491,6 @@ function loadImage(dataset) {
 	function changeDataset(dataset) {	
 
 		d3.selectAll("#mySVG").transition().duration(1000).ease("elastic").remove();
-		//d3.selectAll("#mySVG").remove();
 		loadImage(dataset + ".json") 
 	}// changeDataset()
 
@@ -487,15 +509,17 @@ function loadImage(dataset) {
 	    var centered;
 		//grab data from current dataset
 		var dataset = currentjson;
-		var h = window.innerHeight; 
-		var w = window.innerWidth;
+		var h = window.innerHeight*0.8; 
+		var w = window.innerWidth*0.8;
 		var padding = 50;
 
 		var svg = d3.select("body").append("svg")
 			//a box to contain the map
 			.attr("id", "mySVG")
 		    .attr("width", w)
-			.attr("height", h);
+			.attr("height", h)
+			.attr('viewBox','-100 100 '+w*1.2+' '+h*1.2)
+        	.attr('perserveAspectRatio','xMinYMin meet');
 	
 		var g=svg.append("g");
 
@@ -559,8 +583,8 @@ function loadImage(dataset) {
 			var vscale = scale*h / (bounds[1][1] - bounds[0][1]);
 			var scale = (hscale < vscale) ? hscale : vscale;
             
-			var offset = [w - 1.05*(bounds[0][0] + bounds[1][0])/2, 
-									h - 1.1*(bounds[0][1] + bounds[1][1])/2];
+			var offset = [w - 0.9*(bounds[0][0] + bounds[1][0])/2, 
+									h - 0.9*(bounds[0][1] + bounds[1][1])/2];
 
 
 			//NOTE: FIX OFFSET BUT I THINK ITS PERMANENT NOW
@@ -607,59 +631,58 @@ function loadImage(dataset) {
 		legendLabel[2]=thresholds[1].toFixed(2)+" to "+thresholds[2].toFixed(2);
 		legendLabel[3]="> "+thresholds[2].toFixed(2);
 
-            var colors=[];
+    var colors=[];
 
-			for (var i=0;i<colorScale.range().length;i++){
-				colors.push(colorScale.range()[i]);
-			}
+	for (var i=0;i<colorScale.range().length;i++){
+		colors.push(colorScale.range()[i]);
+	}
 
-			colors.push("grey");
+	colors.push("grey");
 
-			var svg=d3.selectAll("#mySVG");
-			   svg.selectAll('.legend')
-				   .remove();
+	var svg=d3.selectAll("#mySVG");
+	   svg.selectAll('.legend')
+		   .remove();
 
-            var legend=svg.selectAll('.legend')
-			             .data(colors)
-                         .enter()
-                         .append("g")
-                         .attr("class","legend");
-						 
-                legend.append("rect")
-                         .attr("x",30)	
-                         .attr("y",function(d,i){
-						 return 120+i*40;
-						 })							 
-			             .attr("width",30)
-						 .attr("height",40)
-						 .style("fill",function(d,i){
-						 return colors[i];
-						 });
+    var legend=svg.selectAll('.legend')
+	             .data(colors)
+                 .enter()
+                 .append("g")
+                 .attr("class","legend");
+				 
+        legend.append("rect")
+                 .attr("x",-40)	
+                 .attr("y",function(d,i){
+				 return 120+i*40;
+				 })							 
+	             .attr("width",30)
+				 .attr("height",40)
+				 .style("fill",function(d,i){
+				 return colors[i];
+				 });
+        var legendLabel_1=[];
+        for (var i=0;i<legendLabel.length;i++){
+        	legendLabel_1.push(legendLabel[i]);
+        }
+        legendLabel_1.push("missing value(-999)");
 
-				var legendLabel_1=[];
-                
-                for (var i=0;i<legendLabel.length;i++){
-                	legendLabel_1.push(legendLabel[i]);
-                }
-                
-                legendLabel_1.push("missing value(-999)");
-
-				 legend.append("text")
-				         .attr("x",75)
-						 .attr("y",function(d,i){
-						 return 145+i*40;
-						 })
-				         .text(function(d,i){
-						     return legendLabel_1[i];
-						 });
-				 legend.append("text")
-				 		.attr("x",30)
-				 		.attr("y",70)
-				 		.text(fullname);
-				 legend.append("text")
-				 	   .attr("x",30)
-				 	   .attr("y",105)
-				 	   .text("Unit: "+unit);
+		legend.append("text")
+		         .attr("x",-5)
+				 .attr("y",function(d,i){
+				 return 145+i*40;
+				 })
+		         .text(function(d,i){
+				     return legendLabel_1[i];
+				 });
+		 legend.append("text")
+		 		.attr("x",-40)
+		 		.attr("y",70)
+		 		.attr("font-size",16)
+		 		.text(fullname);
+		 legend.append("text")
+		 	   .attr("x",-40)
+		 	   .attr("y",105)
+		 	   .attr("font-size",16)
+		 	   .text("Unit: "+unit);
 
 			g.selectAll("path")
 				.data(json.features)
@@ -777,7 +800,7 @@ function loadImage(dataset) {
 
 					  g.transition()
 					      .duration(750)
-					      .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
+					      .attr("transform", "translate(" + x + "," + y + ")scale(" + k + ")translate(" + -x + "," + -y + ")");
 				});
 		});
 	}// changeAttribute()
