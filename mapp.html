@@ -330,10 +330,10 @@ function loadImage(dataset) {
                  legend.append("rect")
                          .attr("x",0)	
                          .attr("y",function(d,i){
-						 return 55+i*25;
+						 return 45+i*20;
 						 })							 
 			             .attr("width",25)
-						 .attr("height",25)
+						 .attr("height",20)
 						 .style("fill",function(d,i){
 						 return colors[i];
 						 });
@@ -346,19 +346,19 @@ function loadImage(dataset) {
 				legend.append("text")
 				         .attr("x",35)
 						 .attr("y",function(d,i){
-						 return 70+i*25;
+						 return 60+i*20;
 						 })
 				         .text(function(d,i){
 						     return legendLabel_1[i];
 						 });
 				 legend.append("text")
 				 		.attr("x",0)
-				 		.attr("y",20)
+				 		.attr("y",10)
 				 		.attr("font-size",14)
 				 		.text(fullname);
 				 legend.append("text")
 				 	   .attr("x",0)
-				 	   .attr("y",45)
+				 	   .attr("y",35)
 				 	   .attr("font-size",14)
 				 	   .text("Unit: "+unit);
  			var lock;
@@ -496,6 +496,8 @@ function loadImage(dataset) {
 
 	function changeAttribute(attribute) {
 		d3.selectAll("#mySVG").transition().duration(1000).ease("elastic").remove();
+		d3.selectAll("#legends").transition().duration(1000).ease("elastic").remove();
+		
 		var countryattr = [];
 		var countryattr_missing=[];
 		var color = [];
@@ -639,50 +641,49 @@ function loadImage(dataset) {
 
 	colors.push("grey");
 
-	var svg=d3.selectAll("#mySVG");
-	   svg.selectAll('.legend')
-		   .remove();
+	var svg=d3.select("body").append("svg")
+					.attr("id","legends");
+			    
+	    var legend=svg.selectAll('.legend')
+		             .data(colors)
+	                 .enter()
+	                 .append("g")
+	                 .attr("class","legend");
+					 
+	         legend.append("rect")
+	                 .attr("x",0)	
+	                 .attr("y",function(d,i){
+					 return 45+i*20;
+					 })							 
+		             .attr("width",25)
+					 .attr("height",20)
+					 .style("fill",function(d,i){
+					 return colors[i];
+					 });
+	        var legendLabel_1=[];
+	        for (var i=0;i<legendLabel.length;i++){
+	        	legendLabel_1.push(legendLabel[i]);
+	        }
+	        legendLabel_1.push("missing value(-999)");
 
-    var legend=svg.selectAll('.legend')
-	             .data(colors)
-                 .enter()
-                 .append("g")
-                 .attr("class","legend");
-				 
-        legend.append("rect")
-                 .attr("x",-40)	
-                 .attr("y",function(d,i){
-				 return 120+i*40;
-				 })							 
-	             .attr("width",30)
-				 .attr("height",40)
-				 .style("fill",function(d,i){
-				 return colors[i];
-				 });
-        var legendLabel_1=[];
-        for (var i=0;i<legendLabel.length;i++){
-        	legendLabel_1.push(legendLabel[i]);
-        }
-        legendLabel_1.push("missing value(-999)");
-
-		legend.append("text")
-		         .attr("x",-5)
-				 .attr("y",function(d,i){
-				 return 145+i*40;
-				 })
-		         .text(function(d,i){
-				     return legendLabel_1[i];
-				 });
-		 legend.append("text")
-		 		.attr("x",-40)
-		 		.attr("y",70)
-		 		.attr("font-size",16)
-		 		.text(fullname);
-		 legend.append("text")
-		 	   .attr("x",-40)
-		 	   .attr("y",105)
-		 	   .attr("font-size",16)
-		 	   .text("Unit: "+unit);
+			legend.append("text")
+			         .attr("x",35)
+					 .attr("y",function(d,i){
+					 return 60+i*20;
+					 })
+			         .text(function(d,i){
+					     return legendLabel_1[i];
+					 });
+			 legend.append("text")
+			 		.attr("x",0)
+			 		.attr("y",10)
+			 		.attr("font-size",14)
+			 		.text(fullname);
+			 legend.append("text")
+			 	   .attr("x",0)
+			 	   .attr("y",35)
+			 	   .attr("font-size",14)
+			 	   .text("Unit: "+unit);
 
 			g.selectAll("path")
 				.data(json.features)
